@@ -23,12 +23,13 @@ import retrofit.converter.GsonConverter;
 
 public class MyActivity extends Activity {
     private GelcapService gelcap;
-
+    private static final String TAG = "MyActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
+        final long start = System.currentTimeMillis();
 
         Type issueListType = new TypeToken<Collection<IssueWrapper>>() {}.getType();
 
@@ -47,6 +48,8 @@ public class MyActivity extends Activity {
             @Override
             public void success(Object o, Response response) {
                 int a = 4;
+                long duration = System.currentTimeMillis() - start;
+                Log.d(TAG, "Time for concrete issue took " + duration);
 
             }
 
