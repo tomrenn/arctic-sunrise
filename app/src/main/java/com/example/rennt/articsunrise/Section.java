@@ -8,8 +8,12 @@ import com.google.gson.annotations.SerializedName;
 public class Section {
     private String name;
     private String title;
+    private String pages;
     @SerializedName("hidden")
     private boolean isHidden;
+    @SerializedName("paid")
+    private boolean isPaid;
+
 
     public boolean isPaid() {
         return isPaid;
@@ -27,8 +31,6 @@ public class Section {
         return isHidden;
     }
 
-    @SerializedName("paid")
-    private boolean isPaid;
 
 
 }
