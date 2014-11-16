@@ -1,4 +1,4 @@
-package com.example.rennt.articsunrise;
+package com.example.rennt.arcticsunrise.data.api.models;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -8,7 +8,8 @@ import com.google.gson.annotations.SerializedName;
 public class Section {
     private String name;
     private String title;
-    private String pages;
+    @SerializedName("pages")
+    private String page;
     @SerializedName("hidden")
     private boolean isHidden;
     @SerializedName("paid")

@@ -1,11 +1,4 @@
-package com.example.rennt.articsunrise;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-
-import java.lang.reflect.Type;
+package com.example.rennt.arcticsunrise.data.api.models;
 
 /**
  * Represents the Issue representation that exists in the Catalog endpoint.

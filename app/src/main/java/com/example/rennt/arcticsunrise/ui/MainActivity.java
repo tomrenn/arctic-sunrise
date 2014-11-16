@@ -1,4 +1,4 @@
-package com.example.rennt.articsunrise;
+package com.example.rennt.arcticsunrise.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,7 +6,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.gson.FieldNamingPolicy;
+import com.example.rennt.arcticsunrise.GelcapService;
+import com.example.rennt.arcticsunrise.R;
+import com.example.rennt.arcticsunrise.data.api.models.Catalog;
+import com.example.rennt.arcticsunrise.data.api.models.Issue;
+import com.example.rennt.arcticsunrise.data.api.models.IssueWrapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -19,10 +23,13 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.converter.GsonConverter;
+//import retrofit.converter.SimpleXMLConverter;
 
 
-public class MyActivity extends Activity {
+public class MainActivity extends Activity {
     private GelcapService gelcap;
+    private GelcapService XmlGelcap;
+
     private static final String TAG = "MyActivity";
 
     @Override
@@ -44,12 +51,16 @@ public class MyActivity extends Activity {
 
 
         // get concrete issue and sections in that issue.
-        final Callback issueCallback = new Callback() {
+        final Callback issueCallback = new Callback<Issue>() {
             @Override
-            public void success(Object o, Response response) {
+            public void success(Issue issue, Response response) {
                 int a = 4;
                 long duration = System.currentTimeMillis() - start;
                 Log.d(TAG, "Time for concrete issue took " + duration);
+
+
+
+
 
             }
 
@@ -62,15 +73,10 @@ public class MyActivity extends Activity {
         // get catalog and issue wrappers
         Callback callback = new Callback<Catalog>() {
             @Override
-            public void success(Catalog o, Response response) {
+            public void success(Catalog catalog, Response response) {
                 Log.d("MyActivity", "in success");
-                for (int i=0; i<o.getIssues().size(); i++){
-                    IssueWrapper issueWrapper = o.getIssues().get(i);
-                    Log.d("MyActivity", ""+i);
-                    Log.d("MyActivity", issueWrapper.getKey());
-                }
-
-                String issueId = o.getIssues().get(0).getIssueId();
+                // issueId for the now issue
+                String issueId = catalog.getIssues().get(0).getIssueId();
                 Log.d("MyActivity", issueId);
                 gelcap.getIssue(issueId, issueCallback);
             }

@@ -1,4 +1,4 @@
-package com.example.rennt.articsunrise;
+package com.example.rennt.arcticsunrise;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

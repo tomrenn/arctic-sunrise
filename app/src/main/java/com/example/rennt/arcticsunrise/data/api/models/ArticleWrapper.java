@@ -1,11 +1,11 @@
-package com.example.rennt.articsunrise;
+package com.example.rennt.arcticsunrise.data.api.models;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
 /**
- * Summary of an article
- */
+* Summary of an article
+*/
 @Root(name="page")
 public class ArticleWrapper {
 

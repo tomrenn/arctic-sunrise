@@ -1,4 +1,4 @@
-package com.example.rennt.articsunrise;
+package com.example.rennt.arcticsunrise.data.api.models;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

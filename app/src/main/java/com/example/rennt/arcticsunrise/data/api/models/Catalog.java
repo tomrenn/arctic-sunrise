@@ -1,4 +1,4 @@
-package com.example.rennt.articsunrise;
+package com.example.rennt.arcticsunrise.data.api.models;
 
 import java.util.List;
 
