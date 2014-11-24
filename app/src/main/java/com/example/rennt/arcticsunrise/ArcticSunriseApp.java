@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 
 import dagger.ObjectGraph;
-import dagger.internal.Modules;
 import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
@@ -31,9 +30,9 @@ public class ArcticSunriseApp extends Application{
 
     @DebugLog
     public void buildObjectGraphAndInject() {
-        objectGraph = ObjectGraph.create(Modules.list(this));
-//        objectGraph.inject(this);
+        objectGraph = ObjectGraph.create(com.example.rennt.arcticsunrise.Modules.list(this));
         // we would inject this if we were injecting anything into App.java
+//        objectGraph.inject(this);
     }
 
     public void inject(Object o) {

@@ -2,95 +2,43 @@ package com.example.rennt.arcticsunrise.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.rennt.arcticsunrise.GelcapService;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.example.rennt.arcticsunrise.ArcticSunriseApp;
 import com.example.rennt.arcticsunrise.R;
+import com.example.rennt.arcticsunrise.data.api.GelcapService;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
-import com.example.rennt.arcticsunrise.data.api.models.IssueWrapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import com.example.rennt.arcticsunrise.data.api.models.Section;
+import com.example.rennt.arcticsunrise.data.api.models.SectionPage;
 
-import java.lang.reflect.Type;
-import java.util.Collection;
+import javax.inject.Inject;
 
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-import retrofit.converter.GsonConverter;
+import hugo.weaving.DebugLog;
+import timber.log.Timber;
 //import retrofit.converter.SimpleXMLConverter;
 
 
-public class MainActivity extends Activity {
-    private GelcapService gelcap;
-    private GelcapService XmlGelcap;
+public class MainActivity extends Activity implements Response.ErrorListener {
+    @Inject GelcapService gelcapService;
+    private CatalogReciever catalogReciever = new CatalogReciever();
+    private IssueReciever issueReciever = new IssueReciever();
+    private SectionPageReciever spr = new SectionPageReciever();
 
-    private static final String TAG = "MyActivity";
-
-    @Override
+    @Override @DebugLog
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
-        final long start = System.currentTimeMillis();
+        ArcticSunriseApp app = ArcticSunriseApp.get(this);
+        app.inject(this);
 
-        Type issueListType = new TypeToken<Collection<IssueWrapper>>() {}.getType();
+        Timber.d("This is an example: " + gelcapService.getRequestQueue());
+        Timber.d("The id of the thing is: " + gelcapService);
 
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Issue.class, new Issue.IssueDeserializer())
-                .create();
-
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setConverter(new GsonConverter(gson))
-                .setEndpoint("http://gelcap.dowjones.com")
-                .build();
-
-
-        // get concrete issue and sections in that issue.
-        final Callback issueCallback = new Callback<Issue>() {
-            @Override
-            public void success(Issue issue, Response response) {
-                int a = 4;
-                long duration = System.currentTimeMillis() - start;
-                Log.d(TAG, "Time for concrete issue took " + duration);
-
-
-
-
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.e("MyActivity", error.toString());
-            }
-        };
-
-        // get catalog and issue wrappers
-        Callback callback = new Callback<Catalog>() {
-            @Override
-            public void success(Catalog catalog, Response response) {
-                Log.d("MyActivity", "in success");
-                // issueId for the now issue
-                String issueId = catalog.getIssues().get(0).getIssueId();
-                Log.d("MyActivity", issueId);
-                gelcap.getIssue(issueId, issueCallback);
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.e("MyActivity", retrofitError.toString());
-            }
-        };
-
-
-        gelcap = restAdapter.create(GelcapService.class);
-        gelcap.getCatalog(callback);
-        Log.d("MyActivity", "After issuing callback");
+        gelcapService.getCatalog(catalogReciever, this);
     }
 
 
@@ -111,5 +59,51 @@ public class MainActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void receiveCatalog(Catalog catalog){
+        // request NOW issue
+        Timber.d("Recieved Catalog object " + catalog);
+        gelcapService.getIssue(catalog.getIssues().get(0), issueReciever, this);
+    }
+
+    private void receiveIssue(Issue issue){
+        // do something
+        Timber.d("Recieved Issue object " + issue);
+        for (Section section : issue.getSections()){
+            Timber.d("Reading section from issue -> " + section.getTitle());
+        }
+        Timber.d("Done iterating sections");
+        gelcapService.getSectionPage(issue.getSections().get(0), spr, this);
+    }
+
+    private void receiveSection(SectionPage sp){
+        Timber.d("" + sp);
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        Timber.e(error.getMessage());
+    }
+
+    private class SectionPageReciever implements Response.Listener<SectionPage> {
+        @Override
+        public void onResponse(SectionPage sectionPage) {
+            receiveSection(sectionPage);
+        }
+    }
+
+    private class IssueReciever implements Response.Listener<Issue> {
+        @Override
+        public void onResponse(Issue issue) {
+            receiveIssue(issue);
+        }
+    }
+
+    private class CatalogReciever implements Response.Listener<Catalog> {
+        @Override
+        public void onResponse(Catalog catalog) {
+            receiveCatalog(catalog);
+        }
     }
 }

@@ -18,9 +18,8 @@ import dagger.Provides;
  * Created by rennt on 11/16/14.
  */
 @Module(
-        includes = GelcapService.class,
-        complete = false,
-        library = true
+        complete = false, // because 'Application' is provided from another module
+        library = true // because these providers are used outside of this module
 )
 public class DataModule {
     private static final int MAX_CACHE_SIZE = 20; // number of bitmaps in cache
@@ -47,4 +46,5 @@ public class DataModule {
             }
         });
     }
+
 }

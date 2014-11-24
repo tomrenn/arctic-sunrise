@@ -2,6 +2,9 @@ package com.example.rennt.arcticsunrise;
 
 import android.app.Application;
 
+import com.example.rennt.arcticsunrise.data.DataModule;
+import com.example.rennt.arcticsunrise.ui.MainActivity;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -13,10 +16,10 @@ import dagger.Provides;
 @Module(
         includes = {
 //                UiModule.class,
-//                DataModule.class
+            DataModule.class
         },
         injects = {
-                ArcticSunriseApp.class
+            MainActivity.class
         }
 )
 public final class ArcticSunriseModule {
