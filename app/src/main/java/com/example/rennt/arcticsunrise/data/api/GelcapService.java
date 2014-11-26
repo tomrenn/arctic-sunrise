@@ -82,6 +82,12 @@ public class GelcapService {
         return mRequestQueue.add(request);
     }
 
+
+    public Request fillSectionArticles(final Issue issue, final int section){
+        throw new UnsupportedOperationException();
+    }
+
+
     /**
      * Make a request for the content (articles) in a section.
      */

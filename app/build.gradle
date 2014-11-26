@@ -15,7 +15,7 @@ apply plugin: 'hugo'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.0.0"
+    buildToolsVersion "21.1.1"
 
     defaultConfig {
         applicationId "com.example.rennt.arcticsunrise"
@@ -26,10 +26,10 @@ android {
     }
     buildTypes {
         debug {
-            runProguard false
+            minifyEnabled false
         }
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

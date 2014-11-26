@@ -30,17 +30,20 @@ public class Article {
     private boolean isDeco;
     private boolean isPaid;
     private String summmary;
-//    private String thumbnail;
+    private String thumbnail;
     private String articleSource;
     // Item key="share_link"
 //    private String articleLink;
 
 
 
-    public Article(String headline, String summary, boolean isDeco){
+    public Article(String headline, String summary, boolean isDeco,
+                   boolean isPaid, String thumbnail){
         this.headline = headline;
         this.summmary = summary;
         this.isDeco = isDeco;
+        this.isPaid = isPaid;
+        this.thumbnail = thumbnail;
     }
 
     public String getHeadline() { return headline; }
@@ -101,9 +104,11 @@ public class Article {
             parser.require(XmlPullParser.START_TAG, ns, "link");
             String decoStr = parser.getAttributeValue(ns, "class");
             boolean isDeco = "deco".equals(decoStr);
+            boolean isPaid = false;
             String headline = null;
             String summary = null;
             String link = null;
+            String thumbnail = null;
 
             // iterate parser over metadata
             while (!"metadata".equals(parser.getName())) {
@@ -116,7 +121,6 @@ public class Article {
                     continue;
                 }
 
-//                parser.getE
                 String key = parser.getAttributeValue(ns, "key");
 
                 if ("headline".equals(key)) {
@@ -125,6 +129,10 @@ public class Article {
                     parser.require(XmlPullParser.END_TAG, ns, "item");
                 } else if ("summary".equals(key)) {
                     summary = readSummary(parser);
+                } else if ("paid".equals(key)) {
+                    isPaid = "true".equals(readText(parser));
+                } else if ("thumbnail".equals(key)) {
+                    thumbnail = readText(parser);
                 } else {
                     skip(parser);
                 }
@@ -136,7 +144,7 @@ public class Article {
                 parser.next();
             }
 
-            return new Article(headline, summary, isDeco);
+            return new Article(headline, summary, isDeco, isPaid, thumbnail);
         }
 
         private String readSummary(XmlPullParser parser) throws IOException, XmlPullParserException {

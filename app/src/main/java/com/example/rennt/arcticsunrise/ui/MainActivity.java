@@ -31,6 +31,7 @@ public class MainActivity extends Activity implements Response.ErrorListener {
     private CatalogReciever catalogReciever = new CatalogReciever();
     private IssueReciever issueReciever = new IssueReciever();
     private SectionPageReciever spr = new SectionPageReciever();
+    private long startTime = 0;
 
     @Override @DebugLog
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,8 @@ public class MainActivity extends Activity implements Response.ErrorListener {
         setContentView(R.layout.activity_my);
         ArcticSunriseApp app = ArcticSunriseApp.get(this);
         app.inject(this);
+
+        startTime = System.currentTimeMillis();
 
         Timber.d("This is an example: " + gelcapService.getRequestQueue());
         Timber.d("The id of the thing is: " + gelcapService);
@@ -82,9 +85,20 @@ public class MainActivity extends Activity implements Response.ErrorListener {
     }
 
     private void receiveSection(List<Article> articles){
-        Timber.d("" + articles);
+        // TODO: How should we handle received sections? should be saved to section attribute.
+        // TODO: Subclass Response objects so that they do cacheing?
+        // TODO: LocalPersistance class that can also send Response<T> for given listeners
+
+        // TODO: With RxJava we would have a catalog observer, issue observer,
+        // TODO: and section filled observer
+        long milis = System.currentTimeMillis() - startTime;
+        Timber.d("Total time to finish took " + milis + "ms");
         TextView tv = (TextView)findViewById(R.id.my_text_view);
-        tv.setText("num of articles = " + articles.size());
+        String output = "";
+        for (Article article : articles) {
+            output += article.getHeadline() + '\n';
+        }
+        tv.setText(output);
     }
 
     @Override
