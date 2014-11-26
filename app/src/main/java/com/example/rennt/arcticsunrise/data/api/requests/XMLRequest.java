@@ -13,37 +13,40 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.Strategy;
 import org.simpleframework.xml.strategy.TreeStrategy;
+import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 public class XMLRequest<T> extends Request<T> {
-    private final Serializer serializer;
-    private final Class<T> clazz;
     private final Map<String, String> headers;
     private final Response.Listener<T> listener;
+    private final XMLParser<T> xmlParser;
 
+    public interface XMLParser<T> {
+        public T parse(String xml) throws XmlPullParserException, IOException;
+    }
 
     /**
      * Make a GET request and return a parsed object from JSON.
      *
      * @param url URL of the request to make
-     * @param clazz Relevant class object, for Gson's reflection
      * @param headers Map of request headers
      */
-    public XMLRequest(String url, Class<T> clazz, Map<String, String> headers,
+    public XMLRequest(String url, Map<String, String> headers,
+                      XMLParser<T> xmlParser,
                       Response.Listener<T> listener, Response.ErrorListener errorListener) {
         super(Method.GET, url, errorListener);
         Strategy strategy = new TreeStrategy("SectionPage", "ArticleWrapper");
-        this.serializer = new Persister(strategy);
-        this.clazz = clazz;
         this.headers = headers;
         this.listener = listener;
+        this.xmlParser = xmlParser;
     }
 
-    public XMLRequest(String url, Class<T> clazz,
+    public XMLRequest(String url, XMLParser<T> xmlParser,
                       Response.Listener<T> listener, Response.ErrorListener errorListener) {
-        this(url, clazz, null, listener, errorListener);
+        this(url, null, xmlParser, listener, errorListener);
     }
 
 
@@ -63,8 +66,9 @@ public class XMLRequest<T> extends Request<T> {
             String xml = new String(
                     response.data,
                     HttpHeaderParser.parseCharset(response.headers));
+
             return Response.success(
-                    serializer.read(clazz, xml),
+                    xmlParser.parse(xml),
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));

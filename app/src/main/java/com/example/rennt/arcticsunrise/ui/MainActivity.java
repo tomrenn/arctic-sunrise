@@ -4,16 +4,20 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.rennt.arcticsunrise.ArcticSunriseApp;
 import com.example.rennt.arcticsunrise.R;
 import com.example.rennt.arcticsunrise.data.api.GelcapService;
+import com.example.rennt.arcticsunrise.data.api.models.Article;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
 import com.example.rennt.arcticsunrise.data.api.models.Section;
 import com.example.rennt.arcticsunrise.data.api.models.SectionPage;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -74,11 +78,13 @@ public class MainActivity extends Activity implements Response.ErrorListener {
             Timber.d("Reading section from issue -> " + section.getTitle());
         }
         Timber.d("Done iterating sections");
-        gelcapService.getSectionPage(issue.getSections().get(0), spr, this);
+        gelcapService.getSectionContent(issue.getSections().get(0), spr, this);
     }
 
-    private void receiveSection(SectionPage sp){
-        Timber.d("" + sp);
+    private void receiveSection(List<Article> articles){
+        Timber.d("" + articles);
+        TextView tv = (TextView)findViewById(R.id.my_text_view);
+        tv.setText("num of articles = " + articles.size());
     }
 
     @Override
@@ -86,9 +92,9 @@ public class MainActivity extends Activity implements Response.ErrorListener {
         Timber.e(error.getMessage());
     }
 
-    private class SectionPageReciever implements Response.Listener<SectionPage> {
+    private class SectionPageReciever implements Response.Listener<List<Article>> {
         @Override
-        public void onResponse(SectionPage sectionPage) {
+        public void onResponse(List<Article> sectionPage) {
             receiveSection(sectionPage);
         }
     }

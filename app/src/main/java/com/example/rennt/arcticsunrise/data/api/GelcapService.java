@@ -12,6 +12,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
+import com.example.rennt.arcticsunrise.data.api.models.Article;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
 import com.example.rennt.arcticsunrise.data.api.models.IssueWrapper;
@@ -24,6 +25,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -69,6 +71,9 @@ public class GelcapService {
     }
 
 
+    /**
+     * Request the issue object based on an IssueWrapper
+     */
     public Request getIssue(final IssueWrapper issueRef, final Listener<Issue> issueListener,
                             final Response.ErrorListener errorListener) {
         String url = "http://" + GELCAP_HOST + PRE_PATH + "/contents/" + issueRef.getIssueId() + "/issue.json";
@@ -77,10 +82,15 @@ public class GelcapService {
         return mRequestQueue.add(request);
     }
 
-    public Request getSectionPage(final Section section, final Listener<SectionPage> sectionListener,
+    /**
+     * Make a request for the content (articles) in a section.
+     */
+    public Request getSectionContent(final Section section, final Listener<List<Article>> sectionListener,
                                   final Response.ErrorListener errorListener) {
         String url = "http://gelcap.dowjones.com/gc/packager/wsj/europe/contents/NOW201411240210/FRONT_SECTION-pages.xml";
-        Request<SectionPage> request = new XMLRequest<SectionPage>(url, SectionPage.class, sectionListener, errorListener);
+        XMLRequest.XMLParser articleListParser = new Article.ArticleListParser();
+        Request<List<Article>> request = new XMLRequest<List<Article>>(url, articleListParser,
+                sectionListener, errorListener);
         return mRequestQueue.add(request);
     }
 
