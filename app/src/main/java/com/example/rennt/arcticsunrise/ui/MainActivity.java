@@ -17,6 +17,10 @@ import com.example.rennt.arcticsunrise.data.api.models.Issue;
 import com.example.rennt.arcticsunrise.data.api.models.Section;
 import com.example.rennt.arcticsunrise.data.api.models.SectionPage;
 
+import org.lucasr.twowayview.TwoWayLayoutManager;
+import org.lucasr.twowayview.widget.SpannableGridLayoutManager;
+import org.lucasr.twowayview.widget.TwoWayView;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,21 +35,34 @@ public class MainActivity extends Activity implements Response.ErrorListener {
     private CatalogReciever catalogReciever = new CatalogReciever();
     private IssueReciever issueReciever = new IssueReciever();
     private SectionPageReciever spr = new SectionPageReciever();
-    private long startTime = 0;
 
     @Override @DebugLog
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
+        // do dep. injection.
         ArcticSunriseApp app = ArcticSunriseApp.get(this);
         app.inject(this);
 
-        startTime = System.currentTimeMillis();
+        setupTwoWayView();
 
         Timber.d("This is an example: " + gelcapService.getRequestQueue());
         Timber.d("The id of the thing is: " + gelcapService);
 
         gelcapService.getCatalog(catalogReciever, this);
+    }
+
+    private void setupTwoWayView(){
+        TwoWayView twowayView = (TwoWayView) findViewById(R.id.cardList);
+
+        SpannableGridLayoutManager spannableGrid = new SpannableGridLayoutManager(
+                TwoWayLayoutManager.Orientation.VERTICAL,
+                5, // columns
+                10 // rows
+        );
+        twowayView.setLayoutManager(spannableGrid);
+
+//        twowayView.setAdapter(new MyAdapter(true));
     }
 
 
@@ -91,8 +108,6 @@ public class MainActivity extends Activity implements Response.ErrorListener {
 
         // TODO: With RxJava we would have a catalog observer, issue observer,
         // TODO: and section filled observer
-        long milis = System.currentTimeMillis() - startTime;
-        Timber.d("Total time to finish took " + milis + "ms");
         TextView tv = (TextView)findViewById(R.id.my_text_view);
         String output = "";
         for (Article article : articles) {
