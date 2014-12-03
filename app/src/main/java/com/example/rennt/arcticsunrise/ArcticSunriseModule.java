@@ -3,6 +3,7 @@ package com.example.rennt.arcticsunrise;
 import android.app.Application;
 
 import com.example.rennt.arcticsunrise.data.DataModule;
+import com.example.rennt.arcticsunrise.ui.IssueViewPagerAdapter;
 import com.example.rennt.arcticsunrise.ui.MainActivity;
 
 import javax.inject.Singleton;
@@ -19,7 +20,8 @@ import dagger.Provides;
             DataModule.class
         },
         injects = {
-            MainActivity.class
+            MainActivity.class,
+            IssueViewPagerAdapter.SectionFragment.class
         }
 )
 public final class ArcticSunriseModule {

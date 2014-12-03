@@ -1,6 +1,7 @@
 package com.example.rennt.arcticsunrise.data;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.LruCache;
 
@@ -23,6 +24,11 @@ import dagger.Provides;
 )
 public class DataModule {
     private static final int MAX_CACHE_SIZE = 20; // number of bitmaps in cache
+
+    @Provides @Singleton
+    SharedPreferences provideSharedPreferences(Application app){
+        return app.getSharedPreferences("default", Application.MODE_PRIVATE);
+    }
 
     @Provides @Singleton RequestQueue providesRequestQueue(Application appContext) {
         return Volley.newRequestQueue(appContext.getApplicationContext());

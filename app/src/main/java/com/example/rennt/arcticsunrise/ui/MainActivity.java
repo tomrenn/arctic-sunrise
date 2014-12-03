@@ -2,12 +2,16 @@ package com.example.rennt.arcticsunrise.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Adapter;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.astuetz.PagerSlidingTabStrip;
 import com.example.rennt.arcticsunrise.ArcticSunriseApp;
 import com.example.rennt.arcticsunrise.R;
 import com.example.rennt.arcticsunrise.data.api.GelcapService;
@@ -25,30 +29,34 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import hugo.weaving.DebugLog;
 import timber.log.Timber;
 //import retrofit.converter.SimpleXMLConverter;
 
 
-public class MainActivity extends Activity implements Response.ErrorListener {
+public class MainActivity extends FragmentActivity implements Response.ErrorListener {
     @Inject GelcapService gelcapService;
     private CatalogReciever catalogReciever = new CatalogReciever();
     private IssueReciever issueReciever = new IssueReciever();
     private SectionPageReciever spr = new SectionPageReciever();
+    @InjectView(R.id.viewpager) ViewPager viewPager;
+    @InjectView(R.id.pagertabs) PagerSlidingTabStrip pagerTabs;
 
     @Override @DebugLog
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my);
+        setContentView(R.layout.activity_main);
         // do dep. injection.
         ArcticSunriseApp app = ArcticSunriseApp.get(this);
         app.inject(this);
+        // inject views
+        ButterKnife.inject(this);
 
-        setupTwoWayView();
-
+//        setupTwoWayView();
         Timber.d("This is an example: " + gelcapService.getRequestQueue());
         Timber.d("The id of the thing is: " + gelcapService);
-
         gelcapService.getCatalog(catalogReciever, this);
     }
 
@@ -91,14 +99,28 @@ public class MainActivity extends Activity implements Response.ErrorListener {
         gelcapService.getIssue(catalog.getIssues().get(0), issueReciever, this);
     }
 
-    private void receiveIssue(Issue issue){
+    private void receiveIssue(final Issue issue){
         // do something
         Timber.d("Recieved Issue object " + issue);
         for (Section section : issue.getSections()){
             Timber.d("Reading section from issue -> " + section.getTitle());
         }
+        // create PagedIssueAdapter
         Timber.d("Done iterating sections");
-        gelcapService.getSectionContent(issue.getSections().get(0), spr, this);
+//        gelcapService.getSectionContent(issue.getSections().get(0), spr, this);
+
+        Timber.d("Recived Issue on thread id " + android.os.Process.getThreadPriority(android.os.Process.myTid()));
+
+        // notify adapter changed on main UI thread.
+        Timber.d("updating view pager on thread id " + android.os.Process.getThreadPriority(android.os.Process.myTid()));
+        IssueViewPagerAdapter adapter = new IssueViewPagerAdapter(getSupportFragmentManager(), issue);
+        viewPager.setAdapter(adapter);
+        viewPager.setBackgroundColor(getResources().getColor(R.color.primary_material_light));
+        pagerTabs.setViewPager(viewPager);
+        pagerTabs.notifyDataSetChanged();
+//                viewPager.invalidate();
+
+//        viewPager.invalidate();
     }
 
     private void receiveSection(List<Article> articles){

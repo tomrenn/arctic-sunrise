@@ -14,6 +14,7 @@ public class Section {
     private boolean isHidden;
     @SerializedName("paid")
     private boolean isPaid;
+    private String contentUrl;
 
 
     public boolean isPaid() {

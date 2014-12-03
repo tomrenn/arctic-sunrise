@@ -76,9 +76,12 @@ public class GelcapService {
      */
     public Request getIssue(final IssueWrapper issueRef, final Listener<Issue> issueListener,
                             final Response.ErrorListener errorListener) {
-        String url = "http://" + GELCAP_HOST + PRE_PATH + "/contents/" + issueRef.getIssueId() + "/issue.json";
-        Timber.i("New issue request made: " + url);
-        Request<Issue> request = new GsonRequest<Issue>(url, Issue.class, gson, issueListener, errorListener);
+        String issueBase = "http://" + GELCAP_HOST + PRE_PATH + "/contents/" + issueRef.getIssueId();
+        String issuePath = issueBase + "/issue.json";
+        Timber.i("New issue request made: " + issuePath);
+        Request<Issue> request = new GsonRequest<Issue>(issuePath, Issue.class, gson, issueListener, errorListener);
+        // todo: fill issue sections with the sectionUrl
+        // todo: frick, add this feature to Issue Deserializer
         return mRequestQueue.add(request);
     }
 

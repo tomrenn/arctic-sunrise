@@ -52,7 +52,6 @@ public class Article {
     public static class ArticleListParser implements XMLRequest.XMLParser<List<Article>> {
         private static final String ns = null;
 
-        @DebugLog
         public List<Article> parse(String xml) throws XmlPullParserException, IOException {
             Reader reader = new StringReader(xml);
             try {

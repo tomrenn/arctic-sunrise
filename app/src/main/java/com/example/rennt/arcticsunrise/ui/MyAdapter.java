@@ -23,7 +23,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.CardViewHolder> {
     };
     private final boolean spannableLayout;
 
-    
+
     public MyAdapter(boolean spannableLayout){
         this.spannableLayout = spannableLayout;
     }
