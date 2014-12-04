@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,13 +41,14 @@ import timber.log.Timber;
 //import retrofit.converter.SimpleXMLConverter;
 
 
-public class MainActivity extends FragmentActivity implements Response.ErrorListener {
+public class MainActivity extends ActionBarActivity implements Response.ErrorListener {
     @Inject GelcapService gelcapService;
     private CatalogReciever catalogReciever = new CatalogReciever();
     private IssueReciever issueReciever = new IssueReciever();
     private SectionPageReciever spr = new SectionPageReciever();
     @InjectView(R.id.viewpager) ViewPager viewPager;
     @InjectView(R.id.pagertabs) PagerSlidingTabStrip pagerTabs;
+    @InjectView(R.id.toolbar) Toolbar toolbar;
 
     @Override @DebugLog
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,8 @@ public class MainActivity extends FragmentActivity implements Response.ErrorList
         app.inject(this);
         // inject views
         ButterKnife.inject(this);
+
+        setSupportActionBar(toolbar);
 
 //        setupTwoWayView();
         Timber.d("This is an example: " + gelcapService.getRequestQueue());

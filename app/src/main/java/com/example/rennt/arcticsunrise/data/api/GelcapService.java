@@ -46,11 +46,14 @@ import timber.log.Timber;
 @Singleton
 public class GelcapService {
     private static final String GELCAP_HOST = "gelcap.dowjones.com";
-    private static final String CATALOG_PATH = "/gc/packager/wsj/us/android.phone.wifi.2.catalog.json";
+    private static final String CATALOG_PATH = "/android.phone.wifi.2.catalog.json";
+    // String.format("%s");
+//    private static final String TEST = String.format(Locale.US, "/android.phone.wifi.%s.catalog.json", "2");
     private static final String PRE_PATH = "/gc/packager/wsj/us";
     private final RequestQueue mRequestQueue;
     private final ImageLoader mImageLoader;
     private final Gson gson;
+
     /**
      * We can use constructor injection here because Dagger, not the Android OS,
      * will be doing the construction of this object.
