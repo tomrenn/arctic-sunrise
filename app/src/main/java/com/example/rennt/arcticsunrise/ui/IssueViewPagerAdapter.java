@@ -45,7 +45,6 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
 
     @Override
     public int getCount() {
-        Timber.d("Number of sections is : " + issue.getSections().size());
         return issue.getSections().size();
     }
 
@@ -61,11 +60,6 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
         return fragment;
     }
 
-//    @Override
-//    public boolean isViewFromObject(View view, Object object) {
-//        return false;
-//    }
-
     /**
      * A fragment that represents a section within a gelcap Issue.
      */
@@ -73,6 +67,7 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
         private Section section;
         private ArrayAdapter<String> adapter;
         @Inject GelcapService gelcapService;
+        private List<Article> articles;
 
         public void setSection(Section s){
             this.section = s;
@@ -103,65 +98,57 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
             gelcapService.getSectionContent(section, new Response.Listener<List<Article>>() {
                 @Override
                 public void onResponse(final List<Article> response) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            recieveSectionArticles(response);
-                        }
-                    });
+                    recieveSectionArticles(response);
                 }
             }, null);
         }
 
+
         private void recieveSectionArticles(List<Article> articles){
-            Timber.i("Recieved articles " + articles.size());
-//            ListView listView = (ListView) getActivity().findViewById(R.id.fragment_listview);
+            this.articles = articles;
 
             ArrayList<String> titles = new ArrayList<String>();
             for (Article article : articles){
                 titles.add(article.getHeadline());
             }
             adapter.addAll(titles);
-//            listView.setBackgroundColor(getResources().getColor(R.color.red));
-//            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-//                    getActivity(), android.R.layout.simple_list_item_1, titles);
-//            listView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-            getListView().invalidate();
-
         }
 
-        /**
-         * The Fragment's UI is a Spannable
-         */
+        @Override
+        public void onSaveInstanceState(Bundle outState) {
+            super.onSaveInstanceState(outState);
+            Timber.i("Saving instance state " + section.getName());
+            outState.putParcelable("section", section);
+        }
+
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.layout_fragment, container, false);
-            TextView tv = (TextView)v.findViewById(R.id.fragment_text);
-            tv.setText("Fragment Section " + section.getName());
+            Timber.i("On create view");
+            if (adapter != null){
+                adapter.clear();
+                ArrayList<String> titles = new ArrayList<String>();
+                for (Article article : articles){
+                    titles.add(article.getHeadline());
+                }
+                adapter.addAll(titles);
+                setListAdapter(adapter);
+            }
             return v;
-//            LinearLayout layout = new LinearLayout(inflater.getContext(), null);
-//            ProgressBar progress = new ProgressBar(inflater.getContext());
-//            progress.setIndeterminate(true);
-//            progress.setEnabled(true);
-//            layout.addView(progress);
-//            container.addView(layout);
-//            return layout;
-//            View v = inflater.inflate(R.layout.twoway_grid, container, false);
-//            View tv = v.findViewById(R.id.text);
-//            ((TextView)tv).setText("Fragment #" + mNum);
-//            return v;
         }
 
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            adapter = new ArrayAdapter<String>(
-                    getActivity(), android.R.layout.simple_list_item_1, new ArrayList<String>());
-            setListAdapter(adapter);
-//            setListAdapter(new ArrayAdapter<String>(getActivity(),
-//                    android.R.layout.simple_list_item_1, Cheeses.sCheeseStrings));
+            Timber.i("On activity created");
+            if (adapter == null){
+                adapter = new ArrayAdapter<String>(
+                        getActivity(), android.R.layout.simple_list_item_1, new ArrayList<String>());
+                setListAdapter(adapter);
+            }
         }
     }
 }

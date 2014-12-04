@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Adapter;
@@ -32,6 +33,8 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import hugo.weaving.DebugLog;
+import rx.Observer;
+import rx.Subscription;
 import timber.log.Timber;
 //import retrofit.converter.SimpleXMLConverter;
 
@@ -96,7 +99,22 @@ public class MainActivity extends FragmentActivity implements Response.ErrorList
     private void receiveCatalog(Catalog catalog){
         // request NOW issue
         Timber.d("Recieved Catalog object " + catalog);
-        gelcapService.getIssue(catalog.getIssues().get(0), issueReciever, this);
+        Subscription subscription = gelcapService.getIssueObservable(
+                catalog.getIssues().get(0)).subscribe(new Observer<Issue>() {
+                    @Override
+                    public void onCompleted() {}
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Issue issue) {
+                        receiveIssue(issue);
+                    }
+                });
+//        gelcapService.getIssue(catalog.getIssues().get(0), issueReciever, this);
     }
 
     private void receiveIssue(final Issue issue){
@@ -115,7 +133,6 @@ public class MainActivity extends FragmentActivity implements Response.ErrorList
         Timber.d("updating view pager on thread id " + android.os.Process.getThreadPriority(android.os.Process.myTid()));
         IssueViewPagerAdapter adapter = new IssueViewPagerAdapter(getSupportFragmentManager(), issue);
         viewPager.setAdapter(adapter);
-        viewPager.setBackgroundColor(getResources().getColor(R.color.primary_material_light));
         pagerTabs.setViewPager(viewPager);
         pagerTabs.notifyDataSetChanged();
 //                viewPager.invalidate();

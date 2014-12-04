@@ -32,6 +32,10 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -70,6 +74,29 @@ public class GelcapService {
         return mImageLoader;
     }
 
+    public Observable<Issue> getIssueObservable(final IssueWrapper issueRef) {
+        return Observable.create(new Observable.OnSubscribe<Issue>() {
+            @Override
+            public void call(final Subscriber<? super Issue> subscriber) {
+
+                // perform the volley request
+                getIssue(issueRef, new Listener<Issue>() {
+                    @Override
+                    public void onResponse(Issue response) {
+                        subscriber.onNext(response);
+                        subscriber.onCompleted();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        subscriber.onError(error);
+                        subscriber.onCompleted();
+                    }
+                });
+            }
+        }).subscribeOn(Schedulers.io())
+          .observeOn(AndroidSchedulers.mainThread());
+    }
 
     /**
      * Request the issue object based on an IssueWrapper
