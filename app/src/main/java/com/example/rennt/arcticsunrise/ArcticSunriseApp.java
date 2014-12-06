@@ -25,7 +25,7 @@ public class ArcticSunriseApp extends Application{
         }
 
         buildObjectGraphAndInject();
-
+        objectGraph.plus();
     }
 
     @DebugLog

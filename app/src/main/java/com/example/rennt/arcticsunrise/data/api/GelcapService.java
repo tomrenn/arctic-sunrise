@@ -1,37 +1,26 @@
 package com.example.rennt.arcticsunrise.data.api;
 
-import android.content.Context;
-
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.example.rennt.arcticsunrise.data.api.models.Article;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
 import com.example.rennt.arcticsunrise.data.api.models.IssueWrapper;
 import com.example.rennt.arcticsunrise.data.api.models.Section;
-import com.example.rennt.arcticsunrise.data.api.models.SectionPage;
 import com.example.rennt.arcticsunrise.data.api.requests.GsonRequest;
 import com.example.rennt.arcticsunrise.data.api.requests.XMLRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import dagger.Module;
-import dagger.Provides;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;

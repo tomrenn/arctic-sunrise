@@ -1,6 +1,7 @@
 package com.example.rennt.arcticsunrise;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 
 import com.example.rennt.arcticsunrise.data.DataModule;
 import com.example.rennt.arcticsunrise.ui.IssueViewPagerAdapter;
@@ -34,4 +35,5 @@ public final class ArcticSunriseModule {
     @Provides @Singleton Application provideApplication() {
         return app;
     }
+
 }

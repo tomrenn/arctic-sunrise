@@ -22,8 +22,12 @@ import dagger.Provides;
         complete = false, // because 'Application' is provided from another module
         library = true // because these providers are used outside of this module
 )
+/**
+ *
+ */
 public class DataModule {
     private static final int MAX_CACHE_SIZE = 20; // number of bitmaps in cache
+
 
     @Provides @Singleton
     SharedPreferences provideSharedPreferences(Application app){
