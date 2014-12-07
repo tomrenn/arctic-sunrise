@@ -8,6 +8,7 @@ import android.util.LruCache;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.example.rennt.arcticsunrise.data.api.Edition;
 import com.example.rennt.arcticsunrise.data.api.GelcapService;
 
 import javax.inject.Singleton;
@@ -22,23 +23,30 @@ import dagger.Provides;
         complete = false, // because 'Application' is provided from another module
         library = true // because these providers are used outside of this module
 )
-/**
- *
- */
 public class DataModule {
     private static final int MAX_CACHE_SIZE = 20; // number of bitmaps in cache
+    private final Edition edition;
 
+    public DataModule(Edition edition) {
+        this.edition = edition;
+    }
+
+    @Provides @Singleton Edition provideEdition() {
+        return edition;
+    }
 
     @Provides @Singleton
     SharedPreferences provideSharedPreferences(Application app){
         return app.getSharedPreferences("default", Application.MODE_PRIVATE);
     }
 
-    @Provides @Singleton RequestQueue providesRequestQueue(Application appContext) {
+    @Provides @Singleton
+    RequestQueue provideRequestQueue(Application appContext) {
         return Volley.newRequestQueue(appContext.getApplicationContext());
     }
 
-    @Provides @Singleton ImageLoader provideImageLoader(RequestQueue mRequestQueue) {
+    @Provides @Singleton
+    ImageLoader provideImageLoader(RequestQueue mRequestQueue) {
         // create new image loader, example from -
         // http://developer.android.com/training/volley/requestqueue.html#singleton
         return new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {

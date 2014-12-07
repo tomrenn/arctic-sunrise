@@ -39,6 +39,7 @@ public class GelcapService {
     // String.format("%s");
 //    private static final String TEST = String.format(Locale.US, "/android.phone.wifi.%s.catalog.json", "2");
     private static final String PRE_PATH = "/gc/packager/wsj/us";
+    private final Edition edition;
     private final RequestQueue mRequestQueue;
     private final ImageLoader mImageLoader;
     private final Gson gson;
@@ -48,7 +49,8 @@ public class GelcapService {
      * will be doing the construction of this object.
      */
     @Inject
-    public GelcapService(RequestQueue queue, ImageLoader imgLoader){
+    public GelcapService(Edition edition, RequestQueue queue, ImageLoader imgLoader){
+        this.edition = edition;
         this.mRequestQueue = queue;
         mRequestQueue.start();
         this.mImageLoader = imgLoader;
@@ -95,10 +97,10 @@ public class GelcapService {
      */
     public Request getIssue(final IssueWrapper issueRef, final Listener<Issue> issueListener,
                             final Response.ErrorListener errorListener) {
-        String issueBase = "http://" + GELCAP_HOST + PRE_PATH + "/contents/" + issueRef.getIssueId();
-        String issuePath = issueBase + "/issue.json";
-        Timber.i("New issue request made: " + issuePath);
-        Request<Issue> request = new GsonRequest<Issue>(issuePath, Issue.class, gson, issueListener, errorListener);
+        String address = NetworkResolver.getIssueAddress(edition, issueRef);
+        Timber.i("Issue request (network): " + address);
+
+        Request<Issue> request = new GsonRequest<Issue>(address, Issue.class, gson, issueListener, errorListener);
         // todo: fill issue sections with the sectionUrl
         // todo: frick, add this feature to Issue Deserializer
         return mRequestQueue.add(request);
@@ -127,12 +129,79 @@ public class GelcapService {
      */
     public Request getCatalog(final Listener<Catalog> catalogListener,
                            final Response.ErrorListener errorListener){
-        String catalog_url = "http://" + GELCAP_HOST + CATALOG_PATH;
-        Timber.i("New Catalog request made: " + catalog_url);
-        Request<Catalog> request = new GsonRequest<Catalog>(catalog_url, Catalog.class, gson,
+        String address = NetworkResolver.getCatalogAddress(edition);
+
+        Timber.d("Catalog request (network): " + address);
+        Request<Catalog> request = new GsonRequest<Catalog>(address, Catalog.class, gson,
                                                             catalogListener, errorListener);
         return mRequestQueue.add(request);
     }
 
+
+    /**
+     * Resolve gelcap paths, since it is not always straight-forward..
+     */
+    static class NetworkResolver {
+        //http://gelcap.dowjones.com/gc/packager/wsj/us/android.phone.wifi.2.catalog.json
+        // host / edition / version number
+        private static String NEW_FORMAT = "http://%s/gc/packager/wsj/%s";
+        private static String NEW_DOMAIN = "gelcap.com";
+        private static String OLD_FORMAT = "http://%s/gc/packager/%s";
+        private static String OLD_DOMAIN = "mitp.wsj.com";
+
+        private static String CATALOG_PATH = "/android.phone.wifi.%d.catalog.json";
+        private static String ISSUE_BASE = "/contents/%s";
+        /**
+         * Determine the root url location based on edition.
+         */
+        private static String getBasePath(Edition edition){
+            String base;
+            String domain;
+
+            if (edition == Edition.USA ||
+                    edition == Edition.EUROPE ||
+                    edition == Edition.ASIA){
+                base = NEW_FORMAT;
+                domain = NEW_DOMAIN;
+            }
+            else {
+                base = OLD_FORMAT;
+                domain = OLD_DOMAIN;
+            }
+            return String.format(base, domain, edition.getPath());
+        }
+
+        /**
+         * Return the catalog address.
+         */
+        public static String getCatalogAddress(Edition edition){
+            String base = getBasePath(edition);
+            int catalogVersion = 1;
+
+            if (edition == Edition.USA) {
+                catalogVersion = 2;
+            }
+            String catalogPath = String.format(CATALOG_PATH, catalogVersion);
+
+            return base + catalogPath;
+        }
+
+        /**
+         * Return base location for issue information.
+         */
+        private static String getBaseIssuePath(Edition edition, IssueWrapper issueWrapper){
+            String path = getBasePath(edition) + ISSUE_BASE;
+            return String.format(path, issueWrapper.getIssueId());
+        }
+
+        public static String getIssueAddress(Edition edition, IssueWrapper issueWrapper){
+            return getBaseIssuePath(edition, issueWrapper) + "/issue.json";
+        }
+
+        public static String getSectionAddress(Edition edition, IssueWrapper issueWrapper, Section section){
+            return getBaseIssuePath(edition, issueWrapper) + "/" + section.getPagePath();
+        }
+
+    }
 
 }

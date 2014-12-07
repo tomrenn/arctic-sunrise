@@ -41,6 +41,8 @@ public class Section implements Parcelable{
         return title;
     }
 
+    public String getPagePath() { return getName() + "-pages.xml"; }
+
     public boolean isHidden() {
         return isHidden;
     }
