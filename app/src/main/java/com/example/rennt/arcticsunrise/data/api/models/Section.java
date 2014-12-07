@@ -3,6 +3,7 @@ package com.example.rennt.arcticsunrise.data.api.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -18,6 +19,7 @@ public class Section implements Parcelable{
     @SerializedName("paid")
     private boolean isPaid;
     private String contentUrl;
+
 
     public Section(Parcel in){
         name = in.readString();

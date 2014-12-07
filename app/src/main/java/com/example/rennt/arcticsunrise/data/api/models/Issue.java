@@ -39,6 +39,8 @@ public class Issue {
         this.sections = sections;
     }
 
+
+
     /**
      * Adapter to perform gson deserialization.
      * issue["sections"] do not map between the gelcap representation and

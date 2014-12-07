@@ -65,7 +65,7 @@ public class XMLRequest<T> extends Request<T> {
         try {
             String xml = new String(
                     response.data,
-                    HttpHeaderParser.parseCharset(response.headers));
+                    "UTF-8");
 
             return Response.success(
                     xmlParser.parse(xml),

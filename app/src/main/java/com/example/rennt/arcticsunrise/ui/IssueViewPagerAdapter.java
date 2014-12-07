@@ -56,7 +56,8 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
     @Override
     public Fragment getItem(int position) {
         SectionFragment fragment = new SectionFragment();
-        fragment.setSection(issue.getSections().get(position));
+        Section section = issue.getSections().get(position);
+        fragment.setSection(section);
         return fragment;
     }
 

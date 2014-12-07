@@ -25,14 +25,14 @@ import dagger.Provides;
 )
 public class DataModule {
     private static final int MAX_CACHE_SIZE = 20; // number of bitmaps in cache
-    private final Edition edition;
-
-    public DataModule(Edition edition) {
-        this.edition = edition;
-    }
+//    private final Edition edition;
+//
+//    public DataModule(Edition edition) {
+//        this.edition = edition;
+//    }
 
     @Provides @Singleton Edition provideEdition() {
-        return edition;
+        return Edition.USA;
     }
 
     @Provides @Singleton

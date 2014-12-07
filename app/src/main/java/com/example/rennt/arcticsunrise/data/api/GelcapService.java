@@ -1,10 +1,12 @@
 package com.example.rennt.arcticsunrise.data.api;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.ImageLoader;
 import com.example.rennt.arcticsunrise.data.api.models.Article;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
@@ -107,6 +109,30 @@ public class GelcapService {
     }
 
 
+    /**
+     * Take in a issue, fill with sections.
+     * @return
+     */
+    public Request fillIssue(final IssueWrapper issueRef, final Listener<Issue> issueListener,
+                             final Response.ErrorListener errorListener) {
+        String address = NetworkResolver.getIssueAddress(edition, issueRef);
+
+        Request<Issue> request = new Request<Issue>(Request.Method.GET, address, errorListener) {
+            @Override
+            protected Response<Issue> parseNetworkResponse(NetworkResponse response) {
+                issueRef.getIssueId();
+                return Response.success(new Issue(), HttpHeaderParser.parseCacheHeaders(response));
+            }
+
+            @Override
+            protected void deliverResponse(Issue response) {
+                issueListener.onResponse(response);
+            }
+        };
+        return request;
+    }
+
+
     public Request fillSectionArticles(final Issue issue, final int section){
         throw new UnsupportedOperationException();
     }
@@ -117,6 +143,7 @@ public class GelcapService {
      */
     public Request getSectionContent(final Section section, final Listener<List<Article>> sectionListener,
                                   final Response.ErrorListener errorListener) {
+//        NetworkResolver.getSectionAddress(edition, null, section);
         String url = "http://gelcap.dowjones.com/gc/packager/wsj/europe/contents/NOW201411240210/FRONT_SECTION-pages.xml";
         XMLRequest.XMLParser articleListParser = new Article.ArticleListParser();
         Request<List<Article>> request = new XMLRequest<List<Article>>(url, articleListParser,
@@ -145,12 +172,15 @@ public class GelcapService {
         //http://gelcap.dowjones.com/gc/packager/wsj/us/android.phone.wifi.2.catalog.json
         // host / edition / version number
         private static String NEW_FORMAT = "http://%s/gc/packager/wsj/%s";
-        private static String NEW_DOMAIN = "gelcap.com";
+        private static String NEW_DOMAIN = "gelcap.dowjones.com";
         private static String OLD_FORMAT = "http://%s/gc/packager/%s";
         private static String OLD_DOMAIN = "mitp.wsj.com";
 
         private static String CATALOG_PATH = "/android.phone.wifi.%d.catalog.json";
         private static String ISSUE_BASE = "/contents/%s";
+
+        // todo: future StringPreference for debug/mock address/endpoints!
+
         /**
          * Determine the root url location based on edition.
          */
@@ -185,6 +215,8 @@ public class GelcapService {
 
             return base + catalogPath;
         }
+
+//        public static String getSectionAddress(Edition )
 
         /**
          * Return base location for issue information.

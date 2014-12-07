@@ -55,9 +55,11 @@ public class GsonRequest<T> extends Request<T> {
     @Override
     protected Response<T> parseNetworkResponse(NetworkResponse response) {
         try {
+            String charsetName = HttpHeaderParser.parseCharset(response.headers);
+            charsetName = "UTF-8"; // do not use http default
             String json = new String(
                     response.data,
-                    HttpHeaderParser.parseCharset(response.headers));
+                    charsetName);
             return Response.success(
                     gson.fromJson(json, clazz),
                     HttpHeaderParser.parseCacheHeaders(response));

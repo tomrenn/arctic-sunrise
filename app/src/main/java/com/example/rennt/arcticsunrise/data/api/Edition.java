@@ -7,7 +7,7 @@ import com.example.rennt.arcticsunrise.R;
 import java.util.Locale;
 
 public enum Edition {
-    USA("usa", Locale.US, R.string.edition_usa),
+    USA("us", Locale.US, R.string.edition_usa),
     EUROPE("europe", Locale.US, R.string.edition_europe),
     ASIA("asia", Locale.US, R.string.edition_asia),
     KOREA("korea", Locale.KOREAN, R.string.edition_korea),

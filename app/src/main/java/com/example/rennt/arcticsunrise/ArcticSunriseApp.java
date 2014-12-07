@@ -3,6 +3,9 @@ package com.example.rennt.arcticsunrise;
 import android.app.Application;
 import android.content.Context;
 
+import com.example.rennt.arcticsunrise.data.DataModule;
+import com.example.rennt.arcticsunrise.data.api.Edition;
+
 import dagger.ObjectGraph;
 import hugo.weaving.DebugLog;
 import timber.log.Timber;
@@ -25,6 +28,7 @@ public class ArcticSunriseApp extends Application{
         }
 
         buildObjectGraphAndInject();
+//        objectGraph.plus(new DataModule(Edition.USA));
 //        objectGraph.plus();
     }
 
