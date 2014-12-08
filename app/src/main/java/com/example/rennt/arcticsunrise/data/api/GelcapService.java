@@ -95,6 +95,46 @@ public class GelcapService {
     }
 
     /**
+     * Subscribe to retrieve catalog objects.
+     */
+    public Observable<Catalog> getCatalogObservable() {
+        return Observable.create(new Observable.OnSubscribe<Catalog>(){
+            @Override
+            public void call(final Subscriber<? super Catalog> subscriber) {
+
+                // perform volley request
+                getCatalog(new Listener<Catalog>() {
+                    @Override
+                    public void onResponse(Catalog response) {
+                        subscriber.onNext(response);
+                        subscriber.onCompleted();
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error){
+                        subscriber.onError(error);
+                        subscriber.onCompleted();
+                    }
+                });
+            }
+         }).subscribeOn(Schedulers.io())
+           .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * Given the issue, request and set its list of sections
+     */
+    public Observable<Issue> getIssueSectionsObservable(Issue issue) {
+        return Observable.create(new Observable.OnSubscribe<Issue>() {
+            @Override
+            public void call(Subscriber<? super Issue> subscriber) {
+
+                // volley request
+            }
+        });
+    }
+
+    /**
      * Request the issue object based on an IssueWrapper
      */
     public Request getIssue(final IssueWrapper issueRef, final Listener<Issue> issueListener,
