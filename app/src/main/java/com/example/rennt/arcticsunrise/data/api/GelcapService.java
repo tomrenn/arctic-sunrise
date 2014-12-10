@@ -43,6 +43,15 @@ import timber.log.Timber;
 /**
  * The GelcapService contains predefined network operations for use in Activities.
  *
+ *
+ * DebugVersion: MockGelcapService (provides)
+ *
+ * Interface
+ * - getCatalogObservable()
+ * - getFillIssueObservable(Issue i)
+ * - getArticlePageObservable(Section s)  : get List of Articles in Section
+ * -
+ *
  * ALTERNATIVE NAME: NetworkManager
  */
 @Singleton
@@ -71,7 +80,7 @@ public class GelcapService {
         this.gson = new GsonBuilder().create();
     }
 
-    
+
 
     public RequestQueue getRequestQueue() {
         return mRequestQueue;
@@ -81,29 +90,6 @@ public class GelcapService {
         return mImageLoader;
     }
 
-//    public Observable<Issue> getIssueObservable(final Issue issueRef) {
-//        return Observable.create(new Observable.OnSubscribe<Issue>() {
-//            @Override
-//            public void call(final Subscriber<? super Issue> subscriber) {
-//
-//                // perform the volley request
-//                getIssue(issueRef, new Listener<Issue>() {
-//                    @Override
-//                    public void onResponse(Issue response) {
-//                        subscriber.onNext(response);
-//                        subscriber.onCompleted();
-//                    }
-//                }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        subscriber.onError(error);
-//                        subscriber.onCompleted();
-//                    }
-//                });
-//            }
-//        }).subscribeOn(Schedulers.io())
-//          .observeOn(AndroidSchedulers.mainThread());
-//    }
 
     /**
      * Subscribe to retrieve catalog objects.

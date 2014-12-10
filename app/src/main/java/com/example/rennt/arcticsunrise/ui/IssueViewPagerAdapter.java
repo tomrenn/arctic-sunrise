@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.example.rennt.arcticsunrise.ArcticSunriseApp;
@@ -69,23 +70,11 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
         private ArrayAdapter<String> adapter;
         @Inject GelcapService gelcapService;
         private List<Article> articles;
+        private long startTime = 0;
+
 
         public void setSection(Section s){
             this.section = s;
-        }
-        /**
-         * Create a new instance of CountingFragment, providing "num"
-         * as an argument.
-         */
-        static SectionFragment newInstance(int sectionPos) {
-            SectionFragment f = new SectionFragment();
-
-            // Supply num input as an argument.
-            Bundle args = new Bundle();
-            args.putInt("sectionPos", sectionPos);
-            f.setArguments(args);
-
-            return f;
         }
 
         /**
@@ -96,6 +85,8 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
             super.onCreate(savedInstanceState);
             ArcticSunriseApp app = ArcticSunriseApp.get(getActivity());
             app.inject(this);
+
+            startTime = System.currentTimeMillis();
             gelcapService.getSectionContent(section, new Response.Listener<List<Article>>() {
                 @Override
                 public void onResponse(final List<Article> response) {
@@ -106,6 +97,9 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
 
 
         private void recieveSectionArticles(List<Article> articles){
+            long totalTime = System.currentTimeMillis() - startTime;
+            Toast.makeText(getActivity(), "Articles took " + totalTime + "ms", Toast.LENGTH_SHORT).show();
+
             this.articles = articles;
 
             ArrayList<String> titles = new ArrayList<String>();

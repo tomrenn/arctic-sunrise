@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -37,6 +38,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import hugo.weaving.DebugLog;
+import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.functions.Action1;
@@ -47,33 +49,46 @@ import timber.log.Timber;
 public class MainActivity extends ActionBarActivity implements Response.ErrorListener {
     @Inject GelcapService gelcapService;
     @Inject AppContainer appContainer;
-    private CatalogReciever catalogReciever = new CatalogReciever();
-    private IssueReciever issueReciever = new IssueReciever();
-    private SectionPageReciever spr = new SectionPageReciever();
+
+    private ViewGroup container;
     @InjectView(R.id.viewpager) ViewPager viewPager;
     @InjectView(R.id.pagertabs) PagerSlidingTabStrip pagerTabs;
     @InjectView(R.id.toolbar) Toolbar toolbar;
-    private ViewGroup container;
 
+    long startTime = 0;
+    // observables
+    Observable<Catalog> catalogObservable;
+    Subscription lastCatalogSubscription;
 
     @Override @DebugLog
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         // do dep. injection.
         ArcticSunriseApp app = ArcticSunriseApp.get(this);
         app.inject(this);
+
+        // get root view
+        container = appContainer.get(this);
+        // set content view
+        getLayoutInflater().inflate(R.layout.activity_main, container);
+
         // inject views
         ButterKnife.inject(this);
 
-        container = appContainer.get(this);
-
         setSupportActionBar(toolbar);
 
-//        setupTwoWayView();
-        Timber.d("This is an example: " + gelcapService.getRequestQueue());
-        Timber.d("The id of the thing is: " + gelcapService);
-        gelcapService.getCatalog(catalogReciever, this);
+        startTime = System.currentTimeMillis();
+        catalogObservable = gelcapService.getCatalogObservable();
+        subscribeNewCatalogRequest();
+    }
+
+    private void subscribeNewCatalogRequest() {
+        lastCatalogSubscription = catalogObservable.subscribe(new Action1<Catalog>() {
+            @Override
+            public void call(Catalog catalog) {
+                receiveCatalog(catalog);
+            }
+        });
     }
 
     private void setupTwoWayView(){
@@ -118,13 +133,13 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
                 catalog.getIssues().get(0)).subscribe(new Action1<Issue>() {
             @Override
             public void call(Issue issue) {
-                receiveIssue(issue);
+                receiveFilledIssue(issue);
             }
         });
 //        gelcapService.getIssue(catalog.getIssues().get(0), issueReciever, this);
     }
 
-    private void receiveIssue(final Issue issue){
+    private void receiveFilledIssue(final Issue issue){
         // do something
         Timber.d("Recieved Issue object " + issue);
         for (Section section : issue.getSections()){
@@ -141,50 +156,19 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
         IssueViewPagerAdapter adapter = new IssueViewPagerAdapter(getSupportFragmentManager(), issue);
         viewPager.setAdapter(adapter);
         pagerTabs.setViewPager(viewPager);
-        pagerTabs.notifyDataSetChanged();
+
+        long totalTime = System.currentTimeMillis() - startTime;
+        Toast.makeText(this, "Fetching catalog and sections took: " + totalTime, Toast.LENGTH_LONG).show();
+//        pagerTabs.notifyDataSetChanged();
 //                viewPager.invalidate();
 
 //        viewPager.invalidate();
     }
 
-    private void receiveSection(List<Article> articles){
-        // TODO: How should we handle received sections? should be saved to section attribute.
-        // TODO: Subclass Response objects so that they do cacheing?
-        // TODO: LocalPersistance class that can also send Response<T> for given listeners
-
-        // TODO: With RxJava we would have a catalog observer, issue observer,
-        // TODO: and section filled observer
-        TextView tv = (TextView)findViewById(R.id.my_text_view);
-        String output = "";
-        for (Article article : articles) {
-            output += article.getHeadline() + '\n';
-        }
-        tv.setText(output);
-    }
 
     @Override
     public void onErrorResponse(VolleyError error) {
         Timber.e(error.getMessage());
     }
 
-    private class SectionPageReciever implements Response.Listener<List<Article>> {
-        @Override
-        public void onResponse(List<Article> sectionPage) {
-            receiveSection(sectionPage);
-        }
-    }
-
-    private class IssueReciever implements Response.Listener<Issue> {
-        @Override
-        public void onResponse(Issue issue) {
-            receiveIssue(issue);
-        }
-    }
-
-    private class CatalogReciever implements Response.Listener<Catalog> {
-        @Override
-        public void onResponse(Catalog catalog) {
-            receiveCatalog(catalog);
-        }
-    }
 }
