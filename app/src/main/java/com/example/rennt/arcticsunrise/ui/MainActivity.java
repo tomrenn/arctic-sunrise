@@ -9,12 +9,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.astuetz.PagerSlidingTabStrip;
+import com.example.rennt.arcticsunrise.AppContainer;
 import com.example.rennt.arcticsunrise.ArcticSunriseApp;
 import com.example.rennt.arcticsunrise.R;
 import com.example.rennt.arcticsunrise.data.api.GelcapService;
@@ -37,18 +39,22 @@ import butterknife.InjectView;
 import hugo.weaving.DebugLog;
 import rx.Observer;
 import rx.Subscription;
+import rx.functions.Action1;
 import timber.log.Timber;
 //import retrofit.converter.SimpleXMLConverter;
 
 
 public class MainActivity extends ActionBarActivity implements Response.ErrorListener {
     @Inject GelcapService gelcapService;
+    @Inject AppContainer appContainer;
     private CatalogReciever catalogReciever = new CatalogReciever();
     private IssueReciever issueReciever = new IssueReciever();
     private SectionPageReciever spr = new SectionPageReciever();
     @InjectView(R.id.viewpager) ViewPager viewPager;
     @InjectView(R.id.pagertabs) PagerSlidingTabStrip pagerTabs;
     @InjectView(R.id.toolbar) Toolbar toolbar;
+    private ViewGroup container;
+
 
     @Override @DebugLog
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +65,8 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
         app.inject(this);
         // inject views
         ButterKnife.inject(this);
+
+        container = appContainer.get(this);
 
         setSupportActionBar(toolbar);
 
@@ -104,21 +112,15 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
     private void receiveCatalog(Catalog catalog){
         // request NOW issue
         Timber.d("Recieved Catalog object " + catalog);
-        Subscription subscription = gelcapService.getIssueObservable(
-                catalog.getIssues().get(0)).subscribe(new Observer<Issue>() {
-                    @Override
-                    public void onCompleted() {}
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e.toString());
-                    }
-
-                    @Override
-                    public void onNext(Issue issue) {
-                        receiveIssue(issue);
-                    }
-                });
+        // fill issue sections.
+        Subscription subscription = gelcapService.getIssueSectionsObservable(
+                catalog.getIssues().get(0)).subscribe(new Action1<Issue>() {
+            @Override
+            public void call(Issue issue) {
+                receiveIssue(issue);
+            }
+        });
 //        gelcapService.getIssue(catalog.getIssues().get(0), issueReciever, this);
     }
 

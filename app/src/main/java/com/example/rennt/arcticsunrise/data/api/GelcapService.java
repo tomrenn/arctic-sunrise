@@ -11,13 +11,24 @@ import com.android.volley.toolbox.ImageLoader;
 import com.example.rennt.arcticsunrise.data.api.models.Article;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
-import com.example.rennt.arcticsunrise.data.api.models.IssueWrapper;
 import com.example.rennt.arcticsunrise.data.api.models.Section;
 import com.example.rennt.arcticsunrise.data.api.requests.GsonRequest;
 import com.example.rennt.arcticsunrise.data.api.requests.XMLRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -57,10 +68,10 @@ public class GelcapService {
         mRequestQueue.start();
         this.mImageLoader = imgLoader;
         // custom gson with special deserializers
-        this.gson = new GsonBuilder()
-                .registerTypeAdapter(Issue.class, new Issue.IssueDeserializer())
-                .create();
+        this.gson = new GsonBuilder().create();
     }
+
+    
 
     public RequestQueue getRequestQueue() {
         return mRequestQueue;
@@ -70,29 +81,29 @@ public class GelcapService {
         return mImageLoader;
     }
 
-    public Observable<Issue> getIssueObservable(final IssueWrapper issueRef) {
-        return Observable.create(new Observable.OnSubscribe<Issue>() {
-            @Override
-            public void call(final Subscriber<? super Issue> subscriber) {
-
-                // perform the volley request
-                getIssue(issueRef, new Listener<Issue>() {
-                    @Override
-                    public void onResponse(Issue response) {
-                        subscriber.onNext(response);
-                        subscriber.onCompleted();
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        subscriber.onError(error);
-                        subscriber.onCompleted();
-                    }
-                });
-            }
-        }).subscribeOn(Schedulers.io())
-          .observeOn(AndroidSchedulers.mainThread());
-    }
+//    public Observable<Issue> getIssueObservable(final Issue issueRef) {
+//        return Observable.create(new Observable.OnSubscribe<Issue>() {
+//            @Override
+//            public void call(final Subscriber<? super Issue> subscriber) {
+//
+//                // perform the volley request
+//                getIssue(issueRef, new Listener<Issue>() {
+//                    @Override
+//                    public void onResponse(Issue response) {
+//                        subscriber.onNext(response);
+//                        subscriber.onCompleted();
+//                    }
+//                }, new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        subscriber.onError(error);
+//                        subscriber.onCompleted();
+//                    }
+//                });
+//            }
+//        }).subscribeOn(Schedulers.io())
+//          .observeOn(AndroidSchedulers.mainThread());
+//    }
 
     /**
      * Subscribe to retrieve catalog objects.
@@ -124,20 +135,80 @@ public class GelcapService {
     /**
      * Given the issue, request and set its list of sections
      */
-    public Observable<Issue> getIssueSectionsObservable(Issue issue) {
+    public Observable<Issue> getIssueSectionsObservable(final Issue issue) {
         return Observable.create(new Observable.OnSubscribe<Issue>() {
             @Override
-            public void call(Subscriber<? super Issue> subscriber) {
+            public void call(final Subscriber<? super Issue> subscriber) {
 
                 // volley request
+                fillIssueSections(issue, new Listener<Issue>(){
+                    @Override
+                    public void onResponse(Issue issue){
+                        subscriber.onNext(issue);
+                        subscriber.onCompleted();
+                    }
+
+                }, null);
             }
-        });
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
+
+
+    public Request fillIssueSections(final Issue issue, final Listener<Issue> issueListener,
+                                     final Response.ErrorListener errorListener){
+        String address = NetworkResolver.getIssueAddress(edition, issue);
+        Timber.i("Filling issue sections of issue: " + issue);
+        Request<Issue> request = new Request<Issue>(Request.Method.GET, address, errorListener) {
+            @Override
+            protected Response<Issue> parseNetworkResponse(NetworkResponse response) {
+                try {
+                    String json = new String(response.data, "UTF-8");
+                    JsonElement jsonElement = gson.fromJson(json, JsonElement.class);
+                    JsonObject jsonObj = jsonElement.getAsJsonObject();
+                    //getAsJsonObject();
+//                    GsonBuilder builder = new GsonBuilder().
+//                    JsonObject jsonObj = json.getAsJsonObject();
+
+//                    issue.setDateUpdated(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(
+//                            jsonObj.get("date_updated").getAsString()));
+//                    issue.setSchemaVersion(jsonObj.get("schema_version").getAsString());
+
+                    JsonArray jsonSections = jsonObj
+                            .getAsJsonArray("sections").get(0)
+                            .getAsJsonObject()
+                            .getAsJsonArray("items");
+
+                    List<Section> sectionList = new LinkedList<Section>();
+                    Iterator<JsonElement> itty = jsonSections.iterator();
+                    Gson gson = new Gson();
+
+                    while (itty.hasNext()){
+                        sectionList.add(gson.fromJson(itty.next(), Section.class));
+                    }
+                    issue.setSections(sectionList);
+                }
+                catch (UnsupportedEncodingException e){
+                    throw new JsonParseException(e.toString());
+                }
+//                catch (ParseException e){
+//                    throw new JsonParseException(e.toString());
+//                }
+                return Response.success(issue, HttpHeaderParser.parseCacheHeaders(response));
+            }
+
+            @Override
+            protected void deliverResponse(Issue response) {
+                issueListener.onResponse(response);
+            }
+        };
+        return mRequestQueue.add(request);
+    }
+
 
     /**
      * Request the issue object based on an IssueWrapper
      */
-    public Request getIssue(final IssueWrapper issueRef, final Listener<Issue> issueListener,
+    public Request getIssue(final Issue issueRef, final Listener<Issue> issueListener,
                             final Response.ErrorListener errorListener) {
         String address = NetworkResolver.getIssueAddress(edition, issueRef);
         Timber.i("Issue request (network): " + address);
@@ -146,30 +217,6 @@ public class GelcapService {
         // todo: fill issue sections with the sectionUrl
         // todo: frick, add this feature to Issue Deserializer
         return mRequestQueue.add(request);
-    }
-
-
-    /**
-     * Take in a issue, fill with sections.
-     * @return
-     */
-    public Request fillIssue(final IssueWrapper issueRef, final Listener<Issue> issueListener,
-                             final Response.ErrorListener errorListener) {
-        String address = NetworkResolver.getIssueAddress(edition, issueRef);
-
-        Request<Issue> request = new Request<Issue>(Request.Method.GET, address, errorListener) {
-            @Override
-            protected Response<Issue> parseNetworkResponse(NetworkResponse response) {
-                issueRef.getIssueId();
-                return Response.success(new Issue(), HttpHeaderParser.parseCacheHeaders(response));
-            }
-
-            @Override
-            protected void deliverResponse(Issue response) {
-                issueListener.onResponse(response);
-            }
-        };
-        return request;
     }
 
 
@@ -184,7 +231,8 @@ public class GelcapService {
     public Request getSectionContent(final Section section, final Listener<List<Article>> sectionListener,
                                   final Response.ErrorListener errorListener) {
 //        NetworkResolver.getSectionAddress(edition, null, section);
-        String url = "http://gelcap.dowjones.com/gc/packager/wsj/europe/contents/NOW201411240210/FRONT_SECTION-pages.xml";
+        String url = "http://gelcap.dowjones.com/gc/packager/wsj/us/contents/NOW201412100010/";
+        url = url + section.getPagePath();
         XMLRequest.XMLParser articleListParser = new Article.ArticleListParser();
         Request<List<Article>> request = new XMLRequest<List<Article>>(url, articleListParser,
                 sectionListener, errorListener);
@@ -261,17 +309,17 @@ public class GelcapService {
         /**
          * Return base location for issue information.
          */
-        private static String getBaseIssuePath(Edition edition, IssueWrapper issueWrapper){
+        private static String getBaseIssuePath(Edition edition, Issue issue){
             String path = getBasePath(edition) + ISSUE_BASE;
-            return String.format(path, issueWrapper.getIssueId());
+            return String.format(path, issue.getIssueId());
         }
 
-        public static String getIssueAddress(Edition edition, IssueWrapper issueWrapper){
-            return getBaseIssuePath(edition, issueWrapper) + "/issue.json";
+        public static String getIssueAddress(Edition edition, Issue issue){
+            return getBaseIssuePath(edition, issue) + "/issue.json";
         }
 
-        public static String getSectionAddress(Edition edition, IssueWrapper issueWrapper, Section section){
-            return getBaseIssuePath(edition, issueWrapper) + "/" + section.getPagePath();
+        public static String getSectionAddress(Edition edition, Issue issue, Section section){
+            return getBaseIssuePath(edition, issue) + "/" + section.getPagePath();
         }
 
     }

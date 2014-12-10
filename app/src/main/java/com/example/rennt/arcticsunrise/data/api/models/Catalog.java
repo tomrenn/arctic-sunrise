@@ -7,9 +7,9 @@ import java.util.List;
  */
 public class Catalog {
     private int version;
-    private List<IssueWrapper> items;
+    private List<Issue> items;
 
-    public List<IssueWrapper> getIssues(){
+    public List<Issue> getIssues(){
         return this.items;
     }
 }
