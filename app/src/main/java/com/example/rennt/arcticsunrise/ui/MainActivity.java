@@ -27,9 +27,9 @@ import com.example.rennt.arcticsunrise.data.api.models.Issue;
 import com.example.rennt.arcticsunrise.data.api.models.Section;
 import com.example.rennt.arcticsunrise.data.api.models.SectionPage;
 
-import org.lucasr.twowayview.TwoWayLayoutManager;
-import org.lucasr.twowayview.widget.SpannableGridLayoutManager;
-import org.lucasr.twowayview.widget.TwoWayView;
+//import org.lucasr.twowayview.TwoWayLayoutManager;
+//import org.lucasr.twowayview.widget.SpannableGridLayoutManager;
+//import org.lucasr.twowayview.widget.TwoWayView;
 
 import java.util.List;
 
@@ -90,19 +90,19 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
             }
         });
     }
-
-    private void setupTwoWayView(){
-        TwoWayView twowayView = (TwoWayView) findViewById(R.id.cardList);
-
-        SpannableGridLayoutManager spannableGrid = new SpannableGridLayoutManager(
-                TwoWayLayoutManager.Orientation.VERTICAL,
-                5, // columns
-                10 // rows
-        );
-        twowayView.setLayoutManager(spannableGrid);
-
-//        twowayView.setAdapter(new MyAdapter(true));
-    }
+//
+//    private void setupTwoWayView(){
+//        TwoWayView twowayView = (TwoWayView) findViewById(R.id.cardList);
+//
+//        SpannableGridLayoutManager spannableGrid = new SpannableGridLayoutManager(
+//                TwoWayLayoutManager.Orientation.VERTICAL,
+//                5, // columns
+//                10 // rows
+//        );
+//        twowayView.setLayoutManager(spannableGrid);
+//
+////        twowayView.setAdapter(new MyAdapter(true));
+//    }
 
 
     @Override

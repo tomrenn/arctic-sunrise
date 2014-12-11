@@ -7,7 +7,8 @@ public class Modules {
     static Object[] list(ArcticSunriseApp app) {
         return new Object[] {
                 new ArcticSunriseModule(app),
-                // debug module
+                // overriding debug module
+                new DebugArcticSunriseModule(),
         };
     }
 
