@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.orm.SugarRecord;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -22,7 +23,7 @@ import java.util.List;
  *
  * Created by rennt on 11/8/14.
  */
-public class Issue {
+public class Issue extends SugarRecord<Issue>{
     private String type;
     private String key;
     private String first;

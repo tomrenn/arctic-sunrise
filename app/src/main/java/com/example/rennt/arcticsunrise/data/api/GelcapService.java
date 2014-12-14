@@ -1,9 +1,7 @@
 package com.example.rennt.arcticsunrise.data.api;
 
 import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
@@ -22,7 +20,11 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -64,6 +66,7 @@ public class GelcapService {
     private final Edition edition;
     private final RequestQueue mRequestQueue;
     private final ImageLoader mImageLoader;
+    private final OkHttpClient httpClient;
     private final Gson gson;
 
     /**
@@ -71,8 +74,11 @@ public class GelcapService {
      * will be doing the construction of this object.
      */
     @Inject
-    public GelcapService(Edition edition, RequestQueue queue, ImageLoader imgLoader){
+    public GelcapService(Edition edition, RequestQueue queue, ImageLoader imgLoader,
+                         OkHttpClient httpClient){
         this.edition = edition;
+
+        this.httpClient = httpClient;
         this.mRequestQueue = queue;
         mRequestQueue.start();
         this.mImageLoader = imgLoader;
@@ -91,6 +97,15 @@ public class GelcapService {
     }
 
 
+    private String fetchURL(String url) throws IOException{
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        Response response = httpClient.newCall(request).execute();
+        return response.body().string();
+    }
+
     /**
      * Subscribe to retrieve catalog objects.
      */
@@ -105,10 +120,21 @@ public class GelcapService {
                     public void onResponse(Catalog response) {
                         subscriber.onNext(response);
                         subscriber.onCompleted();
+                        // now save to database
+                        try {
+                            Thread.sleep(5000);
                         }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error){
+                        catch (Exception e) {
+
+                        }
+                        Timber.d("Saving issues to database");
+                        for (Issue issue : response.getIssues()){
+                            issue.save();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error){
                         subscriber.onError(error);
                         subscriber.onCompleted();
                     }

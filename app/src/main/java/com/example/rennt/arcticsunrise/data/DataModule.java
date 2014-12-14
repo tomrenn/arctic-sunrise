@@ -10,6 +10,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.example.rennt.arcticsunrise.data.api.Edition;
 import com.example.rennt.arcticsunrise.data.api.GelcapService;
+import com.squareup.okhttp.OkHttpClient;
 
 import javax.inject.Singleton;
 
@@ -30,6 +31,11 @@ public class DataModule {
 //    public DataModule(Edition edition) {
 //        this.edition = edition;
 //    }
+
+    @Provides @Singleton
+    OkHttpClient provideHttpClient() {
+        return new OkHttpClient();
+    }
 
     @Provides @Singleton Edition provideEdition() {
         return Edition.USA;

@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.example.rennt.arcticsunrise.data.DataModule;
 import com.example.rennt.arcticsunrise.data.api.Edition;
+import com.orm.SugarApp;
 
 import dagger.ObjectGraph;
 import hugo.weaving.DebugLog;
@@ -13,7 +14,7 @@ import timber.log.Timber;
 /**
  * Created by rennt on 11/16/14.
  */
-public class ArcticSunriseApp extends Application{
+public class ArcticSunriseApp extends SugarApp {
     private ObjectGraph objectGraph;
 
 
