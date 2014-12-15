@@ -31,6 +31,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import rx.Observable;
+import rx.functions.Action1;
 import timber.log.Timber;
 
 /**
@@ -72,6 +74,7 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
         private List<Article> articles;
         private long startTime = 0;
 
+        private Observable<Section> articleObserver;
 
         public void setSection(Section s){
             this.section = s;
@@ -87,18 +90,20 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
             app.inject(this);
 
             startTime = System.currentTimeMillis();
-            gelcapService.getSectionContent(section, new Response.Listener<List<Article>>() {
+            // setSection must be called before attempting to use this fragment.
+            this.articleObserver = gelcapService.buildSectionArticlesObservable(section);
+            articleObserver.subscribe(new Action1<Section>() {
                 @Override
-                public void onResponse(final List<Article> response) {
-                    recieveSectionArticles(response);
+                public void call(Section section) {
+                    recieveSectionArticles(section.getArticles());
                 }
-            }, null);
+            });
         }
 
 
         private void recieveSectionArticles(List<Article> articles){
             long totalTime = System.currentTimeMillis() - startTime;
-            Toast.makeText(getActivity(), "Articles took " + totalTime + "ms", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), section.getName() + " took " + totalTime + "ms", Toast.LENGTH_SHORT).show();
 
             this.articles = articles;
 

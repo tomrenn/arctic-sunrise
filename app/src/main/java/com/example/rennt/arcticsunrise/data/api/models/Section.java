@@ -5,11 +5,14 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.orm.SugarRecord;
+
+import java.util.List;
 
 /**
  * Created by rennt on 11/10/14.
  */
-public class Section implements Parcelable{
+public class Section extends SugarRecord<Section> implements Parcelable{
     private String name;
     private String title;
     @SerializedName("pages")
@@ -19,6 +22,10 @@ public class Section implements Parcelable{
     @SerializedName("paid")
     private boolean isPaid;
     private String contentUrl;
+
+    // derived
+    @Expose
+    private List<Article> articles;
 
 
     public Section(Parcel in){
@@ -61,5 +68,13 @@ public class Section implements Parcelable{
         dest.writeString(title);
         dest.writeString(contentUrl);
         dest.writeBooleanArray(new boolean[] {isHidden, isPaid});
+    }
+
+    public List<Article> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
     }
 }

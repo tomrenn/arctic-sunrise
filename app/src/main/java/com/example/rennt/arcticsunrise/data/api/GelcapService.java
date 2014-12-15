@@ -1,11 +1,14 @@
 package com.example.rennt.arcticsunrise.data.api;
 
+import android.util.Log;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.Volley;
 import com.example.rennt.arcticsunrise.data.api.models.Article;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
@@ -114,31 +117,35 @@ public class GelcapService {
             @Override
             public void call(final Subscriber<? super Catalog> subscriber) {
 
-                // perform volley request
-                getCatalog(new Listener<Catalog>() {
-                    @Override
-                    public void onResponse(Catalog response) {
-                        subscriber.onNext(response);
-                        subscriber.onCompleted();
-                        // now save to database
-                        try {
-                            Thread.sleep(5000);
-                        }
-                        catch (Exception e) {
+                String address = NetworkResolver.getCatalogAddress(edition);
+                Timber.d("Catalog request (network): " + address);
+                try {
+                    Catalog catalog;
+                    Iterator<Catalog> savedCatalogs = Catalog.findAll(Catalog.class);
+                    if (savedCatalogs.hasNext()){
+                        catalog = savedCatalogs.next();
+                        Timber.d("Using cached from db catalog");
+                        subscriber.onNext(catalog);
 
-                        }
-                        Timber.d("Saving issues to database");
-                        for (Issue issue : response.getIssues()){
-                            issue.save();
-                        }
                     }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error){
-                        subscriber.onError(error);
-                        subscriber.onCompleted();
+                    else {
+                        String response = fetchURL(address);
+                        catalog = gson.fromJson(response, Catalog.class);
+                        subscriber.onNext(catalog);
+                        Timber.d("After catalog onNext");
+
+                        // save to database for future use
+                        catalog.save();
+
+                        Timber.d("Saved issues");
                     }
-                });
+                    subscriber.onCompleted();
+
+                } catch (Exception e){
+                    Timber.e(e.toString());
+                    subscriber.onError(e);
+                    subscriber.onCompleted();
+                }
             }
          }).subscribeOn(Schedulers.io())
            .observeOn(AndroidSchedulers.mainThread());
@@ -148,121 +155,102 @@ public class GelcapService {
      * Given the issue, request and set its list of sections
      */
     public Observable<Issue> getIssueSectionsObservable(final Issue issue) {
+        Timber.d("Filling sections for issue: " + issue);
+
         return Observable.create(new Observable.OnSubscribe<Issue>() {
+
             @Override
             public void call(final Subscriber<? super Issue> subscriber) {
-
-                // volley request
-                fillIssueSections(issue, new Listener<Issue>(){
-                    @Override
-                    public void onResponse(Issue issue){
-                        subscriber.onNext(issue);
-                        subscriber.onCompleted();
-                    }
-
-                }, null);
-            }
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
-    }
-
-
-    public Request fillIssueSections(final Issue issue, final Listener<Issue> issueListener,
-                                     final Response.ErrorListener errorListener){
-        String address = NetworkResolver.getIssueAddress(edition, issue);
-        Timber.i("Filling issue sections of issue: " + issue);
-        Request<Issue> request = new Request<Issue>(Request.Method.GET, address, errorListener) {
-            @Override
-            protected Response<Issue> parseNetworkResponse(NetworkResponse response) {
                 try {
-                    String json = new String(response.data, "UTF-8");
-                    JsonElement jsonElement = gson.fromJson(json, JsonElement.class);
-                    JsonObject jsonObj = jsonElement.getAsJsonObject();
-                    //getAsJsonObject();
-//                    GsonBuilder builder = new GsonBuilder().
-//                    JsonObject jsonObj = json.getAsJsonObject();
+                    fillIssueSections(issue);
 
-//                    issue.setDateUpdated(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(
-//                            jsonObj.get("date_updated").getAsString()));
-//                    issue.setSchemaVersion(jsonObj.get("schema_version").getAsString());
-
-                    JsonArray jsonSections = jsonObj
-                            .getAsJsonArray("sections").get(0)
-                            .getAsJsonObject()
-                            .getAsJsonArray("items");
-
-                    List<Section> sectionList = new LinkedList<Section>();
-                    Iterator<JsonElement> itty = jsonSections.iterator();
-                    Gson gson = new Gson();
-
-                    while (itty.hasNext()){
-                        sectionList.add(gson.fromJson(itty.next(), Section.class));
-                    }
-                    issue.setSections(sectionList);
+                    subscriber.onNext(issue);
+                    // save issue with sections
+                    subscriber.onCompleted();
+                } catch (IOException exception) {
+                    subscriber.onError(exception);
+                    subscriber.onCompleted();
                 }
-                catch (UnsupportedEncodingException e){
-                    throw new JsonParseException(e.toString());
-                }
-//                catch (ParseException e){
-//                    throw new JsonParseException(e.toString());
-//                }
-                return Response.success(issue, HttpHeaderParser.parseCacheHeaders(response));
             }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    /**
+     * Find and set the sections for the given issue.
+     *
+     * @param issue
+     * @return
+     * @throws IOException
+     */
+    private Issue fillIssueSections(final Issue issue) throws IOException{
+        String address = NetworkResolver.getIssueAddress(edition, issue);
+        Timber.i("(Network) Fetching sections for issue: " + issue);
+
+
+        String json = fetchURL(address);
+        JsonElement jsonElement = gson.fromJson(json, JsonElement.class);
+        JsonObject jsonObj = jsonElement.getAsJsonObject();
+
+        JsonArray jsonSections = jsonObj
+                .getAsJsonArray("sections").get(0)
+                .getAsJsonObject()
+                .getAsJsonArray("items");
+
+        List<Section> sections = new LinkedList<>();
+
+        for (Iterator<JsonElement> itty = jsonSections.iterator(); itty.hasNext();) {
+            sections.add(gson.fromJson(itty.next(), Section.class));
+        }
+        issue.setSections(sections);
+        return issue;
+    }
+
+    /**
+     * Return an Observable that fills the given section with the list of articles it contains.
+     */
+    public Observable<Section> buildSectionArticlesObservable(final Section section){
+        return Observable.create(new Observable.OnSubscribe<Section>() {
 
             @Override
-            protected void deliverResponse(Issue response) {
-                issueListener.onResponse(response);
+            public void call(Subscriber<? super Section> subscriber) {
+                // FIXME: use the correct url address..
+                String url = "http://gelcap.dowjones.com/gc/packager/wsj/us/contents/NOW201412100010/";
+                url = url + section.getPagePath();
+
+                try {
+                    String xml = fetchURL(url);
+
+                    Article.ArticleListParser articleParser = new Article.ArticleListParser();
+                    List<Article> articles = articleParser.parse(xml);
+                    section.setArticles(articles);
+                    subscriber.onNext(section);
+                    subscriber.onCompleted();
+
+                } catch (Exception exception) {
+                    subscriber.onNext(section);
+                    subscriber.onCompleted();
+                }
             }
-        };
-        return mRequestQueue.add(request);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
+//    /**
+//     * Make a request for the content (articles) in a section.
+//     */
+//    public com.android.volley.Request getSectionContent(final Section section, final Listener<List<Article>> sectionListener,
+//                                  final com.android.volley.Response.ErrorListener errorListener) {
+////        NetworkResolver.getSectionAddress(edition, null, section);
+//        String url = "http://gelcap.dowjones.com/gc/packager/wsj/us/contents/NOW201412100010/";
+//        url = url + section.getPagePath();
+//        XMLRequest.XMLParser articleListParser = new Article.ArticleListParser();
+//        com.android.volley.Request<List<Article>> request = new XMLRequest<List<Article>>(url, articleListParser,
+//                sectionListener, errorListener);
+//        return mRequestQueue.add(request);
+//    }
 
-    /**
-     * Request the issue object based on an IssueWrapper
-     */
-    public Request getIssue(final Issue issueRef, final Listener<Issue> issueListener,
-                            final Response.ErrorListener errorListener) {
-        String address = NetworkResolver.getIssueAddress(edition, issueRef);
-        Timber.i("Issue request (network): " + address);
-
-        Request<Issue> request = new GsonRequest<Issue>(address, Issue.class, gson, issueListener, errorListener);
-        // todo: fill issue sections with the sectionUrl
-        // todo: frick, add this feature to Issue Deserializer
-        return mRequestQueue.add(request);
-    }
-
-
-    public Request fillSectionArticles(final Issue issue, final int section){
-        throw new UnsupportedOperationException();
-    }
-
-
-    /**
-     * Make a request for the content (articles) in a section.
-     */
-    public Request getSectionContent(final Section section, final Listener<List<Article>> sectionListener,
-                                  final Response.ErrorListener errorListener) {
-//        NetworkResolver.getSectionAddress(edition, null, section);
-        String url = "http://gelcap.dowjones.com/gc/packager/wsj/us/contents/NOW201412100010/";
-        url = url + section.getPagePath();
-        XMLRequest.XMLParser articleListParser = new Article.ArticleListParser();
-        Request<List<Article>> request = new XMLRequest<List<Article>>(url, articleListParser,
-                sectionListener, errorListener);
-        return mRequestQueue.add(request);
-    }
-
-    /**
-     * Pass in a catalog listener to receive a freshly parsed catalog from the network.
-     */
-    public Request getCatalog(final Listener<Catalog> catalogListener,
-                           final Response.ErrorListener errorListener){
-        String address = NetworkResolver.getCatalogAddress(edition);
-
-        Timber.d("Catalog request (network): " + address);
-        Request<Catalog> request = new GsonRequest<Catalog>(address, Catalog.class, gson,
-                                                            catalogListener, errorListener);
-        return mRequestQueue.add(request);
-    }
 
 
     /**
