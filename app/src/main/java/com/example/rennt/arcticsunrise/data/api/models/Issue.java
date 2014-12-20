@@ -10,6 +10,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -31,10 +32,15 @@ public class Issue extends SugarRecord<Issue>{
     private String manifest;
 
     // Filled by a second request
-    @Expose
+    @Expose @Ignore
     private List<Section> sections;
-    @Expose @SerializedName("schema_version")
+    @Expose @SerializedName("schema_version") @Ignore
     private String schemaVersion;
+
+    @Expose
+    private Catalog _catalog;
+
+
 
     public String getKey(){
         return key;

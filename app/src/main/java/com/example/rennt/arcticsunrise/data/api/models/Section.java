@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 
 import java.util.List;
 
@@ -24,9 +25,18 @@ public class Section extends SugarRecord<Section> implements Parcelable{
     private String contentUrl;
 
     // derived
-    @Expose
+    @Expose @Ignore
     private List<Article> articles;
+    @Expose
+    private Issue _issue;
 
+    /**
+     * Default constructor has to stick around for SugarRecord purposes.
+     * https://github.com/satyan/sugar/issues/50
+     */
+    public Section(){
+        super();
+    }
 
     public Section(Parcel in){
         name = in.readString();
@@ -72,6 +82,10 @@ public class Section extends SugarRecord<Section> implements Parcelable{
 
     public List<Article> getArticles() {
         return articles;
+    }
+
+    public List<Article> lookupArticleSet(){
+        return Article.find(Article.class, "_section = ?", this.getId().toString());
     }
 
     public void setArticles(List<Article> articles) {

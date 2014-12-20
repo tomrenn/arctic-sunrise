@@ -29,6 +29,7 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -118,27 +119,47 @@ public class GelcapService {
             public void call(final Subscriber<? super Catalog> subscriber) {
 
                 String address = NetworkResolver.getCatalogAddress(edition);
-                Timber.d("Catalog request (network): " + address);
                 try {
                     Catalog catalog;
                     Iterator<Catalog> savedCatalogs = Catalog.findAll(Catalog.class);
                     if (savedCatalogs.hasNext()){
                         catalog = savedCatalogs.next();
-                        Timber.d("Using cached from db catalog");
-                        subscriber.onNext(catalog);
+                        Timber.d("(Cache) Obtained Catalog");
+                        // lookup cached issues
+                        List<Issue> issueSet = catalog.lookupIssueSet();
+                        Field _issues = Catalog.class.getDeclaredField("issues");
+                        _issues.setAccessible(true);
+                        _issues.set(catalog, issueSet);
 
+                        subscriber.onNext(catalog);
+                        subscriber.onCompleted();
+                        return;
                     }
-                    else {
+                    Timber.d("Catalog request (network): " + address);
+//                    else {
                         String response = fetchURL(address);
                         catalog = gson.fromJson(response, Catalog.class);
+
+                        // set the private variable in the issue
+                        // todo: or we create a custom deserialization that uses a builder..
+                        Field _catalogField = Issue.class.getDeclaredField("_catalog");
+                        _catalogField.setAccessible(true);
+                        for (Issue issue : catalog.getIssues()){
+                            _catalogField.set(issue, catalog);
+                        }
+
+
                         subscriber.onNext(catalog);
                         Timber.d("After catalog onNext");
 
                         // save to database for future use
                         catalog.save();
+                        for (Issue issue: catalog.getIssues()){
+                            issue.save();
+                        }
 
                         Timber.d("Saved issues");
-                    }
+//                    }
                     subscriber.onCompleted();
 
                 } catch (Exception e){
@@ -166,8 +187,12 @@ public class GelcapService {
 
                     subscriber.onNext(issue);
                     // save issue with sections
+                    issue.save();
+                    for (Section section : issue.getSections()){
+                        section.save();
+                    }
                     subscriber.onCompleted();
-                } catch (IOException exception) {
+                } catch (Exception exception) {
                     subscriber.onError(exception);
                     subscriber.onCompleted();
                 }
@@ -184,8 +209,21 @@ public class GelcapService {
      * @return
      * @throws IOException
      */
-    private Issue fillIssueSections(final Issue issue) throws IOException{
+    private Issue fillIssueSections(final Issue issue) throws Exception {
         String address = NetworkResolver.getIssueAddress(edition, issue);
+
+        List<Section> sections;
+
+//        Check if sections already exist
+        if (issue.getId() != null){
+            sections = Section.find(Section.class, "_issue = ?", issue.getId().toString());
+            if (sections != null && sections.size() > 0){
+                Timber.i("(Cache) Obtained sections");
+                issue.setSections(sections);
+                return issue;
+            }
+        }
+
         Timber.i("(Network) Fetching sections for issue: " + issue);
 
 
@@ -198,10 +236,18 @@ public class GelcapService {
                 .getAsJsonObject()
                 .getAsJsonArray("items");
 
-        List<Section> sections = new LinkedList<>();
+        sections = new LinkedList<>();
+
+        // set the private variable in the issue
+        // todo: or we create a custom deserialization that uses a builder..
+        Field _issueField = Section.class.getDeclaredField("_issue");
+        _issueField.setAccessible(true);
+
 
         for (Iterator<JsonElement> itty = jsonSections.iterator(); itty.hasNext();) {
-            sections.add(gson.fromJson(itty.next(), Section.class));
+            Section section = gson.fromJson(itty.next(), Section.class);
+            _issueField.set(section, issue);
+            sections.add(section);
         }
         issue.setSections(sections);
         return issue;
@@ -216,16 +262,31 @@ public class GelcapService {
             @Override
             public void call(Subscriber<? super Section> subscriber) {
                 // FIXME: use the correct url address..
-                String url = "http://gelcap.dowjones.com/gc/packager/wsj/us/contents/NOW201412100010/";
+                String url = "http://gelcap.dowjones.com/gc/packager/wsj/us/contents/NOW201412200320/";
                 url = url + section.getPagePath();
 
                 try {
+                    // lookup cached articles
+                    List<Article> cachedArticles = section.lookupArticleSet();
+                    if (cachedArticles != null && cachedArticles.size() > 0){
+                        Timber.d("(Cache) Obtained articles");
+                        section.setArticles(cachedArticles);
+                        subscriber.onNext(section);
+                        subscriber.onCompleted();
+                        return;
+                    }
+                    Timber.d("(Network) Fetching articles");
+                    // we could do a request to see if content changed, and update accordingly
                     String xml = fetchURL(url);
 
-                    Article.ArticleListParser articleParser = new Article.ArticleListParser();
+                    Article.ArticleListParser articleParser = new Article.ArticleListParser(section);
                     List<Article> articles = articleParser.parse(xml);
                     section.setArticles(articles);
                     subscriber.onNext(section);
+
+                    for (Article article : articles){
+                        article.save();
+                    }
                     subscriber.onCompleted();
 
                 } catch (Exception exception) {

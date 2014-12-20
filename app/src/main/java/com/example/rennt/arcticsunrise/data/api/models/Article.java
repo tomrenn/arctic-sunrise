@@ -4,6 +4,7 @@ import android.util.Log;
 import android.util.Xml;
 
 import com.example.rennt.arcticsunrise.data.api.requests.XMLRequest;
+import com.orm.SugarRecord;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -24,7 +25,7 @@ import hugo.weaving.DebugLog;
 /**
 * Summary of an article
 */
-public class Article {
+public class Article extends SugarRecord<Article>{
     private String headline;
 //    private String type;
     private boolean isDeco;
@@ -35,15 +36,19 @@ public class Article {
     // Item key="share_link"
 //    private String articleLink;
 
+    private Section _section;
 
 
-    public Article(String headline, String summary, boolean isDeco,
+    public Article() { }
+
+    public Article(Section section, String headline, String summary, boolean isDeco,
                    boolean isPaid, String thumbnail){
         this.headline = headline;
         this.summmary = summary;
         this.isDeco = isDeco;
         this.isPaid = isPaid;
         this.thumbnail = thumbnail;
+        this._section = section;
     }
 
     public String getHeadline() { return headline; }
@@ -51,6 +56,13 @@ public class Article {
 
     public static class ArticleListParser implements XMLRequest.XMLParser<List<Article>> {
         private static final String ns = null;
+        private final Section section;
+
+        public ArticleListParser(Section section){
+            super();
+            this.section = section;
+        }
+
 
         public List<Article> parse(String xml) throws XmlPullParserException, IOException {
             Reader reader = new StringReader(xml);
@@ -143,7 +155,7 @@ public class Article {
                 parser.next();
             }
 
-            return new Article(headline, summary, isDeco, isPaid, thumbnail);
+            return new Article(section, headline, summary, isDeco, isPaid, thumbnail);
         }
 
         private String readSummary(XmlPullParser parser) throws IOException, XmlPullParserException {
