@@ -40,6 +40,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -116,17 +117,18 @@ public class GelcapService {
     public Observable<Catalog> getCatalogObservable() {
         return Observable.create(new Observable.OnSubscribe<Catalog>(){
             @Override
+            @DebugLog
             public void call(final Subscriber<? super Catalog> subscriber) {
 
                 String address = NetworkResolver.getCatalogAddress(edition);
                 try {
                     Catalog catalog;
-                    Iterator<Catalog> savedCatalogs = Catalog.findAll(Catalog.class);
-                    if (savedCatalogs.hasNext()){
-                        catalog = savedCatalogs.next();
+                    List<Catalog> cachedCatalogs = Catalog.find(Catalog.class, "_edition = ?", edition.toString());
+                    if (cachedCatalogs != null && cachedCatalogs.size() > 0){
                         Timber.d("(Cache) Obtained Catalog");
+                        catalog = cachedCatalogs.get(0);
                         // lookup cached issues
-                        List<Issue> issueSet = catalog.lookupIssueSet();
+                        List<Issue> issueSet = Issue.findByKey(Issue.class, catalog.getId());
                         Field _issues = Catalog.class.getDeclaredField("issues");
                         _issues.setAccessible(true);
                         _issues.set(catalog, issueSet);
@@ -140,13 +142,17 @@ public class GelcapService {
                         String response = fetchURL(address);
                         catalog = gson.fromJson(response, Catalog.class);
 
+                        Field _editionField = Catalog.class.getDeclaredField("_edition");
+                        _editionField.setAccessible(true);
+                        _editionField.set(catalog, edition);
+
                         // set the private variable in the issue
                         // todo: or we create a custom deserialization that uses a builder..
-                        Field _catalogField = Issue.class.getDeclaredField("_catalog");
-                        _catalogField.setAccessible(true);
-                        for (Issue issue : catalog.getIssues()){
-                            _catalogField.set(issue, catalog);
-                        }
+//                        Field _catalogField = Issue.class.getDeclaredField("_catalog");
+//                        _catalogField.setAccessible(true);
+//                        for (Issue issue : catalog.getIssues()){
+//                            _catalogField.set(issue, catalog);
+//                        }
 
 
                         subscriber.onNext(catalog);
@@ -155,7 +161,7 @@ public class GelcapService {
                         // save to database for future use
                         catalog.save();
                         for (Issue issue: catalog.getIssues()){
-                            issue.save();
+                            issue.saveWithKey(catalog.getId());
                         }
 
                         Timber.d("Saved issues");
@@ -187,9 +193,8 @@ public class GelcapService {
 
                     subscriber.onNext(issue);
                     // save issue with sections
-                    issue.save();
                     for (Section section : issue.getSections()){
-                        section.save();
+                        section.saveWithKey(issue.getId());
                     }
                     subscriber.onCompleted();
                 } catch (Exception exception) {
@@ -209,6 +214,7 @@ public class GelcapService {
      * @return
      * @throws IOException
      */
+    @DebugLog
     private Issue fillIssueSections(final Issue issue) throws Exception {
         String address = NetworkResolver.getIssueAddress(edition, issue);
 
@@ -216,7 +222,7 @@ public class GelcapService {
 
 //        Check if sections already exist
         if (issue.getId() != null){
-            sections = Section.find(Section.class, "_issue = ?", issue.getId().toString());
+            sections = Section.findByKey(Section.class, issue.getId());
             if (sections != null && sections.size() > 0){
                 Timber.i("(Cache) Obtained sections");
                 issue.setSections(sections);
@@ -238,16 +244,10 @@ public class GelcapService {
 
         sections = new LinkedList<>();
 
-        // set the private variable in the issue
-        // todo: or we create a custom deserialization that uses a builder..
-        Field _issueField = Section.class.getDeclaredField("_issue");
-        _issueField.setAccessible(true);
-
-
         for (Iterator<JsonElement> itty = jsonSections.iterator(); itty.hasNext();) {
             Section section = gson.fromJson(itty.next(), Section.class);
-            _issueField.set(section, issue);
             sections.add(section);
+            section.saveWithKey(issue.getId());
         }
         issue.setSections(sections);
         return issue;
@@ -267,7 +267,12 @@ public class GelcapService {
 
                 try {
                     // lookup cached articles
-                    List<Article> cachedArticles = section.lookupArticleSet();
+                    Long sectionKey = section.getId();
+                    while (sectionKey == null){
+                        Timber.d("Section key does not exist yet");
+                        Thread.sleep(50);
+                    }
+                    List<Article> cachedArticles = Article.findByKey(Article.class, section.getId());
                     if (cachedArticles != null && cachedArticles.size() > 0){
                         Timber.d("(Cache) Obtained articles");
                         section.setArticles(cachedArticles);
@@ -279,17 +284,18 @@ public class GelcapService {
                     // we could do a request to see if content changed, and update accordingly
                     String xml = fetchURL(url);
 
-                    Article.ArticleListParser articleParser = new Article.ArticleListParser(section);
+                    Article.ArticleListParser articleParser = new Article.ArticleListParser();
                     List<Article> articles = articleParser.parse(xml);
                     section.setArticles(articles);
                     subscriber.onNext(section);
 
                     for (Article article : articles){
-                        article.save();
+                        article.saveWithKey(section.getId());
                     }
                     subscriber.onCompleted();
 
                 } catch (Exception exception) {
+                    Timber.e(exception.toString());
                     subscriber.onNext(section);
                     subscriber.onCompleted();
                 }

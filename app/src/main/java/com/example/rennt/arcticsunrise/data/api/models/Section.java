@@ -3,6 +3,7 @@ package com.example.rennt.arcticsunrise.data.api.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.rennt.arcticsunrise.data.api.SugarKeyRecord;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Created by rennt on 11/10/14.
  */
-public class Section extends SugarRecord<Section> implements Parcelable{
+public class Section extends SugarKeyRecord<Section> implements Parcelable{
     private String name;
     private String title;
     @SerializedName("pages")
@@ -27,8 +28,6 @@ public class Section extends SugarRecord<Section> implements Parcelable{
     // derived
     @Expose @Ignore
     private List<Article> articles;
-    @Expose
-    private Issue _issue;
 
     /**
      * Default constructor has to stick around for SugarRecord purposes.

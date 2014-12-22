@@ -127,7 +127,6 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.layout_fragment, container, false);
-            Timber.i("On create view");
             if (adapter != null){
                 adapter.clear();
                 ArrayList<String> titles = new ArrayList<String>();
@@ -143,7 +142,6 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            Timber.i("On activity created");
             if (adapter == null){
                 adapter = new ArrayAdapter<String>(
                         getActivity(), android.R.layout.simple_list_item_1, new ArrayList<String>());

@@ -1,5 +1,6 @@
 package com.example.rennt.arcticsunrise.data.api.models;
 
+import com.example.rennt.arcticsunrise.data.api.SugarKeyRecord;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -24,7 +25,7 @@ import java.util.List;
  *
  * Created by rennt on 11/8/14.
  */
-public class Issue extends SugarRecord<Issue>{
+public class Issue extends SugarKeyRecord<Issue> {
     private String type;
     private String key;
     private String first;
@@ -36,9 +37,6 @@ public class Issue extends SugarRecord<Issue>{
     private List<Section> sections;
     @Expose @SerializedName("schema_version") @Ignore
     private String schemaVersion;
-
-    @Expose
-    private Catalog _catalog;
 
 
 

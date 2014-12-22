@@ -141,12 +141,8 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
 
     private void receiveFilledIssue(final Issue issue){
         // do something
-        Timber.d("Recieved Issue object " + issue);
-        for (Section section : issue.getSections()){
-            Timber.d("Reading section from issue -> " + section.getTitle());
-        }
+
         // create PagedIssueAdapter
-        Timber.d("Done iterating sections");
 //        gelcapService.getSectionContent(issue.getSections().get(0), spr, this);
 
         Timber.d("Recived Issue on thread id " + android.os.Process.getThreadPriority(android.os.Process.myTid()));
