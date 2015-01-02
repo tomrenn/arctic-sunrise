@@ -1,27 +1,19 @@
 package com.example.rennt.arcticsunrise.ui;
 
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.ListFragment;
-import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
 import com.example.rennt.arcticsunrise.ArcticSunriseApp;
 import com.example.rennt.arcticsunrise.R;
-import com.example.rennt.arcticsunrise.data.api.GelcapService;
+import com.example.rennt.arcticsunrise.data.api.IssueService;
 import com.example.rennt.arcticsunrise.data.api.models.Article;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
 import com.example.rennt.arcticsunrise.data.api.models.Section;
@@ -59,8 +51,11 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
     @Override
     public Fragment getItem(int position) {
         SectionFragment fragment = new SectionFragment();
-        Section section = issue.getSections().get(position);
-        fragment.setSection(section);
+
+        Bundle args = new Bundle();
+        args.putInt("sectionPos", position);
+        fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -68,17 +63,12 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
      * A fragment that represents a section within a gelcap Issue.
      */
     public static class SectionFragment extends ListFragment {
-        private Section section;
+        @Inject IssueService issueService;
+        private int sectionPos;
         private ArrayAdapter<String> adapter;
-        @Inject GelcapService gelcapService;
         private List<Article> articles;
         private long startTime = 0;
-
         private Observable<Section> articleObserver;
-
-        public void setSection(Section s){
-            this.section = s;
-        }
 
         /**
          * When creating, retrieve this instance's number from its arguments.
@@ -88,10 +78,12 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
             super.onCreate(savedInstanceState);
             ArcticSunriseApp app = ArcticSunriseApp.get(getActivity());
             app.inject(this);
-
             startTime = System.currentTimeMillis();
+
+            sectionPos = getArguments().getInt("sectionPos");
+
             // setSection must be called before attempting to use this fragment.
-            this.articleObserver = gelcapService.buildSectionArticlesObservable(section);
+            this.articleObserver = issueService.buildSectionArticlesObservable(sectionPos);
             articleObserver.subscribe(new Action1<Section>() {
                 @Override
                 public void call(Section section) {
@@ -103,7 +95,7 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
 
         private void recieveSectionArticles(List<Article> articles){
             long totalTime = System.currentTimeMillis() - startTime;
-            Toast.makeText(getActivity(), section.getName() + " took " + totalTime + "ms", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "section " + sectionPos + " took " + totalTime + "ms", Toast.LENGTH_SHORT).show();
 
             this.articles = articles;
 
@@ -118,8 +110,8 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
         @Override
         public void onSaveInstanceState(Bundle outState) {
             super.onSaveInstanceState(outState);
-            Timber.i("Saving instance state " + section.getName());
-            outState.putParcelable("section", section);
+            Timber.i("Saving section fragment " + sectionPos);
+            outState.putInt("sectionPos", sectionPos);
         }
 
 

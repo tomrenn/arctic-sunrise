@@ -4,9 +4,13 @@ import android.app.Application;
 import android.content.Context;
 
 import com.example.rennt.arcticsunrise.data.DataModule;
+import com.example.rennt.arcticsunrise.data.EditionModule;
+import com.example.rennt.arcticsunrise.data.IssueModule;
 import com.example.rennt.arcticsunrise.data.api.Edition;
+import com.example.rennt.arcticsunrise.data.api.IssueService;
 import com.orm.SugarApp;
 
+import dagger.Module;
 import dagger.ObjectGraph;
 import hugo.weaving.DebugLog;
 import timber.log.Timber;
@@ -15,8 +19,12 @@ import timber.log.Timber;
  * Created by rennt on 11/16/14.
  */
 public class ArcticSunriseApp extends SugarApp {
-    private ObjectGraph objectGraph;
-
+    private ObjectGraph currentGraph;
+    // basically a stack.
+    private ObjectGraph baseGraph;
+    private ObjectGraph editionGraph;
+    private ObjectGraph issueGraph;
+    // handle the object graphs here...
 
     @Override public void onCreate() {
         super.onCreate();
@@ -28,20 +36,33 @@ public class ArcticSunriseApp extends SugarApp {
             // TODO Timber.plant(new CrashlyticsTree());
         }
 
-        buildObjectGraphAndInject();
+        buildObjectGraph();
 //        objectGraph.plus(new DataModule(Edition.USA));
 //        objectGraph.plus();
     }
 
     @DebugLog
-    public void buildObjectGraphAndInject() {
-        objectGraph = ObjectGraph.create(com.example.rennt.arcticsunrise.Modules.list(this));
+    public void buildObjectGraph() {
+        baseGraph = ObjectGraph.create(com.example.rennt.arcticsunrise.Modules.list(this));
+        currentGraph = baseGraph;
         // we would inject this if we were injecting anything into App.java
 //        objectGraph.inject(this);
     }
 
     public void inject(Object o) {
-        objectGraph.inject(o);
+        currentGraph.inject(o);
+    }
+
+    public ObjectGraph plusEditionModule(EditionModule module){
+        editionGraph = baseGraph.plus(module);
+        currentGraph = editionGraph;
+        return editionGraph;
+    }
+
+    public ObjectGraph plusIssueModule(IssueModule module){
+        issueGraph = editionGraph.plus(module);
+        currentGraph = issueGraph;
+        return currentGraph;
     }
 
     public static ArcticSunriseApp get(Context context) {

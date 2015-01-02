@@ -1,17 +1,14 @@
 package com.example.rennt.arcticsunrise.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -20,44 +17,50 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.example.rennt.arcticsunrise.AppContainer;
 import com.example.rennt.arcticsunrise.ArcticSunriseApp;
 import com.example.rennt.arcticsunrise.R;
-import com.example.rennt.arcticsunrise.data.api.GelcapService;
-import com.example.rennt.arcticsunrise.data.api.models.Article;
+import com.example.rennt.arcticsunrise.data.EditionModule;
+import com.example.rennt.arcticsunrise.data.IssueModule;
+import com.example.rennt.arcticsunrise.data.ObjectGraphHolder;
+import com.example.rennt.arcticsunrise.data.api.Edition;
+import com.example.rennt.arcticsunrise.data.api.IssueService;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
-import com.example.rennt.arcticsunrise.data.api.models.Section;
-import com.example.rennt.arcticsunrise.data.api.models.SectionPage;
 
 //import org.lucasr.twowayview.TwoWayLayoutManager;
 //import org.lucasr.twowayview.widget.SpannableGridLayoutManager;
 //import org.lucasr.twowayview.widget.TwoWayView;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import dagger.ObjectGraph;
 import hugo.weaving.DebugLog;
 import rx.Observable;
-import rx.Observer;
 import rx.Subscription;
 import rx.functions.Action1;
 import timber.log.Timber;
 //import retrofit.converter.SimpleXMLConverter;
 
 
-public class MainActivity extends ActionBarActivity implements Response.ErrorListener {
-    @Inject GelcapService gelcapService;
+public class MainActivity extends ActionBarActivity implements Response.ErrorListener, ObjectGraphHolder {
     @Inject AppContainer appContainer;
-
+    @Inject Observable<Catalog> catalogObservable;
     private ViewGroup container;
+    @InjectView(R.id.drawerListView) ListView drawerListView;
     @InjectView(R.id.viewpager) ViewPager viewPager;
     @InjectView(R.id.pagertabs) PagerSlidingTabStrip pagerTabs;
     @InjectView(R.id.toolbar) Toolbar toolbar;
 
+    // happens later
+    private ObjectGraph issueObjectGraph;
+    private IssueService issueService;
+
     long startTime = 0;
     // observables
-    Observable<Catalog> catalogObservable;
     Subscription lastCatalogSubscription;
 
     @Override @DebugLog
@@ -65,7 +68,8 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
         super.onCreate(savedInstanceState);
         // do dep. injection.
         ArcticSunriseApp app = ArcticSunriseApp.get(this);
-        app.inject(this);
+        ObjectGraph editionGraph = app.plusEditionModule(new EditionModule(Edition.USA));
+        editionGraph.inject(this);
 
         // get root view
         container = appContainer.get(this);
@@ -78,8 +82,11 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
         setSupportActionBar(toolbar);
 
         startTime = System.currentTimeMillis();
-        catalogObservable = gelcapService.getCatalogObservable();
         subscribeNewCatalogRequest();
+    }
+
+    public ObjectGraph getObjectGraph(){
+        return issueObjectGraph;
     }
 
     private void subscribeNewCatalogRequest() {
@@ -90,20 +97,6 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
             }
         });
     }
-//
-//    private void setupTwoWayView(){
-//        TwoWayView twowayView = (TwoWayView) findViewById(R.id.cardList);
-//
-//        SpannableGridLayoutManager spannableGrid = new SpannableGridLayoutManager(
-//                TwoWayLayoutManager.Orientation.VERTICAL,
-//                5, // columns
-//                10 // rows
-//        );
-//        twowayView.setLayoutManager(spannableGrid);
-//
-////        twowayView.setAdapter(new MyAdapter(true));
-//    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -128,22 +121,33 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
         // request NOW issue
         Timber.d("Recieved Catalog object " + catalog);
 
+        List<String> issues = new LinkedList<>();
+        for (Issue issue : catalog.getIssues()){
+            issues.add(issue.getKey());
+        }
+        drawerListView.setAdapter(
+                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, issues));
+
+        ArcticSunriseApp app = ArcticSunriseApp.get(this);
+        issueObjectGraph = app.plusIssueModule(new IssueModule(catalog.getIssues().get(0)));
+        issueService = issueObjectGraph.get(IssueService.class);
+
         // fill issue sections.
-        Subscription subscription = gelcapService.getIssueSectionsObservable(
-                catalog.getIssues().get(0)).subscribe(new Action1<Issue>() {
-            @Override
-            public void call(Issue issue) {
-                receiveFilledIssue(issue);
-            }
-        });
-//        gelcapService.getIssue(catalog.getIssues().get(0), issueReciever, this);
+        Subscription subscription = issueService.getIssueSectionsObservable()
+                .subscribe(new Action1<Issue>() {
+                    @Override
+                    public void call(Issue issue) {
+                        receiveFilledIssue(issue);
+                    }
+                });
+//        issueService.getIssue(catalog.getIssues().get(0), issueReciever, this);
     }
 
     private void receiveFilledIssue(final Issue issue){
         // do something
 
         // create PagedIssueAdapter
-//        gelcapService.getSectionContent(issue.getSections().get(0), spr, this);
+//        issueService.getSectionContent(issue.getSections().get(0), spr, this);
 
         Timber.d("Recived Issue on thread id " + android.os.Process.getThreadPriority(android.os.Process.myTid()));
 

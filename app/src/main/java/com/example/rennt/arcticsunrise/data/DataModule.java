@@ -9,8 +9,13 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.example.rennt.arcticsunrise.data.api.Edition;
-import com.example.rennt.arcticsunrise.data.api.GelcapService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import java.io.Reader;
 
 import javax.inject.Singleton;
 
@@ -37,6 +42,29 @@ public class DataModule {
         return new OkHttpClient();
     }
 
+
+    /**
+     * Return a stream reader based on the given uri.
+     */
+    public static Reader fetchUri(OkHttpClient httpClient, String uri) throws Exception{
+        Request request = new Request.Builder()
+                .url(uri)
+                .build();
+        Response response = httpClient.newCall(request).execute();
+        return response.body().charStream();
+    }
+
+    /**
+     * Return the full String based on given uri.
+     */
+    public static String fetchUriToString(OkHttpClient httpClient, String uri) throws Exception{
+        Request request = new Request.Builder()
+                .url(uri)
+                .build();
+        Response response = httpClient.newCall(request).execute();
+        return response.body().string();
+    }
+
     @Provides @Singleton Edition provideEdition() {
         return Edition.USA;
     }
@@ -49,6 +77,11 @@ public class DataModule {
     @Provides @Singleton
     RequestQueue provideRequestQueue(Application appContext) {
         return Volley.newRequestQueue(appContext.getApplicationContext());
+    }
+
+    @Provides @Singleton
+    Gson provideGson() {
+        return new GsonBuilder().create();
     }
 
     @Provides @Singleton

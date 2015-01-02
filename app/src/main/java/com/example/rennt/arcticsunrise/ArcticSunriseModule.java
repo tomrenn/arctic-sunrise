@@ -19,10 +19,6 @@ import dagger.Provides;
         includes = {
             DebugUiModule.class,
             DataModule.class
-        },
-        injects = {
-            MainActivity.class,
-            IssueViewPagerAdapter.SectionFragment.class
         }
 )
 public final class ArcticSunriseModule {
