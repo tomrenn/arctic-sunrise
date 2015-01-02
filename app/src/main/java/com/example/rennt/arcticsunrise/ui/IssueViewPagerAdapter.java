@@ -38,6 +38,10 @@ public class IssueViewPagerAdapter extends FragmentPagerAdapter{
         this.issue = issue;
     }
 
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
+
     @Override
     public int getCount() {
         return issue.getSections().size();

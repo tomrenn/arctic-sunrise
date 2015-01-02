@@ -6,7 +6,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -56,12 +58,13 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
     @InjectView(R.id.toolbar) Toolbar toolbar;
 
     // happens later
+    private Catalog catalog;
     private ObjectGraph issueObjectGraph;
     private IssueService issueService;
 
-    long startTime = 0;
     // observables
     Subscription lastCatalogSubscription;
+
 
     @Override @DebugLog
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +84,6 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
 
         setSupportActionBar(toolbar);
 
-        startTime = System.currentTimeMillis();
         subscribeNewCatalogRequest();
     }
 
@@ -117,10 +119,7 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
         return super.onOptionsItemSelected(item);
     }
 
-    private void receiveCatalog(Catalog catalog){
-        // request NOW issue
-        Timber.d("Recieved Catalog object " + catalog);
-
+    private void setupNavDrawer(){
         List<String> issues = new LinkedList<>();
         for (Issue issue : catalog.getIssues()){
             issues.add(issue.getKey());
@@ -128,8 +127,29 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
         drawerListView.setAdapter(
                 new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, issues));
 
+        drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Issue selectedIssue = catalog.getIssues().get(position);
+                Timber.d("Selected position " + position);
+                Timber.d("Changing to issue " + selectedIssue.getKey());
+                chooseIssue(selectedIssue);
+            }
+        });
+    }
+
+    private void receiveCatalog(Catalog catalog){
+        Timber.d("Recieved Catalog object " + catalog);
+        this.catalog = catalog;
+
+        setupNavDrawer();
+
+        chooseIssue(catalog.getIssues().get(0));
+    }
+
+    private void chooseIssue(Issue issue){
         ArcticSunriseApp app = ArcticSunriseApp.get(this);
-        issueObjectGraph = app.plusIssueModule(new IssueModule(catalog.getIssues().get(0)));
+        issueObjectGraph = app.plusIssueModule(new IssueModule(issue));
         issueService = issueObjectGraph.get(IssueService.class);
 
         // fill issue sections.
@@ -140,7 +160,6 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
                         receiveFilledIssue(issue);
                     }
                 });
-//        issueService.getIssue(catalog.getIssues().get(0), issueReciever, this);
     }
 
     private void receiveFilledIssue(final Issue issue){
@@ -157,12 +176,7 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
         viewPager.setAdapter(adapter);
         pagerTabs.setViewPager(viewPager);
 
-        long totalTime = System.currentTimeMillis() - startTime;
-        Toast.makeText(this, "Fetching catalog and sections took: " + totalTime, Toast.LENGTH_LONG).show();
-//        pagerTabs.notifyDataSetChanged();
-//                viewPager.invalidate();
-
-//        viewPager.invalidate();
+        pagerTabs.notifyDataSetChanged();
     }
 
 
