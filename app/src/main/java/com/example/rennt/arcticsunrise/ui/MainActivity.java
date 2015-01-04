@@ -1,7 +1,9 @@
 package com.example.rennt.arcticsunrise.ui;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -26,6 +28,8 @@ import com.example.rennt.arcticsunrise.data.api.Edition;
 import com.example.rennt.arcticsunrise.data.api.IssueService;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
+import com.example.rennt.arcticsunrise.data.prefs.IssuePreference;
+import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
 
 //import org.lucasr.twowayview.TwoWayLayoutManager;
 //import org.lucasr.twowayview.widget.SpannableGridLayoutManager;
@@ -42,29 +46,36 @@ import butterknife.InjectView;
 import dagger.ObjectGraph;
 import hugo.weaving.DebugLog;
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 //import retrofit.converter.SimpleXMLConverter;
 
 
 public class MainActivity extends ActionBarActivity implements Response.ErrorListener, ObjectGraphHolder {
     @Inject AppContainer appContainer;
+    // fixme: observable needs to be composible, so we can say useCache=false.
     @Inject Observable<Catalog> catalogObservable;
     private ViewGroup container;
+    @InjectView(R.id.navDrawer) DrawerLayout navDrawer;
     @InjectView(R.id.drawerListView) ListView drawerListView;
     @InjectView(R.id.viewpager) ViewPager viewPager;
     @InjectView(R.id.pagertabs) PagerSlidingTabStrip pagerTabs;
     @InjectView(R.id.toolbar) Toolbar toolbar;
 
+    @Inject @IssuePreference LongPreference savedIssuePref;
+
     // happens later
     private Catalog catalog;
     private ObjectGraph issueObjectGraph;
     private IssueService issueService;
+    private Issue currentIssue;
 
     // observables
     Subscription lastCatalogSubscription;
-
 
     @Override @DebugLog
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +90,46 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
         // set content view
         getLayoutInflater().inflate(R.layout.activity_main, container);
 
+        Timber.d("Saved Issue id is : " + savedIssuePref.get());
+        if (savedIssuePref.isSet()) {
+            restoreSavedIssue(savedIssuePref.get());
+        }
+
         // inject views
         ButterKnife.inject(this);
 
         setSupportActionBar(toolbar);
 
         subscribeNewCatalogRequest();
+    }
+
+
+    private void restoreSavedIssue(final long issueId){
+        Observable<Issue> savedIssueObsverable = Observable.create(new Observable.OnSubscribe<Issue>(){
+            @Override
+            public void call(final Subscriber<? super Issue> subscriber) {
+                Issue issue = Issue.findById(Issue.class, issueId);
+                subscriber.onNext(issue);
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        savedIssueObsverable.subscribe(new Action1<Issue>() {
+            @Override
+            public void call(Issue issue) {
+                chooseIssue(issue);
+            }
+        });
+    }
+
+
+    protected void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        Timber.d("--- saving instance state ---");
+        Timber.d("current issue : " + issueService.getIssue().getId());
+        savedIssuePref.set(issueService.getIssue().getId());
+        outState.putLong("savedIssueId", issueService.getIssue().getId());
     }
 
     public ObjectGraph getObjectGraph(){
@@ -134,6 +179,7 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
                 Timber.d("Selected position " + position);
                 Timber.d("Changing to issue " + selectedIssue.getKey());
                 chooseIssue(selectedIssue);
+                navDrawer.closeDrawers();
             }
         });
     }
@@ -144,10 +190,42 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
 
         setupNavDrawer();
 
-        chooseIssue(catalog.getIssues().get(0));
+        if (currentIssue == null){
+            Timber.d("Defaulting to first available issue");
+            chooseIssue(catalog.getIssues().get(0));
+        } else {
+            checkOutdatedIssue(catalog);
+        }
+    }
+
+    /**
+     * Check if currentIssue is outdated.
+     *
+     * @return Null if not outdated, or the updated Issue.
+     */
+    private void checkOutdatedIssue(Catalog catalog){
+        for (Issue issue : catalog.getIssues()){
+            if (currentIssue.getKey().equals(issue.getKey())){
+                alertNewAvailableIssue(issue);
+                break;
+//                if (issue.getRevision() > currentIssue.getRevision()){
+//                    // show new content available dialog
+//                    alertNewAvailableIssue(issue);
+//                    break;
+//                }
+            }
+        }
+    }
+
+    private void alertNewAvailableIssue(Issue issue){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("New content available");
+        builder.create().show();
     }
 
     private void chooseIssue(Issue issue){
+        Timber.d("Chosen issue : " + issue.getKey() + " - " + issue.getId());
+        currentIssue = issue;
         ArcticSunriseApp app = ArcticSunriseApp.get(this);
         issueObjectGraph = app.plusIssueModule(new IssueModule(issue));
         issueService = issueObjectGraph.get(IssueService.class);

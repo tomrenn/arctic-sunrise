@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,16 +31,12 @@ import timber.log.Timber;
 /**
  * Created by rennt on 12/1/14.
  */
-public class IssueViewPagerAdapter extends FragmentPagerAdapter{
+public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
     private Issue issue;
 
     public IssueViewPagerAdapter(FragmentManager fm, Issue issue){
         super(fm);
         this.issue = issue;
-    }
-
-    public int getItemPosition(Object object) {
-        return POSITION_NONE;
     }
 
     @Override

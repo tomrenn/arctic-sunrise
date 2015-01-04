@@ -9,6 +9,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.example.rennt.arcticsunrise.data.api.Edition;
+import com.example.rennt.arcticsunrise.data.prefs.IssuePreference;
+import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
+import com.example.rennt.arcticsunrise.ui.MainActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -31,11 +34,6 @@ import dagger.Provides;
 )
 public class DataModule {
     private static final int MAX_CACHE_SIZE = 20; // number of bitmaps in cache
-//    private final Edition edition;
-//
-//    public DataModule(Edition edition) {
-//        this.edition = edition;
-//    }
 
     @Provides @Singleton
     OkHttpClient provideHttpClient() {
@@ -72,6 +70,10 @@ public class DataModule {
     @Provides @Singleton
     SharedPreferences provideSharedPreferences(Application app){
         return app.getSharedPreferences("default", Application.MODE_PRIVATE);
+    }
+
+    @Provides @IssuePreference LongPreference provideCurrentIssuePreference(SharedPreferences prefs){
+        return new LongPreference(prefs, "CURRENT_ISSUE_ID");
     }
 
     @Provides @Singleton

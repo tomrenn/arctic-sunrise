@@ -83,6 +83,14 @@ public class EditionModule {
     }
 
 
+    /**
+     * Todo: make a catalogManager. getObservable(bool useCache) ?
+     *
+     * get cached catalog, cached issues through catalog id.
+     *
+     * get new catalog - save new catalog with similar issues and remove tail issues and old catalog.
+     *
+     */
     @Provides Observable<Catalog> provideCatalogObservable(final OkHttpClient httpClient, final Gson gson) {
         return Observable.create(new Observable.OnSubscribe<Catalog>(){
             @Override
@@ -104,7 +112,6 @@ public class EditionModule {
 
                         subscriber.onNext(catalog);
                         subscriber.onCompleted();
-                        return;
                     }
                     Timber.d("Catalog request (network): " + address);
 

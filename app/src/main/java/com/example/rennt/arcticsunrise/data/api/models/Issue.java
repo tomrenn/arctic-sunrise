@@ -31,6 +31,8 @@ public class Issue extends SugarKeyRecord<Issue> {
     private String first;
     private String label;
     private String manifest;
+    @SerializedName("rev")
+    private int revision;
 
     // Filled by a second request
     @Expose @Ignore
@@ -59,4 +61,7 @@ public class Issue extends SugarKeyRecord<Issue> {
         return "";
     }
 
+    public int getRevision() {
+        return revision;
+    }
 }

@@ -81,6 +81,10 @@ public class IssueService {
         this.gson = gson;
     }
 
+    public Issue getIssue(){
+        return issue;
+    }
+
     /**
      * Return base location for issue information.
      */
