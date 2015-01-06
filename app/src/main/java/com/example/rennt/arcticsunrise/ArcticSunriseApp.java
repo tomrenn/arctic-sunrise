@@ -43,7 +43,7 @@ public class ArcticSunriseApp extends SugarApp {
 
     @DebugLog
     public void buildObjectGraph() {
-        baseGraph = ObjectGraph.create(com.example.rennt.arcticsunrise.Modules.list(this));
+        baseGraph = ObjectGraph.create(Modules.list(this));
         currentGraph = baseGraph;
         // we would inject this if we were injecting anything into App.java
 //        objectGraph.inject(this);

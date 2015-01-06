@@ -55,7 +55,7 @@ import timber.log.Timber;
 //import retrofit.converter.SimpleXMLConverter;
 
 
-public class MainActivity extends ActionBarActivity implements Response.ErrorListener, ObjectGraphHolder {
+public class MainActivity extends ActionBarActivity implements ObjectGraphHolder {
     @Inject AppContainer appContainer;
     // fixme: observable needs to be composible, so we can say useCache=false.
     @Inject Observable<Catalog> catalogObservable;
@@ -255,12 +255,6 @@ public class MainActivity extends ActionBarActivity implements Response.ErrorLis
         pagerTabs.setViewPager(viewPager);
 
         pagerTabs.notifyDataSetChanged();
-    }
-
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        Timber.e(error.getMessage());
     }
 
 }

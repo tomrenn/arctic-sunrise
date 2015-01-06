@@ -1,6 +1,7 @@
 package com.example.rennt.arcticsunrise.data.api.models;
 
 import com.example.rennt.arcticsunrise.data.api.Edition;
+import com.example.rennt.arcticsunrise.data.api.SugarKeyRecord;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
@@ -11,25 +12,25 @@ import java.util.List;
 /**
  * Created by rennt on 11/9/14.
  */
-public class Catalog extends SugarRecord<Catalog>{
+public class Catalog extends SugarKeyRecord<Catalog> {
     private int version;
     @SerializedName("items") @Ignore
     private List<Issue> issues;
-
-    @Expose
-    private Edition _edition;
 
     public List<Issue> getIssues(){
         return this.issues;
     }
 
     /**
-     * Lookup <related> set. Could be an interface(?).
-     * cached database query to find the related objects.
-     *
-     * @return
+     * Return the matching issue if it exists in the catalog or null.
      */
-    public List<Issue> lookupIssueSet(){
-        return Issue.find(Issue.class, "_catalog = ?", this.getId().toString());
+    public Issue containsIssue(Issue givenIssue){
+        for (Issue issue : issues){
+            if (givenIssue.getKey().equals(issue.getKey()) &&
+                    givenIssue.getRevision() == issue.getRevision()){
+                return issue;
+            }
+        }
+        return null;
     }
 }

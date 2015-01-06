@@ -99,36 +99,45 @@ public class EditionModule {
 
                 String address = getCatalogAddress(getBasePath(edition));
                 try {
-                    Catalog catalog;
-                    List<Catalog> cachedCatalogs = Catalog.find(Catalog.class, "_edition = ?", edition.toString());
+                    Catalog cachedCatalog = null;
+                    List<Catalog> cachedCatalogs = Catalog.findByKey(Catalog.class, edition.ordinal());
                     if (cachedCatalogs != null && cachedCatalogs.size() > 0){
                         Timber.d("(Cache) Obtained Catalog");
-                        catalog = cachedCatalogs.get(0);
+                        cachedCatalog = cachedCatalogs.get(0);
                         // lookup cached issues
-                        List<Issue> issueSet = Issue.findByKey(Issue.class, catalog.getId());
+                        List<Issue> issueSet = Issue.findByKey(Issue.class, cachedCatalog.getId());
                         Field _issues = Catalog.class.getDeclaredField("issues");
                         _issues.setAccessible(true);
-                        _issues.set(catalog, issueSet);
+                        _issues.set(cachedCatalog, issueSet);
 
-                        subscriber.onNext(catalog);
-                        subscriber.onCompleted();
+                        subscriber.onNext(cachedCatalog);
                     }
                     Timber.d("Catalog request (network): " + address);
 
                     Reader responseStream = DataModule.fetchUri(httpClient, address);
-                    catalog = gson.fromJson(responseStream, Catalog.class);
+                    Catalog catalog = gson.fromJson(responseStream, Catalog.class);
 
-                    Field _editionField = Catalog.class.getDeclaredField("_edition");
-                    _editionField.setAccessible(true);
-                    _editionField.set(catalog, edition);
-
-                    subscriber.onNext(catalog);
+                    int numNewIssues = 0;
+                    if (cachedCatalog != null) {
+                        // assign issue id to newly parsed issues if they already exist.
+                        for (Issue issue : catalog.getIssues()){
+                            Issue existingIssue = cachedCatalog.containsIssue(issue);
+                            if (existingIssue != null){
+                                issue.setId(existingIssue.getId());
+                            } else {
+                                numNewIssues++;
+                            }
+                        }
+                        cachedCatalog.delete();
+                    }
+                    Timber.d("Catalog updated with " + numNewIssues + " new issues");
 
                     // save to database for future use
-                    catalog.save();
+                    catalog.saveWithKey(edition.ordinal());
                     for (Issue issue: catalog.getIssues()){
                         issue.saveWithKey(catalog.getId());
                     }
+                    subscriber.onNext(catalog);
 
                     subscriber.onCompleted();
 
