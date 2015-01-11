@@ -70,6 +70,7 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
         private List<Article> articles;
         private long startTime = 0;
         private Observable<Section> articleObserver;
+        //todo: inject add Floating Action Button if new content
 
         /**
          * When creating, retrieve this instance's number from its arguments.

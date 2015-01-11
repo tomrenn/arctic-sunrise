@@ -37,7 +37,6 @@ public class Article extends SugarKeyRecord<Article>{
     // Item key="share_link"
 //    private String articleLink;
 
-
     public Article() { }
 
     public Article(String headline, String summary, boolean isDeco,
