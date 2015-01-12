@@ -7,8 +7,8 @@
     android:layout_height="match_parent">
 
     <!-- content -->
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
@@ -26,6 +26,7 @@
             android:id="@+id/pagertabs"
             android:layout_width="match_parent"
             android:layout_height="@dimen/view_pager_height"
+            android:layout_below="@id/toolbar"
             app:pstsTabBackground="?attr/selectableItemBackground"
             app:pstsIndicatorHeight="4dp"
             app:pstsDividerColor="@android:color/transparent"
@@ -34,10 +35,11 @@
         <android.support.v4.view.ViewPager
             android:paddingLeft="@dimen/activity_vertical_margin"
             android:paddingRight="@dimen/activity_vertical_margin"
+            android:layout_below="@id/pagertabs"
             android:id="@+id/viewpager"
             android:layout_height="wrap_content"
             android:layout_width="match_parent" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <!-- drawer -->
     <ListView

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -30,6 +31,7 @@ import com.example.rennt.arcticsunrise.data.api.models.Catalog;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
 import com.example.rennt.arcticsunrise.data.prefs.IssuePreference;
 import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
+import com.melnykov.fab.FloatingActionButton;
 
 //import org.lucasr.twowayview.TwoWayLayoutManager;
 //import org.lucasr.twowayview.widget.SpannableGridLayoutManager;
@@ -65,6 +67,7 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
     @InjectView(R.id.viewpager) ViewPager viewPager;
     @InjectView(R.id.pagertabs) PagerSlidingTabStrip pagerTabs;
     @InjectView(R.id.toolbar) Toolbar toolbar;
+    @InjectView(R.id.content) RelativeLayout relativeContent;
 
     @Inject @IssuePreference LongPreference savedIssuePref;
 
@@ -218,9 +221,7 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
     }
 
     private void alertNewAvailableIssue(Issue issue){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("New content available");
-        builder.create().show();
+        Toast.makeText(this, "New content available, pull to refresh", Toast.LENGTH_SHORT).show();
     }
 
     private void chooseIssue(Issue issue){

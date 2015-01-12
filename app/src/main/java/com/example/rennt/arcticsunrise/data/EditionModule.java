@@ -1,6 +1,7 @@
 package com.example.rennt.arcticsunrise.data;
 
 import com.example.rennt.arcticsunrise.ArcticSunriseModule;
+import com.example.rennt.arcticsunrise.data.api.BaseApiPath;
 import com.example.rennt.arcticsunrise.data.api.BaseEditionPath;
 import com.example.rennt.arcticsunrise.data.api.Edition;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
@@ -36,10 +37,6 @@ import timber.log.Timber;
        complete = false, library = true
 )
 public class EditionModule {
-    private static String NEW_FORMAT = "http://%s/gc/packager/wsj/%s";
-    private static String NEW_DOMAIN = "gelcap.dowjones.com";
-    private static String OLD_FORMAT = "http://%s/gc/packager/%s";
-    private static String OLD_DOMAIN = "mitp.wsj.com";
     private static String CATALOG_PATH = "/android.phone.wifi.%d.catalog.json";
     private Edition edition;
 
@@ -51,21 +48,8 @@ public class EditionModule {
     /**
      * Determine the root url location based on edition.
      */
-    @Provides @BaseEditionPath String getBasePath(Edition edition){
-        String base;
-        String domain;
-
-        if (edition == Edition.USA ||
-                edition == Edition.EUROPE ||
-                edition == Edition.ASIA){
-            base = NEW_FORMAT;
-            domain = NEW_DOMAIN;
-        }
-        else {
-            base = OLD_FORMAT;
-            domain = OLD_DOMAIN;
-        }
-        return String.format(base, domain, edition.getPath());
+    @Provides @BaseEditionPath String getBasePath(Edition edition, @BaseApiPath String basePath){
+        return basePath + "/" + edition.getPath();
     }
 
     /**
@@ -79,7 +63,7 @@ public class EditionModule {
         }
         String catalogPath = String.format(CATALOG_PATH, catalogVersion);
 
-        return basePath + catalogPath;
+        return basePath + "/" + catalogPath;
     }
 
 
@@ -91,13 +75,14 @@ public class EditionModule {
      * get new catalog - save new catalog with similar issues and remove tail issues and old catalog.
      *
      */
-    @Provides Observable<Catalog> provideCatalogObservable(final OkHttpClient httpClient, final Gson gson) {
+    @Provides Observable<Catalog> provideCatalogObservable(final OkHttpClient httpClient, final Gson gson,
+                                                           @BaseEditionPath final String basePath) {
         return Observable.create(new Observable.OnSubscribe<Catalog>(){
             @Override
             @DebugLog
             public void call(final Subscriber<? super Catalog> subscriber) {
 
-                String address = getCatalogAddress(getBasePath(edition));
+                String address = getCatalogAddress(basePath);
                 try {
                     Catalog cachedCatalog = null;
                     List<Catalog> cachedCatalogs = Catalog.findByKey(Catalog.class, edition.ordinal());

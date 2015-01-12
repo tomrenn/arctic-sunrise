@@ -12,6 +12,7 @@ import dagger.Module;
         includes = {
                 DebugUiModule.class,
 //                DebugDataModule.class
+                MockApiModule.class
         },
 
         overrides = true

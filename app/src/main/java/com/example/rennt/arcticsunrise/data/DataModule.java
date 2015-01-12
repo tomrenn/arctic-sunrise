@@ -8,6 +8,8 @@ import android.util.LruCache;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.example.rennt.arcticsunrise.data.api.BaseApiPath;
+import com.example.rennt.arcticsunrise.data.api.BaseEditionPath;
 import com.example.rennt.arcticsunrise.data.api.Edition;
 import com.example.rennt.arcticsunrise.data.prefs.IssuePreference;
 import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
@@ -38,6 +40,11 @@ public class DataModule {
     @Provides @Singleton
     OkHttpClient provideHttpClient() {
         return new OkHttpClient();
+    }
+
+
+    @Provides @BaseApiPath String provideBaseApiPath(){
+        return "http://gelcap.dowjones.com/gc/packager/wsj";
     }
 
 
