@@ -2,17 +2,19 @@ package com.example.rennt.arcticsunrise.ui.debug;
 
 import android.app.Activity;
 import android.os.Build;
-import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.rennt.arcticsunrise.AppContainer;
 import com.example.rennt.arcticsunrise.BuildConfig;
+import com.example.rennt.arcticsunrise.MockApiModule;
 import com.example.rennt.arcticsunrise.R;
 import com.google.common.base.Strings;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,10 +33,13 @@ import static butterknife.ButterKnife.findById;
  */
 @Singleton
 public class DebugAppContainer implements AppContainer {
+    private static final DateFormat DATE_DISPLAY_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
     // injected preferences
     private Activity activity;
 
     @InjectView(R.id.debug_content) ViewGroup content;
+
+    @InjectView(R.id.debug_network_endpoint) Spinner endpointSpinner;
 
     @InjectView(R.id.debug_device_make) TextView deviceMakeView;
     @InjectView(R.id.debug_device_model) TextView deviceModelView;
@@ -65,25 +70,30 @@ public class DebugAppContainer implements AppContainer {
 
         setupBuildSection();
         setupDeviceSection();
+        setupEndpointConfigs();
 
         return content;
+    }
+
+    private void setupEndpointConfigs(){
+        EnumAdapter<MockApiModule.Endpoint> endpointAdapter = new EnumAdapter<>(activity, MockApiModule.Endpoint.class);
+        endpointSpinner.setAdapter(endpointAdapter);
     }
 
     private void setupBuildSection() {
         buildNameView.setText(BuildConfig.VERSION_NAME);
         buildCodeView.setText(String.valueOf(BuildConfig.VERSION_CODE));
-//        buildShaView.setText(BuildConfig.GIT_SHA);
+        buildShaView.setText(BuildConfig.GIT_SHA);
 
-        // include time the build was built
-//        try {
-//            // Parse ISO8601-format time into local time.
-//            java.text.DateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
-//            inFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-//            Date buildTime = inFormat.parse(BuildConfig.BUILD_TIME);
-//            buildDateView.setText(DATE_DISPLAY_FORMAT.format(buildTime));
-//        } catch (ParseException e) {
-//            throw new RuntimeException("Unable to decode build time: " + BuildConfig.BUILD_TIME, e);
-//        }
+        try {
+            // Parse ISO8601-format time into local time.
+            java.text.DateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+            inFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date buildTime = inFormat.parse(BuildConfig.BUILD_TIME);
+            buildDateView.setText(DATE_DISPLAY_FORMAT.format(buildTime));
+        } catch (ParseException e) {
+            throw new RuntimeException("Unable to decode build time: " + BuildConfig.BUILD_TIME, e);
+        }
     }
 
     private static String truncateAt(String string, int length) {

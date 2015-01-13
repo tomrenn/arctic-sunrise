@@ -1,8 +1,11 @@
 package com.example.rennt.arcticsunrise.data;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.LruCache;
 
 import com.android.volley.RequestQueue;
@@ -36,7 +39,7 @@ import dagger.Provides;
 )
 public class DataModule {
     private static final int MAX_CACHE_SIZE = 20; // number of bitmaps in cache
-
+    public static final String PRODUCTION_API_URL = "http://gelcap.dowjones.com/gc/packager/wsj";
     @Provides @Singleton
     OkHttpClient provideHttpClient() {
         return new OkHttpClient();
@@ -44,9 +47,13 @@ public class DataModule {
 
 
     @Provides @BaseApiPath String provideBaseApiPath(){
-        return "http://gelcap.dowjones.com/gc/packager/wsj";
+        return PRODUCTION_API_URL;
     }
 
+    @Provides
+    NetworkInfo provideNetworkInfo(Application context){
+        return ((ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+    }
 
     /**
      * Return a stream reader based on the given uri.
