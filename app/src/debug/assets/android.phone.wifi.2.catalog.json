@@ -1,0 +1,14 @@
+{
+    version: 1,
+    items: [
+        {
+            type: "NOW",
+            key: "NOW",
+            label: "Latest News",
+            ts: "2015-01-19T18:10:00Z",
+            rev: 135439,
+            first: "NOW201501191810/ITP20150119.latest.base.zip",
+            manifest: "contents/NOW201501191810/manifest.android.phone.wifi.2-NOW.json"
+        }
+    ]
+}

@@ -1,18 +1,29 @@
 package com.example.rennt.arcticsunrise.ui.debug;
 
 import android.app.Activity;
+import android.app.Application;
+import android.content.Intent;
 import android.os.Build;
-import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.rennt.arcticsunrise.AppContainer;
+import com.example.rennt.arcticsunrise.ArcticSunriseApp;
 import com.example.rennt.arcticsunrise.BuildConfig;
+import com.example.rennt.arcticsunrise.MockApiModule;
 import com.example.rennt.arcticsunrise.R;
+import com.example.rennt.arcticsunrise.data.ApiEndpoint;
+import com.example.rennt.arcticsunrise.data.ApiEndpoints;
+import com.example.rennt.arcticsunrise.data.prefs.StringPreference;
+import com.example.rennt.arcticsunrise.ui.MainActivity;
 import com.google.common.base.Strings;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,6 +34,7 @@ import javax.inject.Singleton;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import timber.log.Timber;
 
 import static butterknife.ButterKnife.findById;
 
@@ -31,10 +43,15 @@ import static butterknife.ButterKnife.findById;
  */
 @Singleton
 public class DebugAppContainer implements AppContainer {
+    private static final DateFormat DATE_DISPLAY_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
+    private StringPreference apiEndpoint;
+    private Application app;
     // injected preferences
     private Activity activity;
 
     @InjectView(R.id.debug_content) ViewGroup content;
+
+    @InjectView(R.id.debug_network_endpoint) Spinner endpointSpinner;
 
     @InjectView(R.id.debug_device_make) TextView deviceMakeView;
     @InjectView(R.id.debug_device_model) TextView deviceModelView;
@@ -50,8 +67,12 @@ public class DebugAppContainer implements AppContainer {
 
 
 
-    @Inject public DebugAppContainer(){
-        // init the container`
+    @Inject public DebugAppContainer(
+            @ApiEndpoint StringPreference apiEndpoint,
+            Application app
+    ){
+        this.apiEndpoint = apiEndpoint;
+        this.app = app;
     }
 
     public ViewGroup get(Activity activity){
@@ -65,25 +86,63 @@ public class DebugAppContainer implements AppContainer {
 
         setupBuildSection();
         setupDeviceSection();
+        setupEndpointConfigs();
 
         return content;
+    }
+
+    private void setupEndpointConfigs(){
+        final ApiEndpoints currentEndpoint = ApiEndpoints.from(apiEndpoint.get());
+        final EnumAdapter<ApiEndpoints> endpointAdapter = new EnumAdapter<>(activity, ApiEndpoints.class);
+        endpointSpinner.setAdapter(endpointAdapter);
+        endpointSpinner.setSelection(currentEndpoint.ordinal());
+
+        endpointSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                ApiEndpoints selected = endpointAdapter.getItem(position);
+                if (selected != currentEndpoint) {
+                    if (selected == ApiEndpoints.CUSTOM) {
+                        Timber.d("Custom network endpoint selected. Prompting for URL.");
+//                        showCustomEndpointDialog(currentEndpoint.ordinal(), "http://");
+                    } else {
+                        setEndpointAndRelaunch(selected.url);
+                    }
+                } else {
+                    Timber.d("Ignoring re-selection of network endpoint %s", selected);
+                }
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+    }
+
+    private void setEndpointAndRelaunch(String endpoint) {
+        Timber.d("Setting network endpoint to %s", endpoint);
+        apiEndpoint.set(endpoint);
+
+        Intent newApp = new Intent(app, MainActivity.class);
+        newApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        app.startActivity(newApp);
+        ArcticSunriseApp.get(app).buildObjectGraph();
     }
 
     private void setupBuildSection() {
         buildNameView.setText(BuildConfig.VERSION_NAME);
         buildCodeView.setText(String.valueOf(BuildConfig.VERSION_CODE));
-//        buildShaView.setText(BuildConfig.GIT_SHA);
+        buildShaView.setText(BuildConfig.GIT_SHA);
 
-        // include time the build was built
-//        try {
-//            // Parse ISO8601-format time into local time.
-//            java.text.DateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
-//            inFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-//            Date buildTime = inFormat.parse(BuildConfig.BUILD_TIME);
-//            buildDateView.setText(DATE_DISPLAY_FORMAT.format(buildTime));
-//        } catch (ParseException e) {
-//            throw new RuntimeException("Unable to decode build time: " + BuildConfig.BUILD_TIME, e);
-//        }
+        try {
+            // Parse ISO8601-format time into local time.
+            java.text.DateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+            inFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date buildTime = inFormat.parse(BuildConfig.BUILD_TIME);
+            buildDateView.setText(DATE_DISPLAY_FORMAT.format(buildTime));
+        } catch (ParseException e) {
+            throw new RuntimeException("Unable to decode build time: " + BuildConfig.BUILD_TIME, e);
+        }
     }
 
     private static String truncateAt(String string, int length) {

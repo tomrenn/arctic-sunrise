@@ -1,6 +1,10 @@
 package com.example.rennt.arcticsunrise.data;
 
 import android.net.Uri;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.util.Log;
 
 import com.example.rennt.arcticsunrise.ArcticSunriseModule;
 import com.example.rennt.arcticsunrise.data.api.BaseApiPath;
@@ -77,6 +81,7 @@ public class EditionModule {
      *
      */
     @Provides Observable<Catalog> provideCatalogObservable(final DataModule.NetworkResolver resolver, final Gson gson,
+                                                           final NetworkInfo networkInfo,
                                                            @BaseEditionPath final Uri basePath) {
         return Observable.create(new Observable.OnSubscribe<Catalog>(){
             @Override
@@ -98,7 +103,14 @@ public class EditionModule {
 
                         subscriber.onNext(cachedCatalog);
                     }
-                    Timber.d("Catalog request (network): " + address.toString());
+
+                    // no internet connection
+                    if (networkInfo == null || !networkInfo.isConnected()){
+                        Timber.d("No Internet connection found, stopping catalog lookup");
+                        subscriber.onCompleted();
+                        return;
+                    }
+                    Timber.d("Catalog request (network): " + address);
 
                     Reader responseStream = resolver.fetchUri(address);
                     Catalog catalog = gson.fromJson(responseStream, Catalog.class);

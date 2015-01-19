@@ -1,9 +1,12 @@
 package com.example.rennt.arcticsunrise.data;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.LruCache;
 
 import com.android.volley.RequestQueue;
@@ -39,7 +42,7 @@ import dagger.Provides;
 )
 public class DataModule {
     private static final int MAX_CACHE_SIZE = 20; // number of bitmaps in cache
-    public static final String DEFAULT_API = "http://gelcap.dowjones.com/gc/packager/wsj";
+    public static final String PRODUCTION_API_URL = "http://gelcap.dowjones.com/gc/packager/wsj";
 
     public interface NetworkResolver{
         String fetchUriToString(Uri uri) throws IOException;
@@ -53,8 +56,13 @@ public class DataModule {
     }
 
 
+    @Provides
+    NetworkInfo provideNetworkInfo(Application context){
+        return ((ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+    }
+
     @Provides @BaseApiPath Uri provideBaseApiPath(){
-        return Uri.parse(DEFAULT_API);
+        return Uri.parse(PRODUCTION_API_URL);
     }
 
 
@@ -68,7 +76,7 @@ public class DataModule {
     }
 
     @Provides @ApiEndpoint StringPreference provideApiEndpoint(SharedPreferences prefs){
-        return new StringPreference(prefs, "ApiEndpoint", DEFAULT_API);
+        return new StringPreference(prefs, "ApiEndpoint", PRODUCTION_API_URL);
     }
 
     @Provides @IssuePreference LongPreference provideCurrentIssuePreference(SharedPreferences prefs){

@@ -1,0 +1,385 @@
+
+<pages class="TOP_NEWS" preprocessor="preprocessor.ejs">
+    <page template="SECTION-9story_template.xml" class="page1">
+        <link id="b1" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580408702341400196.xml" module="TOP-IMAGE_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580408702341400196.jpml">
+            <metadata>
+                <item key="headline">Tom Renn is Awesome</item>
+                <item key="type">Markets Main</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">false</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/china-shares-fall-most-in-six-years-on-regulatory-crackdown-1421653994</item>
+                <item key="short_url">http://online.wsj.com/articles/china-shares-fall-most-in-six-years-on-regulatory-crackdown-1421653994</item>
+                <item key="flashline"></item>
+                <item key="deckline">Chinese Regulators Target Margin Trading and Shadow Banking</item>
+                <item key="byline">By Daniel Inman and Jacky Wong</item>
+                <item key="date_published">2015-01-19T12:15-04:00</item>
+                <item key="summary">A mountain of debt built up by Chinese investors eager to cash in on the soaring stock market crumbled on Monday, sending the stock market down 7.7%, its worst day in six years. The collapse came after Chinese regulators disciplined three major brokers for violating rules on margin lending that helped fuel China’s historic stock market rally, with shares up 53% last year. Figures from Bank of America Merrill Lynch show that the amount of margin trading in China is among the highest in the world, and is already up 9% in 2015, putting the balance at 1.1 trillion yuan ($177 billion) as of Friday. China has been building up debt rapidly since the financial crisis, as local governments have</item>
+                <item key="thumbnail">BN-GM676_0119cm_OR_20150119022858.jpg</item>
+                <item key="show_subsection">true</item>
+            </metadata>
+        </link>
+        <link id="b2" url="http://mobilefeeds.wsj.com/xml/djml/SB10553624399357934584804580175273470574804.xml" module="TOP-IMAGE_module.xml" pages="ARTICLE-pages.xml" class="deco" href="SB10553624399357934584804580175273470574804.jpml">
+            <metadata>
+                <item key="headline">Here is a video deco</item>
+                <item key="type">MobileDeco1</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">false</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/cotton-gets-more-uncomfortable-1411624437</item>
+                <item key="short_url">http://online.wsj.com/articles/cotton-gets-more-uncomfortable-1411624437</item>
+                <item key="flashline"></item>
+                <item key="deckline"></item>
+                <item key="byline"></item>
+                <item key="date_published">2015-01-19T07:42-04:00</item>
+                <item key="summary">As President Obama delivers his State of the Union Tuesday, what are the five key themes he will likely focus on?</item>
+                <item key="thumbnail">BN-GM497_obamat_OR_20150117184706.jpg</item>
+                <item key="setByAffinity">true</item>
+            </metadata>
+        </link>
+        <link id="b3" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580408601162710526.xml" module="TOP-IMAGE_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580408601162710526.jpml">
+            <metadata>
+                <item key="headline">New AI starts presidential campaign scheduled for 2020</item>
+                <item key="type">Oil Markets</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/oil-prices-slightly-lower-but-likely-to-remain-volatile-1421646787</item>
+                <item key="short_url">http://online.wsj.com/articles/oil-prices-slightly-lower-but-likely-to-remain-volatile-1421646787</item>
+                <item key="flashline"></item>
+                <item key="deckline">Analysts See Little Evidence That Recovery Is in Sight</item>
+                <item key="byline">By Georgi Kantchev</item>
+                <item key="date_published">2015-01-19T12:33-04:00</item>
+                <item key="summary">Oil prices started the week deep in negative territory on expectations that a sustained recovery is still a long way off. U.S. crude snapped a seven-week losing streak last week after bullish comments by an international energy watchdog. But analysts said they see little evidence that the combination of oversupply and sluggish demand that has pummeled prices since last summer is abating. Brent crude for March delivery fell 2.2% to about $49 a barrel on London’s ICE Futures exchange. On the New York Mercantile Exchange, light, sweet crude futures for delivery in February traded at $47.56 a barrel in recent trade, down 2.3% from Friday’s settlement. Over the weekend, J.P. Morgan became the</item>
+                <item key="thumbnail"></item>
+            </metadata>
+        </link>
+        <link id="b4" url="http://mobilefeeds.wsj.com/xml/djml/SB10758858174227614679104580408802374701466.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB10758858174227614679104580408802374701466.jpml">
+            <metadata>
+                <item key="headline">Swiss Franc Remains High</item>
+                <item key="type">Europe Markets</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">false</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/swiss-franc-remains-at-sky-high-levels-swiss-stocks-regain-some-stability-1421658527</item>
+                <item key="short_url">http://online.wsj.com/articles/swiss-franc-remains-at-sky-high-levels-swiss-stocks-regain-some-stability-1421658527</item>
+                <item key="flashline"></item>
+                <item key="deckline">Swiss Currency Hovers Around Parity With Euro</item>
+                <item key="byline">By Josie Cox</item>
+                <item key="date_published">2015-01-19T12:31-04:00</item>
+                <item key="summary">The Swiss franc remained pinned at sky-high levels on Monday, hovering around one-to-one against the euro after last week’s shock decision by the Swiss National Bank to allow its currency to climb freely. The franc has now gained almost 20% against the euro since last week. After the SNB’s announcement Thursday, the euro lost about 30% in value against the franc—the biggest single-day move in a developed market that traders could recall. Beat Siegenthaler, a currency strategist at UBS, said Monday that around parity, the Swiss franc “appears more overvalued versus the euro than at any other time in the last 30 years,” and is likely to put “significant strain” on the country’s economy.</item>
+                <item key="thumbnail">BN-GM771_euromk_OR_20150119072727.jpg</item>
+            </metadata>
+        </link>
+        <link id="b5" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409420755093544.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409420755093544.jpml">
+            <metadata>
+                <item key="headline">Traders Store Oil in Offshore Supertankers</item>
+                <item key="type">World News</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/worlds-largest-traders-use-offshore-supertankers-to-store-oil-1421689744</item>
+                <item key="short_url">http://online.wsj.com/articles/worlds-largest-traders-use-offshore-supertankers-to-store-oil-1421689744</item>
+                <item key="flashline"></item>
+                <item key="deckline">Companies Are Buying Oil Now to Sell Later When Prices Rise</item>
+                <item key="byline">By Sarah Kent and Georgi Kantchev</item>
+                <item key="date_published">2015-01-19T12:49-04:00</item>
+                <item key="summary">The supertanker TI Oceania was built to ferry vast quantities of oil across oceans but for the next year it is expected to remain firmly anchored off the coast of Singapore, storing millions of barrels of oil for giant trading house Vitol SA. According to shipbrokers and analysts, the 3-million-barrel megaship—one of the largest in the world—is just one example of a growing trend that sees traders seeking ways to turn a profit in the slumping global oil market. The strategy is simple: buy and store oil at cheap prices now and sell futures contracts to lock in the higher oil prices expected later. “It is one of the easy ways to make money and that’s one of the interesting things about it from</item>
+                <item key="thumbnail">BN-GM823_supert_OR_20150119124420.jpg</item>
+            </metadata>
+        </link>
+        <link id="b6" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409370007793794.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409370007793794.jpml">
+            <metadata>
+                <item key="headline">Obama Tax Plan Likely to Stir Up Long-Simmering Debate</item>
+                <item key="type">U.S. News</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/obama-tax-plan-likely-to-stir-up-long-simmering-debate-1421680662</item>
+                <item key="short_url">http://online.wsj.com/articles/obama-tax-plan-likely-to-stir-up-long-simmering-debate-1421680662</item>
+                <item key="flashline"></item>
+                <item key="deckline">White House Plan Proposes Using Tax Code to Close Income Gaps Between Wealthy, Middle Class</item>
+                <item key="byline">By John D. McKinnon</item>
+                <item key="date_published">2015-01-19T10:17-04:00</item>
+                <item key="summary">A White House tax plan released over the weekend promises to rekindle a long-simmering debate over how to use the tax code to close income gaps between the wealthy and the middle class. At a minimum, the plan represents President Barack Obama’s opening bid to congressional Republicans in a potential negotiation over a comprehensive rewrite of the tax code, including the rules for individual taxpayers. Sharply negative reactions from GOP lawmakers suggested it is unlikely that many of Mr. Obama’s ideas would become law in the current GOP-run Congress. In political terms, the plan appeared aimed at helping Mr. Obama cement a legacy as an economic populist, and could even help Democratic</item>
+                <item key="thumbnail">BN-GM814_Obama0_OR_20150119121722.jpg</item>
+            </metadata>
+        </link>
+        <link id="b7" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409440832071232.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409440832071232.jpml">
+            <metadata>
+                <item key="headline">Denmark Cuts Interest Rates</item>
+                <item key="type">Europe Economy</item>
+                <item key="subsection">MORE NEWS</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/denmark-central-bank-cuts-interest-rates-1421682943</item>
+                <item key="short_url">http://online.wsj.com/articles/denmark-central-bank-cuts-interest-rates-1421682943</item>
+                <item key="flashline"></item>
+                <item key="deckline">Move Comes After Krone Strengthened Against the Euro</item>
+                <item key="byline">By Charles Duxbury in Stockholm And Josie Cox in London</item>
+                <item key="date_published">2015-01-19T12:08-04:00</item>
+                <item key="summary">Denmark on Monday became the latest European country to cut its interest rates as it attempted to dampen investor interest in the Danish krone ahead of the European Central Bank’s policy meeting on Thursday. Nationalbank cut its deposit rate to minus 0.2% from minus 0.05%, and its lending rate to 0.05% from 0.2%. The krone has strengthened against the euro after a rate cut by the Swiss central bank last week. The Danish central bank is counting on the rate reduction to weaken the attractiveness of Danish currency denominated assets to investors seeking other triple-A rated places in Europe to place their money. Nationalbank’s decision comes ahead of the ECB’s meeting at which the governing</item>
+                <item key="thumbnail"></item>
+                <item key="show_subsection">true</item>
+            </metadata>
+        </link>
+        <link id="b8" url="http://mobilefeeds.wsj.com/xml/djml/SB11381013828971114515604580403891524018232.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11381013828971114515604580403891524018232.jpml">
+            <metadata>
+                <item key="headline">Oil Prices to Play Into BP Fine</item>
+                <item key="type">Business</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/oil-prices-to-play-into-bp-fine-1421610065</item>
+                <item key="short_url">http://online.wsj.com/articles/oil-prices-to-play-into-bp-fine-1421610065</item>
+                <item key="flashline">Law</item>
+                <item key="deckline">Drop in Crude Prices Strains Company—Which Lawyers Will Note in Court</item>
+                <item key="byline">By Daniel Gilbert And Justin Scheck</item>
+                <item key="date_published">2015-01-18T14:41-04:00</item>
+                <item key="summary">After its oil-well explosion in the Gulf of Mexico in 2010, BP PLC caught one lucky break: Oil prices surged and boosted its cash flow, helping it to cover billions of dollars in legal and oil-spill cleanup costs. Now BP is facing up to $13.7 billion in federal fines—about $10 billion more than it has set aside—in much less comfortable economic circumstances now that oil prices have plunged. The company is set to go to trial Jan. 20 in federal court in New Orleans over how much it must pay the U.S. government for each barrel of crude that spilled into the Gulf, in the final phase of litigation stemming from violations of the Clean Water Act. A global oil glut has sent prices tumbling since</item>
+                <item key="thumbnail">AM-BH230_BPCASE_OR_20150118161036.jpg</item>
+                <item key="show_subsection">true</item>
+            </metadata>
+        </link>
+        <link id="b9" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409082288368368.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409082288368368.jpml">
+            <metadata>
+                <item key="headline">Hollande: ECB Will Decide to Buy Government Debt Thursday</item>
+                <item key="type">Economy</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/hollande-says-ecb-will-announce-quantitative-easing-plans-thursday-1421666714</item>
+                <item key="short_url">http://online.wsj.com/articles/hollande-says-ecb-will-announce-quantitative-easing-plans-thursday-1421666714</item>
+                <item key="flashline"></item>
+                <item key="deckline">ECB Fiercely Guards Independence From Governments; Spokesman Declines to Comment</item>
+                <item key="byline">By William Horobin</item>
+                <item key="date_published">2015-01-19T09:04-04:00</item>
+                <item key="summary">PARIS—French President François Hollande said Monday the European Central Bank will decide to buy government debt later this week, reinforcing expectations the Frankfurt-based institution will follow other major central banks into so-called quantitative easing. “On Thursday, the ECB will take the decision to buy sovereign debt, which will provide significant liquidity to the European economy and create a movement that is favorable to growth,” Mr. Hollande said in a speech to business leaders at the Élysée Palace. The comments from the French leader were surprising as they appear to foretell the action of the ECB, which fiercely guards its independence from governments. An ECB spokesman</item>
+                <item key="thumbnail"></item>
+            </metadata>
+        </link>
+    </page>
+    <page template="CONTINUATION-generic-4_template.xml" class="page2">
+        <link id="b1" url="http://mobilefeeds.wsj.com/xml/djml/SB11036709993451353352004580375271763465634.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11036709993451353352004580375271763465634.jpml">
+            <metadata>
+                <item key="headline">Guantanamo’s Cuban Exiles Who Never Left</item>
+                <item key="type">Experiential</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">false</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/cuban-refugees-fled-to-the-u-s-naval-base-in-guantanamo-bay-a-half-century-agoand-never-left-1421427942</item>
+                <item key="short_url">http://online.wsj.com/articles/cuban-refugees-fled-to-the-u-s-naval-base-in-guantanamo-bay-a-half-century-agoand-never-left-1421427942</item>
+                <item key="flashline">Cuba’s Backyard Exiles</item>
+                <item key="deckline">In a hot moment of the Cold War, they won U.S. permission to stay until Cuba was free.</item>
+                <item key="byline">By Michael M. Phillips</item>
+                <item key="date_published">2015-01-16T14:04-04:00</item>
+                <item key="summary">NAVAL STATION GUANTANAMO BAY, Cuba—In 1961, Ramon Baudin got wind that Fidel Castro’s security forces were looking for him. He hid in a bus headed to this U.S. military base, sneaked past a police checkpoint, then pleaded with the American sentry: “Hey, buddy, I’m running away. Open the gate.” Mr. Baudin has been here ever since, part of a small group of Cuban exiles who, in a hot moment of the Cold War, won permission from the U.S. government to stay at the Guantanamo Bay Naval base until Cuba was free. For more than 50 years, the exiles have waited out Mr. Castro, circumscribed by a 17-mile razor-wire fence that separates their present from their past. They have married and divorced, had</item>
+                <item key="thumbnail">BN-GI513_0108gi_OR_20150108125743.jpg</item>
+            </metadata>
+        </link>
+        <link id="b2" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409221640249474.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409221640249474.jpml">
+            <metadata>
+                <item key="headline">Prosecutor Who Accused Argentina’s President of Iran Cover-Up Found Dead</item>
+                <item key="type">Latin America News</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/prosecutor-who-accused-argentinas-president-of-iran-cover-up-found-dead-1421673152</item>
+                <item key="short_url">http://online.wsj.com/articles/prosecutor-who-accused-argentinas-president-of-iran-cover-up-found-dead-1421673152</item>
+                <item key="flashline"></item>
+                <item key="deckline">Body of Alberto Nisman, Who Had Been Investigating Jewish Center Bombing, Found in Bathroom</item>
+                <item key="byline">By Taos Turner</item>
+                <item key="date_published">2015-01-19T08:12-04:00</item>
+                <item key="summary">BUENOS AIRES—The prosecutor who last week accused Argentine President Cristina Kirchner and others of working with Iran to cover up a 1994 terror bombing was found dead in his apartment on Sunday, hours before he was to testify in Congress. Alberto Nisman’s body was discovered inside a bathroom at his apartment on the 13th floor of an apartment tower here in this capital city. A 22-calibre weapon was found near him, according to a statement from Argentina’s Security Secretariat. There were no signs of forced entry into the apartment, the statement said. On Wednesday, Mr. Nisman filed a criminal complaint that accused Mrs. Kirchner, Foreign Minister Hector Timerman and others of conspiring to</item>
+                <item key="thumbnail">BN-GL295_0114ar_OR_20150114172616.jpg</item>
+            </metadata>
+        </link>
+        <link id="b3" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580408411106578900.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580408411106578900.jpml">
+            <metadata>
+                <item key="headline">North Korea Defector Changes Story</item>
+                <item key="type">Asia News</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/famed-north-korea-defector-changes-key-parts-of-story-1421641124</item>
+                <item key="short_url">http://online.wsj.com/articles/famed-north-korea-defector-changes-key-parts-of-story-1421641124</item>
+                <item key="flashline"></item>
+                <item key="deckline">World-Renowned Refugee Admits Changing Story, Putting His Credibility in Question</item>
+                <item key="byline">By Jeyup S. Kwaak</item>
+                <item key="date_published">2015-01-18T23:18-04:00</item>
+                <item key="summary">SEOUL—Shin Dong-hyuk, a renowned North Korean refugee who helped publicize alleged human-rights abuses inside his country, has admitted to changing parts of his life story, putting his credibility in question. Mr. Shin is among the highest-profile activists against North Korea’s prison camps, in which he says he was born via an organized breeding program. He is an extremely rare witness to the internal workings of Camp 14, a prison facility located north of Pyongyang from which no one is expected to escape. He has accused North Korea of perpetrating various human-rights violations, including slave labor, torture and public executions. Mr. Shin’s new version of the story contradicts his</item>
+                <item key="thumbnail">BN-GM632_nkdefe_OR_20150118231356.jpg</item>
+            </metadata>
+        </link>
+        <link id="b4" url="http://mobilefeeds.wsj.com/xml/djml/SB10083468024828034148604580409522140649694.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB10083468024828034148604580409522140649694.jpml">
+            <metadata>
+                <item key="headline">Leaders Gather in Atlanta to Celebrate MLK</item>
+                <item key="type">U.S. News</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/leaders-gather-in-atlanta-to-celebrate-martin-luther-king-jr-1421686000</item>
+                <item key="short_url">http://online.wsj.com/articles/leaders-gather-in-atlanta-to-celebrate-martin-luther-king-jr-1421686000</item>
+                <item key="flashline"></item>
+                <item key="deckline">Annual Service Celebrates Civil-Rights Icon’s Legacy</item>
+                <item key="byline">Associated Press</item>
+                <item key="date_published">2015-01-19T11:46-04:00</item>
+                <item key="summary">ATLANTA — Faith, community and political leaders are gathered at historic Ebenezer Baptist Church in Atlanta to celebrate the legacy of the Rev. Martin Luther King Jr. The 47th annual Martin Luther King Jr. Annual Commemorative Service is underway at the slain civil rights icon’s spiritual home. Calling the gathered crowd to remember her father’s legacy, the Rev. Bernice King urged people to remember his message of nonviolence. King’s sister, Christine King Farris, presided over the service. Gwendolyn Boyd, president of Alabama State University, was to give the keynote address. David Oyelowo, who played King in the movie “Selma,” was scheduled to give a tribute. Also present and slated to</item>
+                <item key="thumbnail">BN-GM805_0119ml_OR_20150119114315.jpg</item>
+            </metadata>
+        </link>
+    </page>
+    <page template="CONTINUATION-generic-4_template.xml" class="page3">
+        <link id="b1" url="http://mobilefeeds.wsj.com/xml/djml/SB10758858174227614679104580409581653358418.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB10758858174227614679104580409581653358418.jpml">
+            <metadata>
+                <item key="headline">Pipeline Leaks Oil into Yellowstone</item>
+                <item key="type">U.S. News</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/oil-spills-into-yellowstone-river-after-pipeline-leak-1421688172</item>
+                <item key="short_url">http://online.wsj.com/articles/oil-spills-into-yellowstone-river-after-pipeline-leak-1421688172</item>
+                <item key="flashline"></item>
+                <item key="deckline">Bridger Pipeline LLC Thinks About 50,000 Gallons May Have Spilled</item>
+                <item key="byline">Associated Press</item>
+                <item key="date_published">2015-01-19T12:22-04:00</item>
+                <item key="summary">BILLINGS, Mont.—Crews worked Monday to clean up crude oil that spilled in and near the Yellowstone River in eastern Montana while officials with Bridger Pipeline LLC tried to determine what caused the weekend breach. Bridger has said the break in the 12-inch steel pipe occurred Saturday morning in an area about 9 miles upstream from Glendive. Bridger spokesman Bill Salvin said Monday that the company is confident that no more than 1,200 barrels—or 50,000 gallons—of oil spilled during the hour-long breach. “Oil has made it into the river,” Mr. Salvin said. “We do not know how much at this point.” Oil has been seen in the river in spots 15 and 25 miles downstream from Glendive, Mr. Salvin</item>
+                <item key="thumbnail"></item>
+            </metadata>
+        </link>
+        <link id="b2" url="http://mobilefeeds.wsj.com/xml/djml/BL-LB-50381.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="BL-LB-50381.jpml">
+            <metadata>
+                <item key="headline">Terror Suspect Faces Trial Over U.S. Embassy Bombings</item>
+                <item key="type">Law Blog</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">false</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://blogs.wsj.com/law/2015/01/19/terror-suspect-faces-trial-over-u-s-embassy-bombings/</item>
+                <item key="short_url">http://blogs.wsj.com/law/2015/01/19/terror-suspect-faces-trial-over-u-s-embassy-bombings/</item>
+                <item key="flashline">Criminal Law</item>
+                <item key="deckline"></item>
+                <item key="byline">By Nicole Hong</item>
+                <item key="date_published">2015-01-19T12:28-04:00</item>
+                <item key="summary">Khaled al-Fawwaz heads to federal court in Manhattan on Tuesday for his alleged role in the 1998 bombings of two U.S. embassies, part of the U.S. government&apos;s broader effort over the past year to prosecute suspected terrorists in American civilian courts. Mr. al-Fawwaz, a citizen of Saudi Arabia, faces a potential life sentence for allegedly conspiring with members of al Qaeda to kill Americans, culminating in the bombings in Kenya and Tanzania that killed 224 people. Mr. al-Fawwaz has pleaded not guilty to all charges. He had been living in exile in London before his extradition to the U.S. in 2012. Mr. al-Fawwaz was supposed to go on trial earlier this month as a co-defendant to Abu Anas</item>
+                <item key="thumbnail">BN-FA487_1015al_A_20141015142403.jpg</item>
+            </metadata>
+        </link>
+        <link id="b3" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409373423990584.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409373423990584.jpml">
+            <metadata>
+                <item key="headline">NFL Investigating Whether Patriots Deflated Footballs</item>
+                <item key="type">NFL</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">false</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/nfl-investigating-whether-patriots-deflated-footballs-1421680370</item>
+                <item key="short_url">http://online.wsj.com/articles/nfl-investigating-whether-patriots-deflated-footballs-1421680370</item>
+                <item key="flashline">NFL</item>
+                <item key="deckline">Tom Brady Calls Allegation of Doctoring Footballs ‘Ridiculous’</item>
+                <item key="byline">By Kevin Clark</item>
+                <item key="date_published">2015-01-19T10:59-04:00</item>
+                <item key="summary">The National Football League said on Monday that it is investigating whether the New England Patriots deflated footballs during their AFC Championship Game win on Sunday over the Indianapolis Colts. League spokesman Michael Signora confirmed the investigation, but declined further comment on Monday. The Patriots didn’t comment. Patriots quarterback Tom Brady, appearing on a radio show Monday morning, called the idea that the team doctored footballs “ridiculous.” “I think I’ve heard it all at this point,” Brady told WEEI. Plenty of football teams have been accused of using deflated footballs during games, the alleged benefit of which is to get a better grip on the ball. In 2012, the</item>
+                <item key="thumbnail">BN-GM795_brady0_OR_20150119095122.jpg</item>
+            </metadata>
+        </link>
+        <link id="b4" url="http://mobilefeeds.wsj.com/xml/djml/SB10083468024828034148604580408062123619640.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB10083468024828034148604580408062123619640.jpml">
+            <metadata>
+                <item key="headline">Seahawks to Return to Super Bowl</item>
+                <item key="type">NFL</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">false</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/seattle-rallies-to-beat-green-bay-to-win-nfc-championship-1421625214</item>
+                <item key="short_url">http://online.wsj.com/articles/seattle-rallies-to-beat-green-bay-to-win-nfc-championship-1421625214</item>
+                <item key="flashline"></item>
+                <item key="deckline">Trailing 16-0 at Halftime, the Defending Champion Seahawks Win 28-22 in Overtime to Advance to the Super Bowl</item>
+                <item key="byline">By Jonathan Clegg</item>
+                <item key="date_published">2015-01-19T10:17-04:00</item>
+                <item key="summary">Seattle Facts and figures can help tell the story of the remarkable comeback that unfolded in the NFC Championship Game here Sunday that sent the Seattle Seahawks back to the Super Bowl. The box score will show how hopeless it looked when Seattle received the ball with less than four minutes remaining down by two scores. The numbers reveal how the Seahawks had committed five turnovers, been held to less than 250 total yards and hadn’t scored a touchdown on offense all game. The statistics state that by the percentages alone, Seattle had less than a one-in-a-100 chance of winning as the game neared the two-minute warning. But the greatest measure of how unfathomable it was that Seattle came</item>
+                <item key="thumbnail">BN-GM591_seattl_OR_20150118183930.jpg</item>
+            </metadata>
+        </link>
+    </page>
+    <page template="CONTINUATION-generic-4_template.xml" class="page4">
+        <link id="b1" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409071170996444.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409071170996444.jpml">
+            <metadata>
+                <item key="headline">Inside Goldman Sachs’s Loan to Banco Espírito Santo</item>
+                <item key="type">Markets Main</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/inside-goldman-sachss-loan-to-banco-espirito-santo-1421671764</item>
+                <item key="short_url">http://online.wsj.com/articles/inside-goldman-sachss-loan-to-banco-espirito-santo-1421671764</item>
+                <item key="flashline"></item>
+                <item key="deckline">Deal Result of Concerted Effort by Senior Goldman Officials to Win Business With Portuguese Company</item>
+                <item key="byline">By Margot Patrick and Patricia Kowsmann</item>
+                <item key="date_published">2015-01-19T07:49-04:00</item>
+                <item key="summary">When Goldman Sachs Group Inc. last summer arranged an $835 million loan to Banco Espírito Santo SA, it was the result of a concerted, monthslong effort by senior Goldman officials to win business with the large Portuguese company, according to people familiar with the matter. Today, Goldman’s embrace of Espirito Santo has come back to haunt the Wall Street giant. Weeks after Goldman arranged the loan, Banco Espírito Santo collapsed amid allegations of fraud. Goldman now is in an unusual public fight with Portugal’s central bank, which bailed out Espírito Santo, over whether the loan should be fully repaid. Anticipated losses linked to the loan took a bite out of Goldman’s already-weak</item>
+                <item key="thumbnail">BN-FU402_1201es_OR_20141201050845.jpg</item>
+            </metadata>
+        </link>
+        <link id="b2" url="http://mobilefeeds.wsj.com/xml/djml/SB10758858174227614679104580408681409071148.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB10758858174227614679104580408681409071148.jpml">
+            <metadata>
+                <item key="headline">Clashes Erupt Across Yemen’s Capital</item>
+                <item key="type">World News</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">false</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/rebels-battle-soldiers-near-yemens-presidential-palace-1421650439</item>
+                <item key="short_url">http://online.wsj.com/articles/rebels-battle-soldiers-near-yemens-presidential-palace-1421650439</item>
+                <item key="flashline"></item>
+                <item key="deckline">Houthi Militants Demand Greater Say in the Crafting of the Country’s Constitution</item>
+                <item key="byline">By Maria Abi-Habib And Hakim Almasmari</item>
+                <item key="date_published">2015-01-19T06:33-04:00</item>
+                <item key="summary">SAN&apos;A, Yemen—Clashes erupted across Yemen’s capital on Monday as Houthi militants demanded a greater say in the crafting of the country’s constitution, days after kidnapping a top presidential aide to leverage their demands. The Houthis are a militant group that represents Yemen’s Zaidi sect—an offshoot of Shiite Islam. In September they forced the government’s resignation after occupying the capital San’a, complaining about the slow pace of reforms undertaken by President Abded Rabbo Mansour Hadi, including the drafting of a new constitution. The militants have since spread across Yemen, occupying some of the country’s most important infrastructure including sea ports, while opposing Mr.</item>
+                <item key="thumbnail">BN-GM694_yemen0_OR_20150119032110.jpg</item>
+            </metadata>
+        </link>
+        <link id="b3" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580408770454765224.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580408770454765224.jpml">
+            <metadata>
+                <item key="headline">EU: No Plans to Ease Russia Sanctions</item>
+                <item key="type">Europe News</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/eu-has-no-plans-for-easing-russia-sanctions-1421653971</item>
+                <item key="short_url">http://online.wsj.com/articles/eu-has-no-plans-for-easing-russia-sanctions-1421653971</item>
+                <item key="flashline"></item>
+                <item key="deckline">Comments Come as Fighting Intensifies Again in Ukraine’s Donetsk Area</item>
+                <item key="byline">By Naftali Bendavid And Laurence Norman</item>
+                <item key="date_published">2015-01-19T13:00-04:00</item>
+                <item key="summary">BRUSSELS—The European Union sought Monday to dispel any suggestion that its united front against Russia was faltering or that members were considering lifting sanctions on Moscow in the near future. Questions about how long the 28-nation bloc can stick together in responding to Russian aggressiveness toward Ukraine were highlighted last week by the emergence of an internal EU paper looking at ways to improve ties with Moscow. EU members friendlier to Russia have long questioned the effectiveness of sanctions in influencing the Kremlin. Some have suggested the damage to the Russian economy caused by falling oil prices could provide an opening for scaling back the sanctions as part of a new</item>
+                <item key="thumbnail">BN-GM813_EURUSS_OR_20150119121402.jpg</item>
+            </metadata>
+        </link>
+        <link id="b4" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409403198201486.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409403198201486.jpml">
+            <metadata>
+                <item key="headline">Larger Home-Builders Show Reflects Industry Optimism</item>
+                <item key="type">Economy</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/larger-home-builders-show-reflects-industry-optimism-1421684986</item>
+                <item key="short_url">http://online.wsj.com/articles/larger-home-builders-show-reflects-industry-optimism-1421684986</item>
+                <item key="flashline"></item>
+                <item key="deckline">International Builders Show in Las Vegas Expects 125,000 Attendees</item>
+                <item key="byline">By Kris Hudson</item>
+                <item key="date_published">2015-01-19T11:29-04:00</item>
+                <item key="summary">Sales of new and existing homes were lackluster last year, but there is an air of optimism running through this year’s gathering of home builders, contractors and suppliers at the home-building industry’s annual convention. The National Association of Home Builders’ International Builders Show, combined with the Kitchen &amp; Bath Industry Show, is expected to attract 125,000 attendees and occupy 750,000 square feet of meeting and showroom space at the sprawling Las Vegas Convention Center. It is the largest edition of the trade show in many years, due partly to its consolidation with other shows and partly to the gradual recovery of the home-building market. It brings with it mildly upbeat</item>
+                <item key="thumbnail">BN-GM810_IBSSHO_OR_20150119120008.jpg</item>
+            </metadata>
+        </link>
+    </page>
+    <page template="CONTINUATION-generic-2_template.xml" class="page5">
+        <link id="b1" url="http://mobilefeeds.wsj.com/xml/djml/BL-REB-30195.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="BL-REB-30195.jpml">
+            <metadata>
+                <item key="headline">The State of the Economy, in Eight Charts</item>
+                <item key="type">Economics Blog</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">false</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://blogs.wsj.com/economics/2015/01/19/the-state-of-the-economy-in-eight-charts/</item>
+                <item key="short_url">http://blogs.wsj.com/economics/2015/01/19/the-state-of-the-economy-in-eight-charts/</item>
+                <item key="flashline">Economy</item>
+                <item key="deckline"></item>
+                <item key="byline">By Josh Zumbrun and Daniel Nasaw</item>
+                <item key="date_published">2015-01-19T08:03-04:00</item>
+                <item key="summary">When President Barack Obama delivers his annual State of the Union speech on Tuesday, the economy will be as strong and bright as it has been in years. Although the economic recovery is clearly accelerating, the improvements did nothing for the Democrats in the November midterm elections. Nor is it likely the economy will much help Mr. Obama&apos;s ability to pass his legislative agenda through the Republican-controlled Congress. In anticipation of his remarks, here are eight charts that describe the state of the union in economic terms. For the duration of his presidency, Mr. Obama has sparred with House Republicans over the budget. Over calendar year 2014, the budget deficit was the smallest</item>
+                <item key="thumbnail">BN-GM342_fiscal_A_20150116153306.jpg</item>
+            </metadata>
+        </link>
+        <link id="b2" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409043839000682.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409043839000682.jpml">
+            <metadata>
+                <item key="headline">Samsung Executive: No Plans to Buy BlackBerry</item>
+                <item key="type">Asian Business News</item>
+                <item key="subsection">TOP STORIES</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/samsung-isnt-planning-blackberry-acquisition-co-ceo-says-1421665607</item>
+                <item key="short_url">http://online.wsj.com/articles/samsung-isnt-planning-blackberry-acquisition-co-ceo-says-1421665607</item>
+                <item key="flashline"></item>
+                <item key="deckline">Samsung Co-CEO J.K. Shin Says His Company Wants to Develop Partnership With BlackBerry</item>
+                <item key="byline">By Jonathan Cheng</item>
+                <item key="date_published">2015-01-19T07:05-04:00</item>
+                <item key="summary">SEOUL -- Samsung Electronics Co.’s co-chief executive said Monday that the company wants to develop its partnership with BlackBerry Ltd., but has no intention of acquiring the Canadian handset maker. “We want to work with BlackBerry and develop this partnership, not acquire the company,” J.K. Shin, who heads Samsung’s mobile-phone business, said in a statement to The Wall Street Journal. Samsung is separately in talks with BlackBerry to extend the scope of its cooperation, including the potential use of BlackBerry technology in Samsung devices, the company said. It didn’t elaborate on the potential extension of its agreement. Rumors of a possible acquisition of BlackBerry by Samsung have</item>
+                <item key="thumbnail">BN-GM762_samber_OR_20150119063309.jpg</item>
+            </metadata>
+        </link>
+    </page>
+</pages>

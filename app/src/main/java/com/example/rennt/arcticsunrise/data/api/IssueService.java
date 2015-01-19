@@ -188,13 +188,6 @@ public class IssueService {
                 Uri uri = getSectionAddress(section);
 
                 try {
-                    // FIXME: this is kinda a hack, add precondition that section must be saved before onNext'ing
-                    Long sectionKey = section.getId();
-                    while (sectionKey == null){
-                        Timber.d("Section key does not exist yet");
-                        Thread.sleep(50);
-                    }
-
                     List<Article> cachedArticles = Article.findByKey(Article.class, section.getId());
                     if (cachedArticles != null && cachedArticles.size() > 0){
                         Timber.d("(Cache) Obtained articles");

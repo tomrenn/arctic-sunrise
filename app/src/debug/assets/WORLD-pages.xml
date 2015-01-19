@@ -1,0 +1,350 @@
+
+<pages class="WORLD" preprocessor="preprocessor.ejs">
+    <page template="SECTION-9story_template.xml" class="page1">
+        <link id="b1" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580408770454765224.xml" module="TOP-IMAGE_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580408770454765224.jpml">
+            <metadata>
+                <item key="headline">EU: No Plans to Ease Russia Sanctions</item>
+                <item key="type">Europe News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/eu-has-no-plans-for-easing-russia-sanctions-1421653971</item>
+                <item key="short_url">http://online.wsj.com/articles/eu-has-no-plans-for-easing-russia-sanctions-1421653971</item>
+                <item key="flashline"></item>
+                <item key="deckline">Comments Come as Fighting Intensifies Again in Ukraine’s Donetsk Area</item>
+                <item key="byline">By Naftali Bendavid And Laurence Norman</item>
+                <item key="date_published">2015-01-19T13:00-04:00</item>
+                <item key="summary">BRUSSELS—The European Union sought Monday to dispel any suggestion that its united front against Russia was faltering or that members were considering lifting sanctions on Moscow in the near future. Questions about how long the 28-nation bloc can stick together in responding to Russian aggressiveness toward Ukraine were highlighted last week by the emergence of an internal EU paper looking at ways to improve ties with Moscow. EU members friendlier to Russia have long questioned the effectiveness of sanctions in influencing the Kremlin. Some have suggested the damage to the Russian economy caused by falling oil prices could provide an opening for scaling back the sanctions as part of a new</item>
+                <item key="thumbnail">BN-GM813_EURUSS_OR_20150119121402.jpg</item>
+                <item key="show_subsection">true</item>
+            </metadata>
+        </link>
+        <link id="b2" url="http://mobilefeeds.wsj.com/xml/djml/SB10969703411716344567204580355073669450914.xml" module="TOP-IMAGE_module.xml" pages="ARTICLE-pages.xml" class="deco" href="SB10969703411716344567204580355073669450914.jpml">
+            <metadata>
+                <item key="headline">The Greek Election Explained</item>
+                <item key="type">MobileDeco1</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">false</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/macys-cfo-tops-wsjs-finance-chief-list-for-2014-1419346908</item>
+                <item key="short_url">http://online.wsj.com/articles/macys-cfo-tops-wsjs-finance-chief-list-for-2014-1419346908</item>
+                <item key="flashline"></item>
+                <item key="deckline"></item>
+                <item key="byline"></item>
+                <item key="date_published">2015-01-19T09:10-04:00</item>
+                <item key="summary">Greece’s future in the eurozone could hinge on the outcome of Sunday’s national election. Find out why.</item>
+                <item key="thumbnail">BN-GM555_Greeke_OR_20150118123859.jpg</item>
+                <item key="setByAffinity">true</item>
+            </metadata>
+        </link>
+        <link id="b3" url="http://mobilefeeds.wsj.com/xml/djml/SB10969703411716344567204580355090694060722.xml" module="TOP-IMAGE_module.xml" pages="ARTICLE-pages.xml" class="deco" href="SB10969703411716344567204580355090694060722.jpml">
+            <metadata>
+                <item key="headline">‘Islamization’ Rally Cancelled After Death Threat</item>
+                <item key="type">MobileDeco1</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">false</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/do-you-suffer-from-gadget-obesity-1419347427</item>
+                <item key="short_url">http://online.wsj.com/articles/do-you-suffer-from-gadget-obesity-1419347427</item>
+                <item key="flashline"></item>
+                <item key="deckline"></item>
+                <item key="byline"></item>
+                <item key="date_published">2015-01-19T07:46-04:00</item>
+                <item key="summary">The weekly anti-Islamist rally organized by Pegida was called off on Monday after one of its organizers received a death threat.</item>
+                <item key="thumbnail">BN-GM553_pegida_OR_20150118113140.jpg</item>
+                <item key="setByAffinity">true</item>
+            </metadata>
+        </link>
+        <link id="b4" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580408411106578900.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580408411106578900.jpml">
+            <metadata>
+                <item key="headline">North Korea Defector Changes Story</item>
+                <item key="type">Asia News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/famed-north-korea-defector-changes-key-parts-of-story-1421641124</item>
+                <item key="short_url">http://online.wsj.com/articles/famed-north-korea-defector-changes-key-parts-of-story-1421641124</item>
+                <item key="flashline"></item>
+                <item key="deckline">World-Renowned Refugee Admits Changing Story, Putting His Credibility in Question</item>
+                <item key="byline">By Jeyup S. Kwaak</item>
+                <item key="date_published">2015-01-18T23:18-04:00</item>
+                <item key="summary">SEOUL—Shin Dong-hyuk, a renowned North Korean refugee who helped publicize alleged human-rights abuses inside his country, has admitted to changing parts of his life story, putting his credibility in question. Mr. Shin is among the highest-profile activists against North Korea’s prison camps, in which he says he was born via an organized breeding program. He is an extremely rare witness to the internal workings of Camp 14, a prison facility located north of Pyongyang from which no one is expected to escape. He has accused North Korea of perpetrating various human-rights violations, including slave labor, torture and public executions. Mr. Shin’s new version of the story contradicts his</item>
+                <item key="thumbnail">BN-GM632_nkdefe_OR_20150118231356.jpg</item>
+            </metadata>
+        </link>
+        <link id="b5" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409572823987274.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409572823987274.jpml">
+            <metadata>
+                <item key="headline">British Leader Defends Minister’s Letter to Muslims</item>
+                <item key="type">Europe News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/british-leader-defends-ministers-letter-to-muslims-1421689547</item>
+                <item key="short_url">http://online.wsj.com/articles/british-leader-defends-ministers-letter-to-muslims-1421689547</item>
+                <item key="flashline"></item>
+                <item key="deckline">Cameron Backs Pickles Letter to Islamic Leaders as Unexceptionable</item>
+                <item key="byline">By Nicholas Winning</item>
+                <item key="date_published">2015-01-19T12:45-04:00</item>
+                <item key="summary">LONDON—British Prime Minister David Cameron defended a letter by one of his ministers that has offended some Muslims by urging them to show how Islam “can be part of British identity.” The row over the letter sent to more than 1,000 Islamic leaders in England by Eric Pickles, the minister responsible for communities and local government, highlights how efforts to tackle the threat of homegrown extremism in the wake of the recent terror attacks in Paris is placing a strain on community relations in European countries with large Muslim populations. Mr. Pickles in his letter sent Friday welcomed the way Muslims in Britain had spoken out against the terror attacks but said “there is more work to</item>
+                <item key="thumbnail"></item>
+            </metadata>
+        </link>
+        <link id="b6" url="http://mobilefeeds.wsj.com/xml/djml/SB10758858174227614679104580407751676320056.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB10758858174227614679104580407751676320056.jpml">
+            <metadata>
+                <item key="headline">Are the Eurozone’s Pockets Deep Enough?</item>
+                <item key="type">Europe File</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/are-the-eurozones-pockets-deep-enough-1421617648</item>
+                <item key="short_url">http://online.wsj.com/articles/are-the-eurozones-pockets-deep-enough-1421617648</item>
+                <item key="flashline"></item>
+                <item key="deckline">ECB Poised to Launch Government Bond-Buying Program</item>
+                <item key="byline">By Simon Nixon</item>
+                <item key="date_published">2015-01-18T16:47-04:00</item>
+                <item key="summary">The moment the markets have been waiting for has arrived: Six years after the U.S. Federal Reserve and the Bank of England launched their quantitative-easing programs and two years after the start of Abenomics in Japan, the European Central Bank is expected Thursday to embark on its own government bond-buying program. Its aim: to head off the threat of deflation in an economy where prices fell 0.2% in December and where inflation expectations are deteriorating. The market is certainly priced for action. Eurozone government bonds—with the exception of those of Greece—are trading at record lows with German government bond yields negative for maturities up to five years. The euro has fallen 12%</item>
+                <item key="thumbnail">BN-GM578_EUROFI_OR_20150118164027.jpg</item>
+            </metadata>
+        </link>
+        <link id="b7" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409082288368368.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409082288368368.jpml">
+            <metadata>
+                <item key="headline">Hollande: ECB Will Decide to Buy Government Debt Thursday</item>
+                <item key="type">Economy</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/hollande-says-ecb-will-announce-quantitative-easing-plans-thursday-1421666714</item>
+                <item key="short_url">http://online.wsj.com/articles/hollande-says-ecb-will-announce-quantitative-easing-plans-thursday-1421666714</item>
+                <item key="flashline"></item>
+                <item key="deckline">ECB Fiercely Guards Independence From Governments; Spokesman Declines to Comment</item>
+                <item key="byline">By William Horobin</item>
+                <item key="date_published">2015-01-19T09:04-04:00</item>
+                <item key="summary">PARIS—French President François Hollande said Monday the European Central Bank will decide to buy government debt later this week, reinforcing expectations the Frankfurt-based institution will follow other major central banks into so-called quantitative easing. “On Thursday, the ECB will take the decision to buy sovereign debt, which will provide significant liquidity to the European economy and create a movement that is favorable to growth,” Mr. Hollande said in a speech to business leaders at the Élysée Palace. The comments from the French leader were surprising as they appear to foretell the action of the ECB, which fiercely guards its independence from governments. An ECB spokesman</item>
+                <item key="thumbnail"></item>
+            </metadata>
+        </link>
+        <link id="b8" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409221640249474.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409221640249474.jpml">
+            <metadata>
+                <item key="headline">Prosecutor Who Accused Argentina’s President of Iran Cover-Up Found Dead</item>
+                <item key="type">Latin America News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/prosecutor-who-accused-argentinas-president-of-iran-cover-up-found-dead-1421673152</item>
+                <item key="short_url">http://online.wsj.com/articles/prosecutor-who-accused-argentinas-president-of-iran-cover-up-found-dead-1421673152</item>
+                <item key="flashline"></item>
+                <item key="deckline">Body of Alberto Nisman, Who Had Been Investigating Jewish Center Bombing, Found in Bathroom</item>
+                <item key="byline">By Taos Turner</item>
+                <item key="date_published">2015-01-19T08:12-04:00</item>
+                <item key="summary">BUENOS AIRES—The prosecutor who last week accused Argentine President Cristina Kirchner and others of working with Iran to cover up a 1994 terror bombing was found dead in his apartment on Sunday, hours before he was to testify in Congress. Alberto Nisman’s body was discovered inside a bathroom at his apartment on the 13th floor of an apartment tower here in this capital city. A 22-calibre weapon was found near him, according to a statement from Argentina’s Security Secretariat. There were no signs of forced entry into the apartment, the statement said. On Wednesday, Mr. Nisman filed a criminal complaint that accused Mrs. Kirchner, Foreign Minister Hector Timerman and others of conspiring to</item>
+                <item key="thumbnail">BN-GL295_0114ar_OR_20150114172616.jpg</item>
+            </metadata>
+        </link>
+        <link id="b9" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409500035961156.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409500035961156.jpml">
+            <metadata>
+                <item key="headline">Cameroon Army Says Some Boko Haram Captives Freed</item>
+                <item key="type">Africa News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/cameroon-army-says-some-boko-haram-captives-freed-1421686821</item>
+                <item key="short_url">http://online.wsj.com/articles/cameroon-army-says-some-boko-haram-captives-freed-1421686821</item>
+                <item key="flashline"></item>
+                <item key="deckline">Officer Says 24 of 80 Taken on Sunday Have Been Rescued</item>
+                <item key="byline">By Emmanuel Tumanjong</item>
+                <item key="date_published">2015-01-19T12:00-04:00</item>
+                <item key="summary">YAOUNDÉ, Cameroon—Cameroon’s military said it had freed 24 of the 80 people kidnapped by Boko Haram fighters over the weekend, as West African militaries step up their response to the Nigeria-based Islamist insurgency. Abakar Mey, a Cameroonian officer, said Monday his troops “succeeded in rescuing 24 elderly people” snatched from their villages Sunday along the rural border with Nigeria, “in the course of pursuing the Boko Haram militants back into Nigeria.” Boko Haram fighters seized them along with dozens of women and children from the villages of Mabass and Malaxy, part of an intensifying campaign for influence and territory that is taking the insurgency beyond its base in Nigeria. In</item>
+                <item key="thumbnail"></item>
+            </metadata>
+        </link>
+    </page>
+    <page template="CONTINUATION-generic-4_template.xml" class="page2">
+        <link id="b1" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409001594252296.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409001594252296.jpml">
+            <metadata>
+                <item key="headline">Iran Nuclear Talks to Resume Next Month</item>
+                <item key="type">World News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/iran-nuclear-talks-to-resume-next-month-1421664461</item>
+                <item key="short_url">http://online.wsj.com/articles/iran-nuclear-talks-to-resume-next-month-1421664461</item>
+                <item key="flashline"></item>
+                <item key="deckline">Negotiations in Geneva over the Weekend Were ‘Serious and Useful’</item>
+                <item key="byline">By Laurence Norman</item>
+                <item key="date_published">2015-01-19T08:44-04:00</item>
+                <item key="summary">BRUSSELS—Nuclear talks between Iran and six powers over Tehran’s nuclear program will resume at senior-official level early next month, a spokeswoman for the European Union said Monday. She said talks in Geneva on Sunday between the parties were “serious and useful” and they had decided to meet again in early February. Others, however, said the talks remain very difficult. The EU chairs the six-power group—made up of the U.S., Russia, China, France, the U.K. and Germany—which negotiates on the nuclear dossier. U.S. Secretary of State John Kerry held talks on Wednesday and on Friday with his Iranian counterpart, Javad Zarif, in an effort to accelerate the diplomacy. Senior U.S. diplomats also</item>
+                <item key="thumbnail">BN-GM757_iranta_OR_20150119054303.jpg</item>
+            </metadata>
+        </link>
+        <link id="b2" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409181179984028.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409181179984028.jpml">
+            <metadata>
+                <item key="headline">German Lawmakers Slam Protest Ban</item>
+                <item key="type">Europe News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/german-lawmakers-slam-police-ban-on-pegida-protest-1421673917</item>
+                <item key="short_url">http://online.wsj.com/articles/german-lawmakers-slam-police-ban-on-pegida-protest-1421673917</item>
+                <item key="flashline"></item>
+                <item key="deckline">Police in Dresden Ban Anti-Islam March on Security Grounds</item>
+                <item key="byline">By Harriet Torry and Anton Troianovski</item>
+                <item key="date_published">2015-01-19T13:00-04:00</item>
+                <item key="summary">BERLIN—German politicians criticized a decision by police in the eastern city of Dresden to ban an anti-Islam march after death threats toward an organizer, slamming the move as a worrying restriction on freedom of speech. Lawmakers across the political spectrum defended the rights of a movement many of them have sharply criticized in past weeks, highlighting the delicate balancing act the government and the security services face in confronting the threat of Islamist extremism without encroaching on liberties many voters hold dear, especially in light of Germany’s totalitarian past. Patriotic Europeans Against the Islamization of the West, known by its German initials as Pegida, has staged</item>
+                <item key="thumbnail">BN-GM778_gerpro_OR_20150119075728.jpg</item>
+            </metadata>
+        </link>
+        <link id="b3" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409193301113742.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409193301113742.jpml">
+            <metadata>
+                <item key="headline">Rally Held to Denounce Charlie Hebdo in Chechnya</item>
+                <item key="type">Russia News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/tens-of-thousands-protest-against-french-magazine-charlie-hebdo-in-chechen-capital-1421673775</item>
+                <item key="short_url">http://online.wsj.com/articles/tens-of-thousands-protest-against-french-magazine-charlie-hebdo-in-chechen-capital-1421673775</item>
+                <item key="flashline"></item>
+                <item key="deckline">Russia’s Interior Ministry Says More Than 800,000 Joined the Protest From Chechny and Surrounding Republics</item>
+                <item key="byline">By Alan Cullison</item>
+                <item key="date_published">2015-01-19T08:22-04:00</item>
+                <item key="summary">MOSCOW—Tens of thousands of people packed the streets of the capital of Russia’s Chechen republic on Monday, as the Kremlin-backed leader there declared a holiday and a rally to denounce the French magazine Charlie Hebdo’s caricatures of the Muslim Prophet Muhammad as immoral and provocative. Russia’s Interior Ministry said more than 800,000 joined the rally from Chechnya and surrounding Muslim-dominated republics of Russia’s southern rim. Though Russian officials often overestimate numbers at such official events, the crowd did appear to reach hundreds of thousands, and packed the city center of Grozny. Members of Russia’s orthodox clergy joined the march, denouncing the West for “trying to</item>
+                <item key="thumbnail">BN-GM782_cheche_OR_20150119080610.jpg</item>
+            </metadata>
+        </link>
+        <link id="b4" url="http://mobilefeeds.wsj.com/xml/djml/SB10758858174227614679104580409150046842876.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB10758858174227614679104580409150046842876.jpml">
+            <metadata>
+                <item key="headline">Soaring Franc Creates Bonanza in Stores</item>
+                <item key="type">European Business News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/soaring-franc-creates-bonanza-in-swiss-stores-1421674197</item>
+                <item key="short_url">http://online.wsj.com/articles/soaring-franc-creates-bonanza-in-swiss-stores-1421674197</item>
+                <item key="flashline"></item>
+                <item key="deckline">Shoppers Are Suddenly Getting Discounts on Everything From Vegetables to Dresses</item>
+                <item key="byline">By Neil MacLucas And Andrew Morse</item>
+                <item key="date_published">2015-01-19T08:29-04:00</item>
+                <item key="summary">ZURICH—The soaring Swiss franc that caused howls in financial markets is creating a bonanza in stores, where shoppers are suddenly getting discounts on everything from vegetables to party dresses. On Monday, Basel-based Coop said it was cutting prices on more than 200 types of fruit and vegetables imported from the European Union. The supermarket chain, Switzerland’s second-largest retailer behind Migros, said further price cuts for imported fish, poultry and cheese were also in the works. “We contacted our suppliers on Friday and asked that price discounts be passed on to us so we can pass them on to our customers,” Denise Stadler, a Coop spokeswoman said. Coop isn’t the only retailer going</item>
+                <item key="thumbnail">BN-GM774_swpric_OR_20150119073355.jpg</item>
+            </metadata>
+        </link>
+    </page>
+    <page template="CONTINUATION-generic-4_template.xml" class="page3">
+        <link id="b1" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409212580596120.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409212580596120.jpml">
+            <metadata>
+                <item key="headline">Li’s Warning Fuels China Growth Talk</item>
+                <item key="type">China News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/lis-warning-adds-to-speculation-that-china-could-miss-growth-target-1421673866</item>
+                <item key="short_url">http://online.wsj.com/articles/lis-warning-adds-to-speculation-that-china-could-miss-growth-target-1421673866</item>
+                <item key="flashline"></item>
+                <item key="deckline">Chinese Premier Speaks of ‘Formidable and Arduous’ Work for Government</item>
+                <item key="byline">By Mark Magnier</item>
+                <item key="date_published">2015-01-19T08:50-04:00</item>
+                <item key="summary">BEIJING—China’s economy faces continued downward pressure this year, Premier Li Keqiang said Monday at an official work meeting ahead of the government’s much-watched release of its fourth quarter and 2014 economic growth results. While his remarks to economic policy makers and officials isn’t the first time that Mr. Li has acknowledged growing economic headwinds in recent months, the timing added to speculation that Beijing could miss its growth target—set at about 7.5% year on year in 2014—for the first time since the late 1990s. The quarterly and annual growth results are reported by the statistics bureau Tuesday morning. China is battling a real estate downturn, slowing domestic demand,</item>
+                <item key="thumbnail">MW-BW517_li_keq_OR_20140313012504.jpg</item>
+            </metadata>
+        </link>
+        <link id="b2" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409080534117478.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409080534117478.jpml">
+            <metadata>
+                <item key="headline">AirAsia Crash: No Sign So Far of Terrorism</item>
+                <item key="type">Asia News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">false</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/airasia-crash-investigators-no-sign-so-far-of-terrorism-pilot-suicide-1421667736</item>
+                <item key="short_url">http://online.wsj.com/articles/airasia-crash-investigators-no-sign-so-far-of-terrorism-pilot-suicide-1421667736</item>
+                <item key="flashline"></item>
+                <item key="deckline">No Indication Thus Far of Gunfire or Threats</item>
+                <item key="byline">By Ben Otto And I Made Sentana</item>
+                <item key="date_published">2015-01-19T08:27-04:00</item>
+                <item key="summary">JAKARTA, Indonesia—Investigators said they have found no indication so far that terrorism or pilot suicide played a role in the crash of AirAsia Flight 8501. “So far, there’s no sign of terrorist activity,” Mardjono Siswosuwarno, the lead investigator in the probe, said Monday. A team of investigators listening to the plane’s cockpit voice recorder has reported no indications of gunfire or threats, he said. The recorder was recovered along with a flight-data recorder from the crash site in the Java Sea last week. Nurcahyo Utomo, another investigator from Indonesia’s Transportation Safety Committee, said nothing heard on the audio recording so far suggested pilot suicide played a role in the</item>
+                <item key="thumbnail">BN-GM763_0119AI_OR_20150119063901.jpg</item>
+            </metadata>
+        </link>
+        <link id="b3" url="http://mobilefeeds.wsj.com/xml/djml/SB10758858174227614679104580408681409071148.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB10758858174227614679104580408681409071148.jpml">
+            <metadata>
+                <item key="headline">Clashes Erupt Across Yemen’s Capital</item>
+                <item key="type">World News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">false</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/rebels-battle-soldiers-near-yemens-presidential-palace-1421650439</item>
+                <item key="short_url">http://online.wsj.com/articles/rebels-battle-soldiers-near-yemens-presidential-palace-1421650439</item>
+                <item key="flashline"></item>
+                <item key="deckline">Houthi Militants Demand Greater Say in the Crafting of the Country’s Constitution</item>
+                <item key="byline">By Maria Abi-Habib And Hakim Almasmari</item>
+                <item key="date_published">2015-01-19T06:33-04:00</item>
+                <item key="summary">SAN&apos;A, Yemen—Clashes erupted across Yemen’s capital on Monday as Houthi militants demanded a greater say in the crafting of the country’s constitution, days after kidnapping a top presidential aide to leverage their demands. The Houthis are a militant group that represents Yemen’s Zaidi sect—an offshoot of Shiite Islam. In September they forced the government’s resignation after occupying the capital San’a, complaining about the slow pace of reforms undertaken by President Abded Rabbo Mansour Hadi, including the drafting of a new constitution. The militants have since spread across Yemen, occupying some of the country’s most important infrastructure including sea ports, while opposing Mr.</item>
+                <item key="thumbnail">BN-GM694_yemen0_OR_20150119032110.jpg</item>
+            </metadata>
+        </link>
+        <link id="b4" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580408960656956610.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580408960656956610.jpml">
+            <metadata>
+                <item key="headline">EU to Appeal Court Decision on Hamas</item>
+                <item key="type">World News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/eu-to-challenge-court-decision-striking-hamas-off-terror-list-1421663087</item>
+                <item key="short_url">http://online.wsj.com/articles/eu-to-challenge-court-decision-striking-hamas-off-terror-list-1421663087</item>
+                <item key="flashline"></item>
+                <item key="deckline">Asset Freeze and Other Restrictions Will Remain in Place Until Final Judgment</item>
+                <item key="byline">By Laurence Norman</item>
+                <item key="date_published">2015-01-19T09:35-04:00</item>
+                <item key="summary">BRUSSELS—The European Union will challenge a ruling by the bloc’s second highest court striking Hamas off the region’s terror list, ensuring that an asset freeze and other restrictions remain in place until a final judgment is made. The decision, widely expected, came during a meeting of the EU’s foreign ministers in Brussels. In its ruling last month, the EU’s General Court said the terror listing wasn’t based on evidence that had been properly examined and confirmed by national authorities, but on “factual imputations derived from the press and the Internet.” The court had made a similar ruling for the same reason in October 2014 on Sri Lanka’s Tamil Tigers group. An EU official said the</item>
+                <item key="thumbnail">BN-GM740_euhama_OR_20150119051640.jpg</item>
+            </metadata>
+        </link>
+    </page>
+    <page template="CONTINUATION-generic-4_template.xml" class="page4">
+        <link id="b1" url="http://mobilefeeds.wsj.com/xml/djml/SB10758858174227614679104580409283344374878.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB10758858174227614679104580409283344374878.jpml">
+            <metadata>
+                <item key="headline">Iranian General Killed Sunday in Rocket Strike in Syria</item>
+                <item key="type">Middle East News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/iranian-general-killed-sunday-in-syria-1421678099</item>
+                <item key="short_url">http://online.wsj.com/articles/iranian-general-killed-sunday-in-syria-1421678099</item>
+                <item key="flashline"></item>
+                <item key="deckline">Rocket Strike Took Place Near Border with Israeli-Controlled Golan Heights</item>
+                <item key="byline">By Joshua Mitnick and Dana Ballout</item>
+                <item key="date_published">2015-01-19T12:52-04:00</item>
+                <item key="summary">TEL AVIV—A general in the elite Iranian Revolutionary Guards force was killed in a rocket strike in Syria near the border with the Israeli-controlled Golan Heights, Iranian news media reported Monday. Iran’s Lebanese Shiite ally Hezbollah said an Israeli helicopter carried out Sunday’s attack, in which six of its members were also killed, including the son of Imad Mughniyeh, the group’s former military chief who was killed by a car bomb in Damascus in 2008. The Iranian news agency Fars identified the dead Iranian general as Brig. Gen. Muhammad Ali Allahdadi. Israel neither confirmed nor denied the attack, but a senior defense official, Amos Gilad, in an interview with Israel Radio, said the</item>
+                <item key="thumbnail"></item>
+            </metadata>
+        </link>
+        <link id="b2" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580409191390087392.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580409191390087392.jpml">
+            <metadata>
+                <item key="headline">Erdogan Holds First Meeting of Cabinet</item>
+                <item key="type">World News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/erdogan-holds-first-cabinet-meeting-as-turkeys-president-1421675195</item>
+                <item key="short_url">http://online.wsj.com/articles/erdogan-holds-first-cabinet-meeting-as-turkeys-president-1421675195</item>
+                <item key="flashline"></item>
+                <item key="deckline">Opposition Slams Meeting as Part of Campaign to Establish a De Facto Presidential System of Government</item>
+                <item key="byline">By Emre Peker</item>
+                <item key="date_published">2015-01-19T08:46-04:00</item>
+                <item key="summary">ISTANBUL—Turkey’s President Recep Tayyip Erdogan became the first head of state in over a decade to chair a cabinet meeting on Monday, marking the latest attempt by the president to expand the powers of his office and transform the country’s political system. The cabinet arrived at the newly opened 1,150-room presidential palace at around noon local time in Ankara. National television channels broadcast Mr. Erdogan circling a horseshoe-shaped table and shaking hands with all 26 cabinet members. The meeting was the first to be chaired by the head of state since former president Suleyman Demirel was invited to attend a cabinet gathering by then prime minister Bulent Ecevit in 2000. Mr.</item>
+                <item key="thumbnail">BN-GM784_turkey_OR_20150119082320.jpg</item>
+            </metadata>
+        </link>
+        <link id="b3" url="http://mobilefeeds.wsj.com/xml/djml/SB10758858174227614679104580407120772426374.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB10758858174227614679104580407120772426374.jpml">
+            <metadata>
+                <item key="headline">Belgium Asks Greece to Extradite Detainee in Terror Case</item>
+                <item key="type">Europe News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">true</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/french-police-release-three-detainees-after-terror-sweep-1421582891</item>
+                <item key="short_url">http://online.wsj.com/articles/french-police-release-three-detainees-after-terror-sweep-1421582891</item>
+                <item key="flashline"></item>
+                <item key="deckline">European Officials Seeks to Tighten Security After Paris Terror Attacks and Foiled Plot in Belgium</item>
+                <item key="byline">By Max Colchester in Paris, Laurence Norman in Brussels and Benoît Faucon in London</item>
+                <item key="date_published">2015-01-18T17:04-04:00</item>
+                <item key="summary">Belgian authorities are seeking the extradition of one of four people detained in Athens in connection with a foiled plot to attack police in Belgium, as officials across Europe sought to tighten security in the wake of the terror attacks in Paris. The request comes after Belgian police killed two people in an antiterrorism raid Thursday in Verviers, a city in the southeast of the country. The European Union’s counterterrorism czar said over the weekend that terrorists had planned the attack on Belgian police for Friday. Belgian media cited Justice Minister Koen Geens saying on Sunday that the suspected head of the terrorist cell behind the alleged police attack was still at large. Over the</item>
+                <item key="thumbnail">BN-GM547_frsusp_OR_20150118072039.jpg</item>
+            </metadata>
+        </link>
+        <link id="b4" url="http://mobilefeeds.wsj.com/xml/djml/SB11848606239175954545404580408482212076258.xml" module="CONTINUATION-dynamic_module.xml" pages="ARTICLE-pages.xml" href="SB11848606239175954545404580408482212076258.jpml">
+            <metadata>
+                <item key="headline">Australia Presses Jakarta on Death Penalty</item>
+                <item key="type">Asia News</item>
+                <item key="subsection">WORLD</item>
+                <item key="paid">false</item>
+                <item myClass="com.dowjones.gelcap.xmlengine.sectionpages.UrlItem" key="share_link">http://online.wsj.com/articles/australia-pressures-indonesia-to-spare-lives-of-convicts-1421644255</item>
+                <item key="short_url">http://online.wsj.com/articles/australia-pressures-indonesia-to-spare-lives-of-convicts-1421644255</item>
+                <item key="flashline"></item>
+                <item key="deckline">Indonesia’s Executions of Foreign Drug Traffickers Spurs Concern Over Australians</item>
+                <item key="byline">By Rob Taylor</item>
+                <item key="date_published">2015-01-19T00:10-04:00</item>
+                <item key="summary">CANBERRA, Australia—Canberra vowed to ratchet up pressure on Indonesia to spare the lives of two convicted Australian drug traffickers on death row, saying executions aren’t the way to stop illegal narcotics smuggling. Over the weekend, Indonesia executed five foreigners and a local woman convicted of drug offenses—sparking concern in Canberra that the two Australians, held for involvement in a separate incident, may also soon face a firing squad. Foreign Minister Julie Bishop said Monday that Australia had made more than 50 appeals for clemency on behalf of the pair, who have been on death row in Bali for nine years. She wouldn’t say whether Australia would consider withdrawing its</item>
+                <item key="thumbnail">BN-GM636_ausind_OR_20150118235800.jpg</item>
+            </metadata>
+        </link>
+    </page>
+</pages>

@@ -16,6 +16,8 @@ repositories {
 apply plugin: 'com.android.application'
 apply plugin: 'hugo'
 
+def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
 
 android {
     compileSdkVersion 21
@@ -27,6 +29,9 @@ android {
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
+
+        buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
+        buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
     }
     buildTypes {
         debug {
