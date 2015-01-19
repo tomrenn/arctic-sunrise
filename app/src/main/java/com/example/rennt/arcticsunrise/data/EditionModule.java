@@ -1,5 +1,7 @@
 package com.example.rennt.arcticsunrise.data;
 
+import android.net.Uri;
+
 import com.example.rennt.arcticsunrise.ArcticSunriseModule;
 import com.example.rennt.arcticsunrise.data.api.BaseApiPath;
 import com.example.rennt.arcticsunrise.data.api.BaseEditionPath;
@@ -37,7 +39,7 @@ import timber.log.Timber;
        complete = false, library = true
 )
 public class EditionModule {
-    private static String CATALOG_PATH = "/android.phone.wifi.%d.catalog.json";
+    private static String CATALOG_PATH = "android.phone.wifi.%d.catalog.json";
     private Edition edition;
 
 
@@ -46,16 +48,16 @@ public class EditionModule {
     }
 
     /**
-     * Determine the root url location based on edition.
+     * Get the base Edition path, e.g., '.../usa' or '.../europe'
      */
-    @Provides @BaseEditionPath String getBasePath(Edition edition, @BaseApiPath String basePath){
-        return basePath + "/" + edition.getPath();
+    @Provides @BaseEditionPath Uri getBasePath(@BaseApiPath Uri basePath){
+        return Uri.withAppendedPath(basePath, edition.getPath());
     }
 
     /**
-     * Return the catalog address.
+     * Return the catalog address. '.../usa/catalog.json'
      */
-    private String getCatalogAddress(String basePath){
+    private Uri getCatalogUri(Uri basePath) {
         int catalogVersion = 1;
 
         if (edition == Edition.USA) {
@@ -63,9 +65,8 @@ public class EditionModule {
         }
         String catalogPath = String.format(CATALOG_PATH, catalogVersion);
 
-        return basePath + "/" + catalogPath;
+        return Uri.withAppendedPath(basePath, catalogPath);
     }
-
 
     /**
      * Todo: make a catalogManager. getObservable(bool useCache) ?
@@ -75,14 +76,14 @@ public class EditionModule {
      * get new catalog - save new catalog with similar issues and remove tail issues and old catalog.
      *
      */
-    @Provides Observable<Catalog> provideCatalogObservable(final OkHttpClient httpClient, final Gson gson,
-                                                           @BaseEditionPath final String basePath) {
+    @Provides Observable<Catalog> provideCatalogObservable(final DataModule.NetworkResolver resolver, final Gson gson,
+                                                           @BaseEditionPath final Uri basePath) {
         return Observable.create(new Observable.OnSubscribe<Catalog>(){
             @Override
             @DebugLog
             public void call(final Subscriber<? super Catalog> subscriber) {
 
-                String address = getCatalogAddress(basePath);
+                Uri address = getCatalogUri(basePath);
                 try {
                     Catalog cachedCatalog = null;
                     List<Catalog> cachedCatalogs = Catalog.findByKey(Catalog.class, edition.ordinal());
@@ -97,9 +98,9 @@ public class EditionModule {
 
                         subscriber.onNext(cachedCatalog);
                     }
-                    Timber.d("Catalog request (network): " + address);
+                    Timber.d("Catalog request (network): " + address.toString());
 
-                    Reader responseStream = DataModule.fetchUri(httpClient, address);
+                    Reader responseStream = resolver.fetchUri(address);
                     Catalog catalog = gson.fromJson(responseStream, Catalog.class);
 
                     int numNewIssues = 0;

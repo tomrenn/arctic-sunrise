@@ -1,5 +1,8 @@
 package com.example.rennt.arcticsunrise;
 
+import android.app.Application;
+import android.net.Uri;
+
 import com.example.rennt.arcticsunrise.data.api.BaseApiPath;
 
 import dagger.Module;
@@ -14,9 +17,10 @@ import dagger.Provides;
 )
 public class MockApiModule {
 
-
-
-    @Provides @BaseApiPath String provideBaseApiPath(){
-        return "file://";
-    }
+//
+//    @Provides @BaseApiPath Uri provideBaseApiPath(){
+//        return new Uri.Builder()
+//                .scheme("mock://")
+//                .build();
+//    }
 }

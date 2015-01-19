@@ -1,5 +1,6 @@
 package com.example.rennt.arcticsunrise.data.api;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.android.volley.NetworkResponse;
@@ -64,18 +65,18 @@ import timber.log.Timber;
  * ALTERNATIVE NAME: NetworkManager
  */
 public class IssueService {
-    private OkHttpClient httpClient;
+    private DataModule.NetworkResolver resolver;
     private Issue issue;
-    private String baseEditionPath;
+    private Uri baseEditionPath;
     private Gson gson;
     /**
      * We can use constructor injection here because Dagger, not the Android OS,
      * will be doing the construction of this object.
      */
 
-    public IssueService(OkHttpClient httpClient, Gson gson,
-                        Issue issue, @BaseEditionPath String baseEditionPath){
-        this.httpClient = httpClient;
+    public IssueService(DataModule.NetworkResolver resolver, Gson gson,
+                        Issue issue, @BaseEditionPath Uri baseEditionPath){
+        this.resolver = resolver;
         this.issue = issue;
         this.baseEditionPath = baseEditionPath;
         this.gson = gson;
@@ -88,17 +89,17 @@ public class IssueService {
     /**
      * Return base location for issue information.
      */
-    private String getBaseIssuePath(){
-        String path = baseEditionPath + "/contents/%s";
-        return String.format(path, issue.getIssueId());
+    private Uri getBaseIssuePath(){
+        String contentPath = String.format("contents/%s", issue.getIssueId());
+        return Uri.withAppendedPath(baseEditionPath, contentPath);
     }
 
-    private String getIssueAddress(){
-        return getBaseIssuePath() + "/issue.json";
+    private Uri getIssueAddress(){
+        return Uri.withAppendedPath(getBaseIssuePath(), "issue.json");
     }
 
-    private String getSectionAddress(Section section){
-        return getBaseIssuePath() + "/" + section.getPagePath();
+    private Uri getSectionAddress(Section section){
+        return Uri.withAppendedPath(getBaseIssuePath(), section.getPagePath());
     }
 
     /**
@@ -138,7 +139,7 @@ public class IssueService {
      */
     @DebugLog
     private Issue fillIssueSections() throws Exception {
-        String address = getIssueAddress();
+        Uri address = getIssueAddress();
 
         List<Section> sections;
 
@@ -155,7 +156,7 @@ public class IssueService {
         Timber.i("(Network) Fetching sections for issue: " + issue);
 
 
-        Reader json = DataModule.fetchUri(httpClient, address);
+        Reader json = resolver.fetchUri(address);
         JsonElement jsonElement = gson.fromJson(json, JsonElement.class);
         JsonObject jsonObj = jsonElement.getAsJsonObject();
 
@@ -184,7 +185,7 @@ public class IssueService {
             @Override
             public void call(Subscriber<? super Section> subscriber) {
                 Section section = issue.getSections().get(sectionPos);
-                String url = getSectionAddress(section);
+                Uri uri = getSectionAddress(section);
 
                 try {
                     // FIXME: this is kinda a hack, add precondition that section must be saved before onNext'ing
@@ -205,8 +206,8 @@ public class IssueService {
                     Timber.d("(Network) Fetching articles");
                     // we could do a request to see if content changed, and update accordingly
 //                    String xml = DataModule.fetchUri(httpClient, url);
-                    Timber.d(url);
-                    String xml = DataModule.fetchUriToString(httpClient, url);
+                    Timber.d(uri.toString());
+                    String xml = resolver.fetchUriToString(uri);
                     Timber.d(xml.substring(0, 20));
                     Article.ArticleListParser articleParser = new Article.ArticleListParser();
                     List<Article> articles = articleParser.parse(xml);

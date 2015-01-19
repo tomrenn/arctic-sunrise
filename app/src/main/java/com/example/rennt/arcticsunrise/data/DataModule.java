@@ -3,6 +3,7 @@ package com.example.rennt.arcticsunrise.data;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.LruCache;
 
 import com.android.volley.RequestQueue;
@@ -13,6 +14,7 @@ import com.example.rennt.arcticsunrise.data.api.BaseEditionPath;
 import com.example.rennt.arcticsunrise.data.api.Edition;
 import com.example.rennt.arcticsunrise.data.prefs.IssuePreference;
 import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
+import com.example.rennt.arcticsunrise.data.prefs.StringPreference;
 import com.example.rennt.arcticsunrise.ui.MainActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,6 +22,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import java.io.IOException;
 import java.io.Reader;
 
 import javax.inject.Singleton;
@@ -36,6 +39,13 @@ import dagger.Provides;
 )
 public class DataModule {
     private static final int MAX_CACHE_SIZE = 20; // number of bitmaps in cache
+    public static final String DEFAULT_API = "http://gelcap.dowjones.com/gc/packager/wsj";
+
+    public interface NetworkResolver{
+        String fetchUriToString(Uri uri) throws IOException;
+        Reader fetchUri(Uri uri) throws IOException;
+    }
+
 
     @Provides @Singleton
     OkHttpClient provideHttpClient() {
@@ -43,32 +53,10 @@ public class DataModule {
     }
 
 
-    @Provides @BaseApiPath String provideBaseApiPath(){
-        return "http://gelcap.dowjones.com/gc/packager/wsj";
+    @Provides @BaseApiPath Uri provideBaseApiPath(){
+        return Uri.parse(DEFAULT_API);
     }
 
-
-    /**
-     * Return a stream reader based on the given uri.
-     */
-    public static Reader fetchUri(OkHttpClient httpClient, String uri) throws Exception{
-        Request request = new Request.Builder()
-                .url(uri)
-                .build();
-        Response response = httpClient.newCall(request).execute();
-        return response.body().charStream();
-    }
-
-    /**
-     * Return the full String based on given uri.
-     */
-    public static String fetchUriToString(OkHttpClient httpClient, String uri) throws Exception{
-        Request request = new Request.Builder()
-                .url(uri)
-                .build();
-        Response response = httpClient.newCall(request).execute();
-        return response.body().string();
-    }
 
     @Provides @Singleton Edition provideEdition() {
         return Edition.USA;
@@ -77,6 +65,10 @@ public class DataModule {
     @Provides @Singleton
     SharedPreferences provideSharedPreferences(Application app){
         return app.getSharedPreferences("default", Application.MODE_PRIVATE);
+    }
+
+    @Provides @ApiEndpoint StringPreference provideApiEndpoint(SharedPreferences prefs){
+        return new StringPreference(prefs, "ApiEndpoint", DEFAULT_API);
     }
 
     @Provides @IssuePreference LongPreference provideCurrentIssuePreference(SharedPreferences prefs){

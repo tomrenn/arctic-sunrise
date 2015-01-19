@@ -1,5 +1,6 @@
 package com.example.rennt.arcticsunrise;
 
+import com.example.rennt.arcticsunrise.data.DebugDataModule;
 import com.example.rennt.arcticsunrise.ui.DebugUiModule;
 
 import dagger.Module;
@@ -11,7 +12,7 @@ import dagger.Module;
         addsTo = ArcticSunriseModule.class,
         includes = {
                 DebugUiModule.class,
-//                DebugDataModule.class
+                DebugDataModule.class,
                 MockApiModule.class
         },
 

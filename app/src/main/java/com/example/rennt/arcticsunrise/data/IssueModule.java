@@ -1,5 +1,7 @@
 package com.example.rennt.arcticsunrise.data;
 
+import android.net.Uri;
+
 import com.example.rennt.arcticsunrise.ArcticSunriseModule;
 import com.example.rennt.arcticsunrise.data.api.BaseEditionPath;
 import com.example.rennt.arcticsunrise.data.api.Edition;
@@ -48,8 +50,8 @@ public class IssueModule {
 
 
     @Provides
-    IssueService provideIssueService(OkHttpClient httpClient, Gson gson, @BaseEditionPath String editionBase){
-        return new IssueService(httpClient, gson, issue, editionBase);
+    IssueService provideIssueService(DataModule.NetworkResolver resolver, Gson gson, @BaseEditionPath Uri editionBase){
+        return new IssueService(resolver, gson, issue, editionBase);
     }
 
 }
