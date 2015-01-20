@@ -1,5 +1,6 @@
 package com.example.rennt.arcticsunrise.data;
 
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -9,6 +10,7 @@ import android.util.Log;
 import com.example.rennt.arcticsunrise.ArcticSunriseModule;
 import com.example.rennt.arcticsunrise.data.api.BaseApiPath;
 import com.example.rennt.arcticsunrise.data.api.BaseEditionPath;
+import com.example.rennt.arcticsunrise.data.api.CatalogService;
 import com.example.rennt.arcticsunrise.data.api.Edition;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
@@ -19,9 +21,14 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.simpleframework.xml.util.Resolver;
+
 import java.io.Reader;
 import java.lang.reflect.Field;
 import java.util.List;
+
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -61,7 +68,7 @@ public class EditionModule {
     /**
      * Return the catalog address. '.../usa/catalog.json'
      */
-    private Uri getCatalogUri(Uri basePath) {
+    private Uri getCatalogUri(@BaseEditionPath Uri basePath) {
         int catalogVersion = 1;
 
         if (edition == Edition.USA) {
@@ -72,82 +79,12 @@ public class EditionModule {
         return Uri.withAppendedPath(basePath, catalogPath);
     }
 
-    /**
-     * Todo: make a catalogManager. getObservable(bool useCache) ?
-     *
-     * get cached catalog, cached issues through catalog id.
-     *
-     * get new catalog - save new catalog with similar issues and remove tail issues and old catalog.
-     *
-     */
-    @Provides Observable<Catalog> provideCatalogObservable(final DataModule.NetworkResolver resolver, final Gson gson,
-                                                           final NetworkInfo networkInfo,
-                                                           @BaseEditionPath final Uri basePath) {
-        return Observable.create(new Observable.OnSubscribe<Catalog>(){
-            @Override
-            @DebugLog
-            public void call(final Subscriber<? super Catalog> subscriber) {
 
-                Uri address = getCatalogUri(basePath);
-                try {
-                    Catalog cachedCatalog = null;
-                    List<Catalog> cachedCatalogs = Catalog.findByKey(Catalog.class, edition.ordinal());
-                    if (cachedCatalogs != null && cachedCatalogs.size() > 0){
-                        Timber.d("(Cache) Obtained Catalog");
-                        cachedCatalog = cachedCatalogs.get(0);
-                        // lookup cached issues
-                        List<Issue> issueSet = Issue.findByKey(Issue.class, cachedCatalog.getId());
-                        Field _issues = Catalog.class.getDeclaredField("issues");
-                        _issues.setAccessible(true);
-                        _issues.set(cachedCatalog, issueSet);
-
-                        subscriber.onNext(cachedCatalog);
-                    }
-
-                    // no internet connection
-                    if (networkInfo == null || !networkInfo.isConnected()){
-                        Timber.d("No Internet connection found, stopping catalog lookup");
-                        subscriber.onCompleted();
-                        return;
-                    }
-                    Timber.d("Catalog request (network): " + address);
-
-                    Reader responseStream = resolver.fetchUri(address);
-                    Catalog catalog = gson.fromJson(responseStream, Catalog.class);
-
-                    int numNewIssues = 0;
-                    if (cachedCatalog != null) {
-                        // assign issue id to newly parsed issues if they already exist.
-                        for (Issue issue : catalog.getIssues()){
-                            Issue existingIssue = cachedCatalog.containsIssue(issue);
-                            if (existingIssue != null){
-                                issue.setId(existingIssue.getId());
-                            } else {
-                                numNewIssues++;
-                            }
-                        }
-                        cachedCatalog.delete();
-                    }
-                    Timber.d("Catalog updated with " + numNewIssues + " new issues");
-
-                    // save to database for future use
-                    catalog.saveWithKey(edition.ordinal());
-                    for (Issue issue: catalog.getIssues()){
-                        issue.saveWithKey(catalog.getId());
-                    }
-                    subscriber.onNext(catalog);
-
-                    subscriber.onCompleted();
-
-                } catch (Exception e){
-                    Timber.e(e.toString());
-                    subscriber.onError(e);
-                    subscriber.onCompleted();
-                }
-            }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+    @Provides @Singleton
+    CatalogService providesCatalogService(DataModule.NetworkResolver resolver, Gson gson,
+                                          @BaseEditionPath Uri basePath,
+                                          ConnectivityManager cm){
+        Uri catalogUri = getCatalogUri(basePath);
+        return new CatalogService(resolver, gson, catalogUri, edition, cm);
     }
-
-
 }

@@ -19,6 +19,9 @@ import com.example.rennt.arcticsunrise.MockApiModule;
 import com.example.rennt.arcticsunrise.R;
 import com.example.rennt.arcticsunrise.data.ApiEndpoint;
 import com.example.rennt.arcticsunrise.data.ApiEndpoints;
+import com.example.rennt.arcticsunrise.data.api.CatalogService;
+import com.example.rennt.arcticsunrise.data.prefs.IssuePreference;
+import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
 import com.example.rennt.arcticsunrise.data.prefs.StringPreference;
 import com.example.rennt.arcticsunrise.ui.MainActivity;
 import com.google.common.base.Strings;
@@ -45,6 +48,7 @@ import static butterknife.ButterKnife.findById;
 public class DebugAppContainer implements AppContainer {
     private static final DateFormat DATE_DISPLAY_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
     private StringPreference apiEndpoint;
+    private LongPreference savedIssue;
     private Application app;
     // injected preferences
     private Activity activity;
@@ -69,9 +73,11 @@ public class DebugAppContainer implements AppContainer {
 
     @Inject public DebugAppContainer(
             @ApiEndpoint StringPreference apiEndpoint,
+            @IssuePreference LongPreference savedIssue,
             Application app
     ){
         this.apiEndpoint = apiEndpoint;
+        this.savedIssue = savedIssue;
         this.app = app;
     }
 
@@ -122,8 +128,10 @@ public class DebugAppContainer implements AppContainer {
     private void setEndpointAndRelaunch(String endpoint) {
         Timber.d("Setting network endpoint to %s", endpoint);
         apiEndpoint.set(endpoint);
+        savedIssue.delete();
 
         Intent newApp = new Intent(app, MainActivity.class);
+        newApp.putExtra(CatalogService.CATALOG_CACHE_FLAG, false);
         newApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         app.startActivity(newApp);
         ArcticSunriseApp.get(app).buildObjectGraph();

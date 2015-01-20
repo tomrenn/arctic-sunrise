@@ -60,9 +60,7 @@ import timber.log.Timber;
  * - getCatalogObservable()
  * - getFillIssueObservable(Issue i)
  * - getArticlePageObservable(Section s)  : get List of Articles in Section
- * -
  *
- * ALTERNATIVE NAME: NetworkManager
  */
 public class IssueService {
     private DataModule.NetworkResolver resolver;

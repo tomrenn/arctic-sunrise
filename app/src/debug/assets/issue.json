@@ -1,2 +1,38 @@
-
-{"date_updated":"2015-01-19T13:10:00-0500","schema_version":"26","sections":[{"title":null,"items":[{"name":"TOP_NEWS","title":"Top Stories","pages":"TOP_NEWS-pages.xml","hidden":false,"paid":false,"header_background_colors":null,"article_count":23},{"name":"WORLD","title":"World","pages":"WORLD-pages.xml","hidden":false,"paid":false,"header_background_colors":null,"article_count":21},{"name":"US","title":"U.S.","pages":"US-pages.xml","hidden":false,"paid":false,"header_background_colors":null,"article_count":19},{"name":"BUSINESS","title":"Business","pages":"BUSINESS-pages.xml","hidden":false,"paid":false,"header_background_colors":null,"article_count":33},{"name":"TECH","title":"Tech","pages":"TECH-pages.xml","hidden":false,"paid":false,"header_background_colors":null,"article_count":36},{"name":"MARKETS","title":"Markets","pages":"MARKETS-pages.xml","hidden":false,"paid":false,"header_background_colors":null,"article_count":35},{"name":"OPINION","title":"Opinion","pages":"OPINION-pages.xml","hidden":false,"paid":false,"header_background_colors":null,"article_count":21},{"name":"LIFE_AND_CULTURE","title":"Life & Culture","pages":"LIFE_AND_CULTURE-pages.xml","hidden":false,"paid":false,"header_background_colors":null,"article_count":40},{"name":"LATEST_NEWS","title":"Latest News","pages":"LATEST_NEWS-pages.xml","hidden":true,"paid":false,"header_background_colors":null,"article_count":19}]}]}
+{
+    "date_updated":"2015-01-19T13:10:00-0500",
+    "schema_version":"26",
+    "sections":[
+        {
+            "title":null,
+            "items":[
+                {
+                    "name":"TOP_NEWS",
+                    "title":"Top Stories",
+                    "pages":"TOP_NEWS-pages.xml",
+                    "hidden":false,
+                    "paid":false,
+                    "header_background_colors":null,
+                    "article_count":23
+                },
+                {
+                    "name":"WORLD",
+                    "title":"World",
+                    "pages":"WORLD-pages.xml",
+                    "hidden":false,
+                    "paid":false,
+                    "header_background_colors":null,
+                    "article_count":21
+                },
+                {
+                    "name":"US",
+                    "title":"U.S.",
+                    "pages":"US-pages.xml",
+                    "hidden":false,
+                    "paid":false,
+                    "header_background_colors":null,
+                    "article_count":19
+                }
+            ]
+        }
+    ]
+}

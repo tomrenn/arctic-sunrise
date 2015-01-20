@@ -57,8 +57,8 @@ public class DataModule {
 
 
     @Provides
-    NetworkInfo provideNetworkInfo(Application context){
-        return ((ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+    ConnectivityManager provideConnectivityManager(Application context){
+        return ((ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE));
     }
 
     @Provides @BaseApiPath Uri provideBaseApiPath(){

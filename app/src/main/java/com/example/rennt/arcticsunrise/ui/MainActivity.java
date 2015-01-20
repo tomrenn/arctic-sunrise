@@ -25,6 +25,7 @@ import com.example.rennt.arcticsunrise.R;
 import com.example.rennt.arcticsunrise.data.EditionModule;
 import com.example.rennt.arcticsunrise.data.IssueModule;
 import com.example.rennt.arcticsunrise.data.ObjectGraphHolder;
+import com.example.rennt.arcticsunrise.data.api.CatalogService;
 import com.example.rennt.arcticsunrise.data.api.Edition;
 import com.example.rennt.arcticsunrise.data.api.IssueService;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
@@ -59,9 +60,10 @@ import timber.log.Timber;
 
 public class MainActivity extends ActionBarActivity implements ObjectGraphHolder {
     @Inject AppContainer appContainer;
-    // fixme: observable needs to be composible, so we can say useCache=false.
-    @Inject Observable<Catalog> catalogObservable;
+    @Inject CatalogService catalogService;
+
     private ViewGroup container;
+
     @InjectView(R.id.navDrawer) DrawerLayout navDrawer;
     @InjectView(R.id.drawerListView) ListView drawerListView;
     @InjectView(R.id.viewpager) ViewPager viewPager;
@@ -103,7 +105,12 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
 
         setSupportActionBar(toolbar);
 
-        subscribeNewCatalogRequest();
+        boolean useCatalogCache = true;
+        Bundle args = getIntent().getExtras();
+        if (args != null){
+            useCatalogCache = args.getBoolean(CatalogService.CATALOG_CACHE_FLAG, true);
+        }
+        subscribeNewCatalogRequest(useCatalogCache);
     }
 
 
@@ -139,7 +146,9 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
         return issueObjectGraph;
     }
 
-    private void subscribeNewCatalogRequest() {
+    private void subscribeNewCatalogRequest(boolean useCache) {
+        Observable<Catalog> catalogObservable = catalogService.getCatalogObservable(useCache);
+
         lastCatalogSubscription = catalogObservable.subscribe(new Action1<Catalog>() {
             @Override
             public void call(Catalog catalog) {
@@ -242,15 +251,6 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
     }
 
     private void receiveFilledIssue(final Issue issue){
-        // do something
-
-        // create PagedIssueAdapter
-//        issueService.getSectionContent(issue.getSections().get(0), spr, this);
-
-        Timber.d("Recived Issue on thread id " + android.os.Process.getThreadPriority(android.os.Process.myTid()));
-
-        // notify adapter changed on main UI thread.
-        Timber.d("updating view pager on thread id " + android.os.Process.getThreadPriority(android.os.Process.myTid()));
         IssueViewPagerAdapter adapter = new IssueViewPagerAdapter(getSupportFragmentManager(), issue);
         viewPager.setAdapter(adapter);
         pagerTabs.setViewPager(viewPager);
