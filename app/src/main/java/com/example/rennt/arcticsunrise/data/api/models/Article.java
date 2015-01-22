@@ -31,7 +31,7 @@ public class Article extends SugarKeyRecord<Article>{
 //    private String type;
     private boolean isDeco;
     private boolean isPaid;
-    private String summmary;
+    private String summary;
     private String thumbnail;
     private String articleSource;
     // Item key="share_link"
@@ -42,13 +42,17 @@ public class Article extends SugarKeyRecord<Article>{
     public Article(String headline, String summary, boolean isDeco,
                    boolean isPaid, String thumbnail){
         this.headline = headline;
-        this.summmary = summary;
+        this.summary = summary;
         this.isDeco = isDeco;
         this.isPaid = isPaid;
         this.thumbnail = thumbnail;
     }
 
     public String getHeadline() { return headline; }
+
+    public String getSummary() {
+        return summary;
+    }
 
 
     public static class ArticleListParser implements XMLRequest.XMLParser<List<Article>> {

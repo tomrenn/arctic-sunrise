@@ -1,5 +1,6 @@
 package com.example.rennt.arcticsunrise.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -58,7 +59,7 @@ import timber.log.Timber;
 //import retrofit.converter.SimpleXMLConverter;
 
 
-public class MainActivity extends ActionBarActivity implements ObjectGraphHolder {
+public class MainActivity extends Activity implements ObjectGraphHolder {
     @Inject AppContainer appContainer;
     @Inject CatalogService catalogService;
 
@@ -103,7 +104,9 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
         // inject views
         ButterKnife.inject(this);
 
-        setSupportActionBar(toolbar);
+        toolbar.setTitle(R.string.app_name);
+//        toolbar.start
+//        setS(toolbar);
 
         boolean useCatalogCache = true;
         Bundle args = getIntent().getExtras();
@@ -251,7 +254,7 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
     }
 
     private void receiveFilledIssue(final Issue issue){
-        IssueViewPagerAdapter adapter = new IssueViewPagerAdapter(getSupportFragmentManager(), issue);
+        IssueViewPagerAdapter adapter = new IssueViewPagerAdapter(getFragmentManager(), issue);
         viewPager.setAdapter(adapter);
         pagerTabs.setViewPager(viewPager);
 

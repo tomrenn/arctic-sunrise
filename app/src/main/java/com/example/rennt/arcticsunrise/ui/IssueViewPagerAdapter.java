@@ -1,15 +1,19 @@
 package com.example.rennt.arcticsunrise.ui;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.ListFragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.ListFragment;
+import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rennt.arcticsunrise.ArcticSunriseApp;
@@ -24,9 +28,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
 import rx.Observable;
 import rx.functions.Action1;
 import timber.log.Timber;
+
+import static butterknife.ButterKnife.findById;
 
 /**
  * Created by rennt on 12/1/14.
@@ -51,13 +58,104 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        SectionFragment fragment = new SectionFragment();
+        SectionRecyclerFragment fragment = new SectionRecyclerFragment();
 
         Bundle args = new Bundle();
         args.putInt("sectionPos", position);
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+
+    /**
+     * Section Fragment using RecyclerView
+     */
+    public static class SectionRecyclerFragment extends Fragment {
+        @Inject IssueService issueService;
+        private int sectionPos;
+        private RecyclerView recyclerView;
+        private RecyclerView.Adapter recyclerAdapter;
+
+        private Observable<Section> articleObserver;
+
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            ArcticSunriseApp app = ArcticSunriseApp.get(getActivity());
+            app.inject(this);
+
+            sectionPos = getArguments().getInt("sectionPos");
+
+            this.articleObserver = issueService.buildSectionArticlesObservable(sectionPos);
+            articleObserver.subscribe(new Action1<Section>() {
+                @Override
+                public void call(Section section) {
+                    recieveSectionArticles(section.getArticles());
+                }
+            });
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            recyclerView = (RecyclerView) inflater.inflate(R.layout.section, container, false);
+            LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+            recyclerView.setLayoutManager(manager);
+            return recyclerView;
+        }
+
+        private void recieveSectionArticles(final List<Article> articles){
+            recyclerAdapter = new RecyclerView.Adapter<CardViewHolder>() {
+                @Override
+                public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                    View view;
+                    LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+                    switch (viewType){
+                        default:
+                            view = inflater.inflate(R.layout.right_image_card, parent, false);
+                    }
+                    Timber.d("Created view - " + view);
+                    CardViewHolder viewHolder = new CardViewHolder(view);
+                    return viewHolder;
+                }
+
+                /** Set view data */
+                @Override
+                public void onBindViewHolder(CardViewHolder holder, int position) {
+                    Timber.d("Binding view holder - " + holder);
+                    Article article = articles.get(position);
+                    holder.headline.setText(article.getHeadline());
+                    holder.summary.setText(article.getSummary());
+                }
+
+                @Override
+                public int getItemCount() {
+                    return articles.size();
+                }
+            };
+           recyclerView.setAdapter(recyclerAdapter);
+        }
+
+        @Override
+        public void onSaveInstanceState(Bundle outState) {
+            super.onSaveInstanceState(outState);
+            Timber.i("Saving section fragment " + sectionPos);
+            outState.putInt("sectionPos", sectionPos);
+        }
+    }
+
+    public static class CardViewHolder extends RecyclerView.ViewHolder {
+        public TextView headline;
+        public TextView summary;
+        public ImageView image;
+
+        public CardViewHolder(View itemView) {
+            super(itemView);
+            headline = findById(itemView, R.id.headline);
+            summary = findById(itemView, R.id.summary);
+            image = findById(itemView, R.id.image);
+        }
     }
 
     /**

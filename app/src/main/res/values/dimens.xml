@@ -5,4 +5,7 @@
 
     <!-- view pager tabs -->
     <dimen name="view_pager_height">46dp</dimen>
+
+    <dimen name="card_height">110dp</dimen>
+    <dimen name="card_image_width">100dp</dimen>
 </resources>
