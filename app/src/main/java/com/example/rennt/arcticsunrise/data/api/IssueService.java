@@ -87,9 +87,17 @@ public class IssueService {
     /**
      * Return base location for issue information.
      */
-    private Uri getBaseIssuePath(){
+    public Uri getBaseIssuePath(){
         String contentPath = String.format("contents/%s", issue.getIssueId());
         return Uri.withAppendedPath(baseEditionPath, contentPath);
+    }
+
+    /**
+     * Get Uri for file at issue's location.
+     * @return remote file location
+     */
+    public Uri getUriFromIssue(String filename){
+        return Uri.withAppendedPath(getBaseIssuePath(), filename);
     }
 
     private Uri getIssueAddress(){

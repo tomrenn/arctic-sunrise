@@ -54,6 +54,10 @@ public class Article extends SugarKeyRecord<Article>{
         return summary;
     }
 
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
 
     public static class ArticleListParser implements XMLRequest.XMLParser<List<Article>> {
         private static final String ns = null;

@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.rennt.arcticsunrise.AppContainer;
@@ -20,6 +22,7 @@ import com.example.rennt.arcticsunrise.R;
 import com.example.rennt.arcticsunrise.data.ApiEndpoint;
 import com.example.rennt.arcticsunrise.data.ApiEndpoints;
 import com.example.rennt.arcticsunrise.data.api.CatalogService;
+import com.example.rennt.arcticsunrise.data.prefs.BooleanPreference;
 import com.example.rennt.arcticsunrise.data.prefs.IssuePreference;
 import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
 import com.example.rennt.arcticsunrise.data.prefs.StringPreference;
@@ -33,6 +36,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import butterknife.ButterKnife;
@@ -49,6 +53,7 @@ public class DebugAppContainer implements AppContainer {
     private static final DateFormat DATE_DISPLAY_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
     private StringPreference apiEndpoint;
     private LongPreference savedIssue;
+    private BooleanPreference listUiType;
     private Application app;
     // injected preferences
     private Activity activity;
@@ -69,15 +74,19 @@ public class DebugAppContainer implements AppContainer {
     @InjectView(R.id.debug_build_sha) TextView buildShaView;
     @InjectView(R.id.debug_build_date) TextView buildDateView;
 
+    @InjectView(R.id.debug_ui_list_type) Switch switchListType;
+
 
 
     @Inject public DebugAppContainer(
             @ApiEndpoint StringPreference apiEndpoint,
             @IssuePreference LongPreference savedIssue,
+            @Named("UI-list") BooleanPreference listUiType,
             Application app
     ){
         this.apiEndpoint = apiEndpoint;
         this.savedIssue = savedIssue;
+        this.listUiType = listUiType;
         this.app = app;
     }
 
@@ -93,6 +102,7 @@ public class DebugAppContainer implements AppContainer {
         setupBuildSection();
         setupDeviceSection();
         setupEndpointConfigs();
+        setupUIConfigs();
 
         return content;
     }
@@ -122,7 +132,25 @@ public class DebugAppContainer implements AppContainer {
             @Override public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+    }
 
+    private void setupUIConfigs(){
+        switchListType.setChecked(listUiType.get());
+        switchListType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                listUiType.set(isChecked);
+                relaunch();
+            }
+        });
+    }
+
+    private void relaunch(){
+        Intent newApp = new Intent(app, MainActivity.class);
+        newApp.putExtra(CatalogService.CATALOG_CACHE_FLAG, false);
+        newApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        app.startActivity(newApp);
+        ArcticSunriseApp.get(app).buildObjectGraph();
     }
 
     private void setEndpointAndRelaunch(String endpoint) {
@@ -130,11 +158,7 @@ public class DebugAppContainer implements AppContainer {
         apiEndpoint.set(endpoint);
         savedIssue.delete();
 
-        Intent newApp = new Intent(app, MainActivity.class);
-        newApp.putExtra(CatalogService.CATALOG_CACHE_FLAG, false);
-        newApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        app.startActivity(newApp);
-        ArcticSunriseApp.get(app).buildObjectGraph();
+        relaunch();
     }
 
     private void setupBuildSection() {

@@ -155,6 +155,17 @@
 
     <TextView
         android:layout_gravity="start|end|center_vertical"
+        android:text="Use cards"
+        style="@style/Widget.U2020.DebugDrawer.RowTitle"
+        />
+    <Switch
+        android:id="@+id/debug_ui_list_type"
+        android:layout_gravity="start|center_vertical"
+        style="@style/Widget.U2020.DebugDrawer.RowWidget"
+        />
+
+    <TextView
+        android:layout_gravity="start|end|center_vertical"
         android:text="Animations"
         style="@style/Widget.U2020.DebugDrawer.RowTitle"
         />

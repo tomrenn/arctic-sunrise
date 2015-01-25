@@ -3,9 +3,10 @@ package com.example.rennt.arcticsunrise.ui;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ListFragment;
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,13 +23,15 @@ import com.example.rennt.arcticsunrise.data.api.IssueService;
 import com.example.rennt.arcticsunrise.data.api.models.Article;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
 import com.example.rennt.arcticsunrise.data.api.models.Section;
+import com.example.rennt.arcticsunrise.data.prefs.BooleanPreference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
-import butterknife.ButterKnife;
 import rx.Observable;
 import rx.functions.Action1;
 import timber.log.Timber;
@@ -40,10 +43,12 @@ import static butterknife.ButterKnife.findById;
  */
 public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
     private Issue issue;
+    @Inject @Named("UI-list") BooleanPreference useCardsFragment;
 
-    public IssueViewPagerAdapter(FragmentManager fm, Issue issue){
+    public IssueViewPagerAdapter(FragmentManager fm, Context c, Issue issue){
         super(fm);
         this.issue = issue;
+        ArcticSunriseApp.get(c).inject(this);
     }
 
     @Override
@@ -58,7 +63,12 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        SectionRecyclerFragment fragment = new SectionRecyclerFragment();
+        Fragment fragment;
+        if (useCardsFragment != null && useCardsFragment.get()) {
+            fragment = new SectionRecyclerFragment();
+        } else {
+            fragment = new SectionFragment();
+        }
 
         Bundle args = new Bundle();
         args.putInt("sectionPos", position);
@@ -106,18 +116,34 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
 
         private void recieveSectionArticles(final List<Article> articles){
             recyclerAdapter = new RecyclerView.Adapter<CardViewHolder>() {
+                private static final int CARD_TYPE = 0;
+                private static final int IMAGE_CARD_TYPE = 1;
+
                 @Override
                 public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                     View view;
                     LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-
+                    Timber.d("On create view holder type: " + viewType);
                     switch (viewType){
-                        default:
+                        case CARD_TYPE:
+                            view = inflater.inflate(R.layout.simple_card, parent, false);
+                            break;
+                        case IMAGE_CARD_TYPE:
                             view = inflater.inflate(R.layout.right_image_card, parent, false);
+                            break;
+                        default:
+                            view = null; // should NEVER happen
                     }
                     Timber.d("Created view - " + view);
-                    CardViewHolder viewHolder = new CardViewHolder(view);
-                    return viewHolder;
+                    return new CardViewHolder(view);
+                }
+
+                public int getItemViewType(int position){
+                    if (articles.get(position).getThumbnail().isEmpty()){
+                        return CARD_TYPE;
+                    } else {
+                        return IMAGE_CARD_TYPE;
+                    }
                 }
 
                 /** Set view data */
@@ -127,6 +153,10 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
                     Article article = articles.get(position);
                     holder.headline.setText(article.getHeadline());
                     holder.summary.setText(article.getSummary());
+                    if (!article.getThumbnail().isEmpty()) {
+                        Uri uri = issueService.getUriFromIssue(article.getThumbnail());
+                        Picasso.with(getActivity()).load(uri).into(holder.image);
+                    }
                 }
 
                 @Override

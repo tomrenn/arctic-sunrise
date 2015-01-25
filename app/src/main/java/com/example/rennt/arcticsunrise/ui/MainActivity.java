@@ -254,7 +254,7 @@ public class MainActivity extends Activity implements ObjectGraphHolder {
     }
 
     private void receiveFilledIssue(final Issue issue){
-        IssueViewPagerAdapter adapter = new IssueViewPagerAdapter(getFragmentManager(), issue);
+        IssueViewPagerAdapter adapter = new IssueViewPagerAdapter(getFragmentManager(), this, issue);
         viewPager.setAdapter(adapter);
         pagerTabs.setViewPager(viewPager);
 

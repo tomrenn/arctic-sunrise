@@ -15,9 +15,11 @@ import com.android.volley.toolbox.Volley;
 import com.example.rennt.arcticsunrise.data.api.BaseApiPath;
 import com.example.rennt.arcticsunrise.data.api.BaseEditionPath;
 import com.example.rennt.arcticsunrise.data.api.Edition;
+import com.example.rennt.arcticsunrise.data.prefs.BooleanPreference;
 import com.example.rennt.arcticsunrise.data.prefs.IssuePreference;
 import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
 import com.example.rennt.arcticsunrise.data.prefs.StringPreference;
+import com.example.rennt.arcticsunrise.ui.IssueViewPagerAdapter;
 import com.example.rennt.arcticsunrise.ui.MainActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -28,15 +30,18 @@ import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.io.Reader;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import timber.log.Timber;
 
 /**
  * Created by rennt on 11/16/14.
  */
 @Module(
+        injects = IssueViewPagerAdapter.class,
         complete = false, // because 'Application' is provided from another module
         library = true // because these providers are used outside of this module
 )
@@ -73,6 +78,12 @@ public class DataModule {
     @Provides @Singleton
     SharedPreferences provideSharedPreferences(Application app){
         return app.getSharedPreferences("default", Application.MODE_PRIVATE);
+    }
+
+    @Provides @Named("UI-list") // TODO: This should be a temporary preference
+    BooleanPreference provideUIListPreference(SharedPreferences prefs){
+        Timber.d("New preference being created");
+        return new BooleanPreference(prefs, "UI-list-type");
     }
 
     @Provides @ApiEndpoint StringPreference provideApiEndpoint(SharedPreferences prefs){
