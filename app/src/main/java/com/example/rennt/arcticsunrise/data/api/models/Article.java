@@ -48,6 +48,8 @@ public class Article extends SugarKeyRecord<Article>{
         this.thumbnail = thumbnail;
     }
 
+    public boolean isDeco() { return isDeco; }
+
     public String getHeadline() { return headline; }
 
     public String getSummary() {
@@ -108,8 +110,10 @@ public class Article extends SugarKeyRecord<Article>{
             return entries;
         }
 
-        // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
-        // to their respective "read" methods for processing. Otherwise, skips the tag.
+        /**
+         * Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
+         * to their respective "read" methods for processing. Otherwise, skips the tag.
+         */
         private Article readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
             parser.require(XmlPullParser.START_TAG, ns, "link");
             String decoStr = parser.getAttributeValue(ns, "class");

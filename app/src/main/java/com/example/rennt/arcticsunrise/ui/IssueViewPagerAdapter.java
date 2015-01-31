@@ -118,6 +118,7 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
             recyclerAdapter = new RecyclerView.Adapter<CardViewHolder>() {
                 private static final int CARD_TYPE = 0;
                 private static final int IMAGE_CARD_TYPE = 1;
+                private static final int DECO_CARD_TYPE = 2;
 
                 @Override
                 public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -131,28 +132,39 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
                         case IMAGE_CARD_TYPE:
                             view = inflater.inflate(R.layout.right_image_card, parent, false);
                             break;
+                        case DECO_CARD_TYPE:
+                            view = inflater.inflate(R.layout.deco_card, parent, false);
+                            break;
                         default:
-                            view = null; // should NEVER happen
+                            throw new UnsupportedOperationException("Unknown card type");
                     }
-                    Timber.d("Created view - " + view);
                     return new CardViewHolder(view);
                 }
 
+                /**
+                 * Determine what card to show based off Article properties
+                 * @return The internal adapter type
+                 */
                 public int getItemViewType(int position){
-                    if (articles.get(position).getThumbnail().isEmpty()){
+                    if (articles.get(position).getThumbnail().isEmpty()) {
                         return CARD_TYPE;
+                    } else if (articles.get(position).isDeco()) {
+                        return DECO_CARD_TYPE;
                     } else {
                         return IMAGE_CARD_TYPE;
                     }
                 }
 
-                /** Set view data */
+                /**
+                 * Assign(bind) values to the ViewHolder
+                 */
                 @Override
                 public void onBindViewHolder(CardViewHolder holder, int position) {
-                    Timber.d("Binding view holder - " + holder);
                     Article article = articles.get(position);
                     holder.headline.setText(article.getHeadline());
-                    holder.summary.setText(article.getSummary());
+                    if (holder.summary != null){
+                        holder.summary.setText(article.getSummary());
+                    }
                     if (!article.getThumbnail().isEmpty()) {
                         Uri uri = issueService.getUriFromIssue(article.getThumbnail());
                         Picasso.with(getActivity()).load(uri).into(holder.image);
@@ -163,6 +175,7 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
                 public int getItemCount() {
                     return articles.size();
                 }
+
             };
            recyclerView.setAdapter(recyclerAdapter);
         }
