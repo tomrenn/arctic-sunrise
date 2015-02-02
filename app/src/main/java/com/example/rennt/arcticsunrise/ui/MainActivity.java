@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -59,7 +60,7 @@ import timber.log.Timber;
 //import retrofit.converter.SimpleXMLConverter;
 
 
-public class MainActivity extends Activity implements ObjectGraphHolder {
+public class MainActivity extends ActionBarActivity implements ObjectGraphHolder {
     @Inject AppContainer appContainer;
     @Inject CatalogService catalogService;
 
@@ -71,6 +72,7 @@ public class MainActivity extends Activity implements ObjectGraphHolder {
     @InjectView(R.id.pagertabs) PagerSlidingTabStrip pagerTabs;
     @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.content) RelativeLayout relativeContent;
+    @InjectView(R.id.progressBar) ProgressBar progressBar;
 
     @Inject @IssuePreference LongPreference savedIssuePref;
 
@@ -95,18 +97,18 @@ public class MainActivity extends Activity implements ObjectGraphHolder {
         container = appContainer.get(this);
         // set content view
         getLayoutInflater().inflate(R.layout.activity_main, container);
-
-        Timber.d("Saved Issue id is : " + savedIssuePref.get());
-        if (savedIssuePref.isSet()) {
-            restoreSavedIssue(savedIssuePref.get());
-        }
-
         // inject views
         ButterKnife.inject(this);
 
+        if (savedIssuePref.isSet()) {
+            Timber.d("Saved Issue id is : " + savedIssuePref.get());
+            container.removeView(progressBar);
+            progressBar.setVisibility(View.GONE);
+            restoreSavedIssue(savedIssuePref.get());
+        }
+
+        setSupportActionBar(toolbar);
         toolbar.setTitle(R.string.app_name);
-//        toolbar.start
-//        setS(toolbar);
 
         boolean useCatalogCache = true;
         Bundle args = getIntent().getExtras();
@@ -237,6 +239,7 @@ public class MainActivity extends Activity implements ObjectGraphHolder {
     }
 
     private void chooseIssue(Issue issue){
+        container.removeView(progressBar);
         Timber.d("Chosen issue : " + issue.getKey() + " - " + issue.getId());
         currentIssue = issue;
         ArcticSunriseApp app = ArcticSunriseApp.get(this);

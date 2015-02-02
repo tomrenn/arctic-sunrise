@@ -15,6 +15,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.rennt.arcticsunrise.data.api.BaseApiPath;
 import com.example.rennt.arcticsunrise.data.api.BaseEditionPath;
 import com.example.rennt.arcticsunrise.data.api.Edition;
+import com.example.rennt.arcticsunrise.data.api.SavedUserId;
+import com.example.rennt.arcticsunrise.data.api.UserManager;
 import com.example.rennt.arcticsunrise.data.prefs.BooleanPreference;
 import com.example.rennt.arcticsunrise.data.prefs.IssuePreference;
 import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
@@ -54,6 +56,11 @@ public class DataModule {
         Reader fetchUri(Uri uri) throws IOException;
     }
 
+    @Provides @Singleton
+    UserManager provideUserManager(@SavedUserId LongPreference savedUserId,
+                                   OkHttpClient httpClient){
+        return new UserManager(savedUserId, httpClient);
+    }
 
     @Provides @Singleton
     OkHttpClient provideHttpClient() {
@@ -84,6 +91,10 @@ public class DataModule {
     BooleanPreference provideUIListPreference(SharedPreferences prefs){
         Timber.d("New preference being created");
         return new BooleanPreference(prefs, "UI-list-type");
+    }
+
+    @Provides @SavedUserId LongPreference provideSavedUserId(SharedPreferences prefs){
+        return new LongPreference(prefs, "SavedUserId");
     }
 
     @Provides @ApiEndpoint StringPreference provideApiEndpoint(SharedPreferences prefs){

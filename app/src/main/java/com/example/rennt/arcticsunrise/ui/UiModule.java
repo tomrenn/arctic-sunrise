@@ -11,9 +11,6 @@ import dagger.Provides;
  * Created by rennt on 12/9/14.
  */
 @Module(
-        injects = {
-                MainActivity.class
-        },
         library = true,
         complete = false
 )

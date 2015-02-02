@@ -166,6 +166,17 @@
 
     <TextView
         android:layout_gravity="start|end|center_vertical"
+        android:text="Mock User Login"
+        style="@style/Widget.U2020.DebugDrawer.RowTitle"
+        />
+    <Switch
+        android:id="@+id/debug_mock_user"
+        android:layout_gravity="start|center_vertical"
+        style="@style/Widget.U2020.DebugDrawer.RowWidget"
+        />
+
+    <TextView
+        android:layout_gravity="start|end|center_vertical"
         android:text="Animations"
         style="@style/Widget.U2020.DebugDrawer.RowTitle"
         />

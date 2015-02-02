@@ -6,6 +6,7 @@ import com.example.rennt.arcticsunrise.data.DataModule;
 import com.example.rennt.arcticsunrise.ui.DebugUiModule;
 import com.example.rennt.arcticsunrise.ui.IssueViewPagerAdapter;
 import com.example.rennt.arcticsunrise.ui.MainActivity;
+import com.example.rennt.arcticsunrise.ui.UiModule;
 
 import javax.inject.Singleton;
 
@@ -17,7 +18,7 @@ import dagger.Provides;
  */
 @Module(
         includes = {
-            DebugUiModule.class,
+            UiModule.class,
             DataModule.class
         }
 )

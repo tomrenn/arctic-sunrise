@@ -25,7 +25,9 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 
-
+/**
+ * Service for obtaining catalogs for a specific Edition.
+ */
 public class CatalogService {
     private final DataModule.NetworkResolver resolver;
     private final Gson gson;
@@ -35,8 +37,7 @@ public class CatalogService {
     public static final String CATALOG_CACHE_FLAG = "catalogCacheFlag";
 
     public CatalogService(DataModule.NetworkResolver resolver, Gson gson,
-                          Uri catalogAddress,
-                          Edition edition,
+                          Uri catalogAddress, Edition edition,
                           ConnectivityManager cm){
         this.resolver = resolver;
         this.gson = gson;
@@ -50,10 +51,8 @@ public class CatalogService {
     }
 
     /**
-     * Todo: make a catalogManager. getObservable(bool useCache) ?
-     *
-     * get cached catalog, cached issues through catalog id.
-     *
+     * todo: better define/document code paths
+     * Get cached catalog, cached issues through catalog id.
      * get new catalog - save new catalog with similar issues and remove tail issues and old catalog.
      *
      */

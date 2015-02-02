@@ -21,6 +21,7 @@ import com.example.rennt.arcticsunrise.MockApiModule;
 import com.example.rennt.arcticsunrise.R;
 import com.example.rennt.arcticsunrise.data.ApiEndpoint;
 import com.example.rennt.arcticsunrise.data.ApiEndpoints;
+import com.example.rennt.arcticsunrise.data.MockUserFlag;
 import com.example.rennt.arcticsunrise.data.api.CatalogService;
 import com.example.rennt.arcticsunrise.data.prefs.BooleanPreference;
 import com.example.rennt.arcticsunrise.data.prefs.IssuePreference;
@@ -54,6 +55,7 @@ public class DebugAppContainer implements AppContainer {
     private StringPreference apiEndpoint;
     private LongPreference savedIssue;
     private BooleanPreference listUiType;
+    private BooleanPreference mockUserFlag;
     private Application app;
     // injected preferences
     private Activity activity;
@@ -75,17 +77,19 @@ public class DebugAppContainer implements AppContainer {
     @InjectView(R.id.debug_build_date) TextView buildDateView;
 
     @InjectView(R.id.debug_ui_list_type) Switch switchListType;
-
+    @InjectView(R.id.debug_mock_user) Switch switchMockUser;
 
 
     @Inject public DebugAppContainer(
             @ApiEndpoint StringPreference apiEndpoint,
             @IssuePreference LongPreference savedIssue,
+            @MockUserFlag BooleanPreference mockUserFlag,
             @Named("UI-list") BooleanPreference listUiType,
             Application app
     ){
         this.apiEndpoint = apiEndpoint;
         this.savedIssue = savedIssue;
+        this.mockUserFlag = mockUserFlag;
         this.listUiType = listUiType;
         this.app = app;
     }
@@ -141,6 +145,14 @@ public class DebugAppContainer implements AppContainer {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 listUiType.set(isChecked);
                 relaunch();
+            }
+        });
+
+        switchMockUser.setChecked(mockUserFlag.get());
+        switchMockUser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mockUserFlag.set(isChecked);
             }
         });
     }

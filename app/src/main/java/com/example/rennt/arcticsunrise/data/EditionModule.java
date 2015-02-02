@@ -47,7 +47,7 @@ import timber.log.Timber;
 @Module(
     injects = MainActivity.class,
     addsTo = ArcticSunriseModule.class,
-       complete = false, library = true
+    complete = false, library = true
 )
 public class EditionModule {
     private static String CATALOG_PATH = "android.phone.wifi.%d.catalog.json";
