@@ -11,12 +11,17 @@ import rx.Observable;
 
 
 public class MockUserManager extends UserManager {
+    private BooleanPreference mockUserFlag;
 
     public MockUserManager(LongPreference savedUserId, OkHttpClient client,
                            BooleanPreference mockUserFlag) {
         super(savedUserId, client);
-        this.user = new User("John", "Smith", "donotemail@wsj.com", true);
+        if (mockUserFlag.get()){
+            this.user = new User("John", "Smith", "donotemail@wsj.com", true);
+        }
     }
+
+    public boolean hasUser(){ return savedUserId.isSet() || mockUserFlag.get(); `}
 
     public Observable<User> retrieveSavedUser(){
         return Observable.just(getUser());

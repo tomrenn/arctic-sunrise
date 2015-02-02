@@ -30,6 +30,7 @@ import com.example.rennt.arcticsunrise.data.ObjectGraphHolder;
 import com.example.rennt.arcticsunrise.data.api.CatalogService;
 import com.example.rennt.arcticsunrise.data.api.Edition;
 import com.example.rennt.arcticsunrise.data.api.IssueService;
+import com.example.rennt.arcticsunrise.data.api.UserManager;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
 import com.example.rennt.arcticsunrise.data.prefs.IssuePreference;
@@ -63,7 +64,7 @@ import timber.log.Timber;
 public class MainActivity extends ActionBarActivity implements ObjectGraphHolder {
     @Inject AppContainer appContainer;
     @Inject CatalogService catalogService;
-
+    @Inject UserManager userManager;
     private ViewGroup container;
 
     @InjectView(R.id.navDrawer) DrawerLayout navDrawer;

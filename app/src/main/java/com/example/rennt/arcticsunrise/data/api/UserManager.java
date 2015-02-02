@@ -14,7 +14,7 @@ import rx.schedulers.Schedulers;
 
 
 public class UserManager {
-    private LongPreference savedUserId;
+    protected LongPreference savedUserId;
     private OkHttpClient httpClient;
     protected User user;
 
@@ -24,9 +24,10 @@ public class UserManager {
         this.httpClient = client;
     }
 
-    public boolean hasUser(){ return this.user != null; }
+    // todo: figure out if this should use savedUserId.isSet(),
+    public boolean hasUser(){ return savedUserId.isSet(); }
 
-    public User getUser(){ return this.user; }
+    protected User getUser(){ return this.user; }
 
 
     // todo: make login event that would update stuff
