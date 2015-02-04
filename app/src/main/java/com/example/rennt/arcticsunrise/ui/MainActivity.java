@@ -101,6 +101,10 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
         // inject views
         ButterKnife.inject(this);
 
+        if (userManager.hasUser()){
+            Timber.d("Logged in user!");
+        }
+
         if (savedIssuePref.isSet()) {
             Timber.d("Saved Issue id is : " + savedIssuePref.get());
             container.removeView(progressBar);

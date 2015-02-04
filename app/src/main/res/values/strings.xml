@@ -5,10 +5,15 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <string name="sign_in">Sign in</string>
+    <string name="register">Register</string>
+
     <!-- edition display names -->
     <string name="edition_usa">USA</string>
     <string name="edition_europe">Europe</string>
     <string name="edition_asia">Asia</string>
     <string name="edition_korea">한국 Korea</string>
     <string name="edition_japan">日本 Japan</string>
+
+
 </resources>

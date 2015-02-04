@@ -153,6 +153,7 @@ public class DebugAppContainer implements AppContainer {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mockUserFlag.set(isChecked);
+                relaunch();
             }
         });
     }
