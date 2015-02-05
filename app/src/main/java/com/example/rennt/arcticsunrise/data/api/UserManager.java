@@ -27,7 +27,10 @@ public class UserManager {
     // todo: figure out if this should use savedUserId.isSet(),
     public boolean hasUser(){ return savedUserId.isSet(); }
 
-    protected User getUser(){ return this.user; }
+    public User getUser(){ return this.user; }
+
+    // if the user obj has already been loaded
+    public boolean isUserLoaded() { return this.user != null; }
 
 
     // todo: make login event that would update stuff

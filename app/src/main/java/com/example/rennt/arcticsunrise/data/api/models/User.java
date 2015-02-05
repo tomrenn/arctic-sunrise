@@ -8,6 +8,7 @@ public class User {
     private String lastName;
     private String email;
     private boolean isPaidUser;
+    private String oauthUUID;
 
     public String getFirstName() { return firstName; }
     public String getLastName() { return lastName; }
