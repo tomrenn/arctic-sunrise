@@ -8,6 +8,7 @@ import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
 import com.squareup.okhttp.OkHttpClient;
 
 import rx.Observable;
+import rx.Subscriber;
 
 
 public class MockUserManager extends UserManager {
@@ -26,6 +27,13 @@ public class MockUserManager extends UserManager {
         return savedUserId.isSet() || mockUserFlag.get(); }
 
     public Observable<User> retrieveSavedUser(){
-        return Observable.just(getUser());
+        // todo: actually do super if mockUserFlag is not set
+        return Observable.create(new Observable.OnSubscribe<User>() {
+            @Override
+            public void call(Subscriber<? super User> subscriber) {
+                subscriber.onNext(getUser());
+                notifyLoginListeners(getUser());
+            }
+        });
     }
 }

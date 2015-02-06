@@ -4,6 +4,8 @@ import com.example.rennt.arcticsunrise.data.api.models.User;
 import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
 import com.squareup.okhttp.OkHttpClient;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -15,10 +17,19 @@ import rx.schedulers.Schedulers;
 
 
 public class UserManager {
+    private List<LoggedInListener> inListeners;
+    private List<LoggedOutListener> outListeners;
     protected LongPreference savedUserId;
     private OkHttpClient httpClient;
     protected User user;
 
+    public interface LoggedInListener {
+        public void onUserLoggedIn(User user);
+    }
+
+    public interface LoggedOutListener {
+        public void onUserLoggedOut();
+    }
 
     public UserManager(@SavedUserId LongPreference savedUserId, OkHttpClient client){
         this.savedUserId = savedUserId;
@@ -32,7 +43,6 @@ public class UserManager {
 
     // if the user obj has already been loaded
     public boolean isUserLoaded() { return this.user != null; }
-
 
     // todo: make login event that would update stuff
     public Observable<User> retrieveSavedUser(){
@@ -52,4 +62,40 @@ public class UserManager {
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    protected void notifyLoginListeners(User user){
+        for (LoggedInListener inListener : inListeners) {
+            inListener.onUserLoggedIn(user);
+        }
+    }
+
+    protected void notifyLogoutListeners(){
+        for (LoggedOutListener outListener : outListeners) {
+            outListener.onUserLoggedOut();
+        }
+    }
+
+
+    public void addLoginListener(LoggedInListener inListener){
+        this.inListeners.add(inListener);
+    }
+
+    public void removeLoginListener(LoggedInListener inListener){
+        this.inListeners.remove(inListener);
+    }
+
+    public void addLogoutListener(LoggedOutListener outListener){
+        this.outListeners.add(outListener);
+    }
+
+    public void removeLogoutListener(LoggedOutListener outListener){
+        this.outListeners.remove(outListener);
+    }
+
+    public void addListeners(LoggedInListener inListener, LoggedOutListener outListener){
+        addLoginListener(inListener);
+        addLogoutListener(outListener);
+    }
+
+
 }
