@@ -83,6 +83,8 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
     private IssueService issueService;
     private Issue currentIssue;
 
+    private NavDrawerPresenter navPresenter;
+
     // observables
     Subscription lastCatalogSubscription;
 
@@ -101,9 +103,7 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
         // inject views
         ButterKnife.inject(this);
 
-        if (userManager.hasUser()){
-            Timber.d("Logged in user!");
-        }
+        navPresenter = new NavDrawerPresenter(container, userManager);
 
         if (savedIssuePref.isSet()) {
             Timber.d("Saved Issue id is : " + savedIssuePref.get());

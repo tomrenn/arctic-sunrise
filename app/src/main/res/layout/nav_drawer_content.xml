@@ -1,41 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@android:color/background_light">
 
-    <ImageView
-        android:id="@+id/banner"
+    <FrameLayout
+        android:id="@+id/banner_container"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:background="@color/material_blue_grey_900"
-        />
+        android:layout_height="140dp">
 
-    <Button
-        android:id="@+id/sign_in"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/banner"
-        android:layout_alignRight="@id/banner"
-        android:text="@string/sign_in"
-        tools:ignore="RtlHardcoded"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="16dp" />
+        <ImageView
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:background="@color/material_blue_grey_900"
+            />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/banner"
-        android:layout_alignLeft="@id/banner"
-        android:text="@string/register"
-        tools:ignore="RtlHardcoded"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="16dp" />
+        <include layout="@layout/nav_drawer_banner_logged_out"
+            android:id="@+id/banner_foreground"/>
+
+    </FrameLayout>
+
 
     <ListView
         android:id="@+id/drawerListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/banner" />
-</RelativeLayout>
+</LinearLayout>
