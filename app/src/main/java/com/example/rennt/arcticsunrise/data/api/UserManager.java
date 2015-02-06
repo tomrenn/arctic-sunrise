@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.exceptions.OnErrorNotImplementedException;
 import rx.schedulers.Schedulers;
 
 
@@ -45,7 +46,8 @@ public class UserManager {
 
             @Override
             public void call(Subscriber<? super User> subscriber) {
-
+                subscriber.onError(new UnsupportedOperationException("Login not implemented"));
+                subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

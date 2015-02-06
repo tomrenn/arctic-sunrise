@@ -64,21 +64,18 @@ public class NavDrawerPresenter {
     @OnClick(R.id.sign_in) public void showLoginDialog(){
         AlertDialog.Builder loginBuilder = new AlertDialog.Builder(rootNav.getContext());
 
-        final EditText emailField = new EditText(context);
-        emailField.setHint("Email Address");
-        EditText passwordField = new EditText(context);
-        passwordField.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
-        LinearLayout fieldContainer = new LinearLayout(context);
-        fieldContainer.setOrientation(LinearLayout.VERTICAL);
-        fieldContainer.addView(emailField);
-        fieldContainer.addView(passwordField);
+        final View loginDialogContent = inflater.inflate(R.layout.dialog_sign_in, rootNav, false);
+
+        final EditText emailField = findById(loginDialogContent, R.id.email);
+        final EditText passwordField = findById(loginDialogContent, R.id.password);
+        TextView forgotPassword = findById(loginDialogContent, R.id.forgot_password);
 
         loginBuilder.setTitle("Sign in to your WSJ Account")
-                .setView(fieldContainer)
+                .setView(loginDialogContent)
                 .setPositiveButton(R.string.sign_in, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // todo: call UserManager login observable
+                        // click placeholder, see: http://stackoverflow.com/a/15619098
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -86,8 +83,32 @@ public class NavDrawerPresenter {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                     }
-                })
-                .show();
+                });
+
+        AlertDialog dialog = loginBuilder.create();
+        dialog.show();
+        // override button (after showing dialog) so dialog is not dismissed on click
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = emailField.getText().toString();
+                String password = passwordField.getText().toString();
+                userManager.retrieveUser(email, password).subscribe(new Action1<User>() {
+                    @Override
+                    public void call(User user) {
+                        displayUserBanner(user);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        TextView errorMsg = findById(loginDialogContent, R.id.error_msg);
+                        errorMsg.setText(throwable.getMessage());
+                        errorMsg.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        });
+
     }
 
     public void displayUserBanner(User user){
