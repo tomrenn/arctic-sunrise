@@ -36,7 +36,6 @@ public class NavDrawerPresenter {
     private final LayoutInflater inflater;
 
     @InjectView(R.id.banner_container) ViewGroup bannerContainer;
-    @InjectView(R.id.sign_in) Button signInButton;
     @InjectView(R.id.regsiter) Button registerButton;
 
     public NavDrawerPresenter(final ViewGroup rootView, final UserManager userManager){
@@ -44,7 +43,7 @@ public class NavDrawerPresenter {
         this.context = rootView.getContext();
         this.userManager = userManager;
         inflater = LayoutInflater.from(rootView.getContext());
-        // setup on click buttons, etc.
+
         ButterKnife.inject(this, rootView);
 
         if (userManager.isUserLoaded()){
@@ -58,7 +57,6 @@ public class NavDrawerPresenter {
                 }
             });
         }
-        // todo: login button must have ability to display a login dialog with it's own presenter
     }
 
     @OnClick(R.id.sign_in) public void showLoginDialog(){
@@ -111,6 +109,14 @@ public class NavDrawerPresenter {
 
     }
 
+    private void displayLogoutBanner(){
+        ViewGroup bannerForeground = findById(bannerContainer, R.id.banner_foreground);
+        bannerContainer.removeView(bannerForeground);
+
+        inflater.inflate(R.layout.nav_drawer_banner_logged_out, bannerContainer);
+        ButterKnife.inject(this, rootNav);
+    }
+
     public void displayUserBanner(User user){
         // remove signIn, Registration buttons
         ViewGroup bannerForeground = findById(bannerContainer, R.id.banner_foreground);
@@ -122,5 +128,12 @@ public class NavDrawerPresenter {
         TextView emailLabel = findById(loggedInForeground, R.id.user_email);
         nameLabel.setText(user.getFullName());
         emailLabel.setText(user.getEmail());
+        findById(loggedInForeground, R.id.logout_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userManager.logout();
+                displayLogoutBanner();
+            }
+        });
     }
 }

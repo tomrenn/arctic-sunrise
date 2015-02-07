@@ -22,6 +22,12 @@
             android:layout_marginEnd="@dimen/card_image_width"
             tools:text="Robotic uprising has begun"/>
 
+        <TextView
+            android:id="@+id/key"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/headline" />
+
         <com.example.rennt.arcticsunrise.ui.EllipsizingTextView
             android:id="@+id/summary"
             android:layout_width="match_parent"

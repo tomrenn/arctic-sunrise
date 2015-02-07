@@ -4,6 +4,7 @@ import com.example.rennt.arcticsunrise.data.api.models.User;
 import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
 import com.squareup.okhttp.OkHttpClient;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -34,6 +35,8 @@ public class UserManager {
     public UserManager(@SavedUserId LongPreference savedUserId, OkHttpClient client){
         this.savedUserId = savedUserId;
         this.httpClient = client;
+        this.inListeners = new LinkedList<>();
+        this.outListeners = new LinkedList<>();
     }
 
     // todo: figure out if this should use savedUserId.isSet(),
@@ -61,6 +64,12 @@ public class UserManager {
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public void logout(){
+        this.user = null;
+        savedUserId.delete();
+        notifyLogoutListeners();
     }
 
     protected void notifyLoginListeners(User user){

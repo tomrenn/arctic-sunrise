@@ -18,22 +18,25 @@ public class MockUserManager extends UserManager {
                            BooleanPreference mockUserFlag) {
         super(savedUserId, client);
         this.mockUserFlag = mockUserFlag;
-        if (mockUserFlag.get()){
-            this.user = new User("John", "Smith", "donotemail@wsj.com", true);
-        }
     }
 
     public boolean hasUser(){
-        return savedUserId.isSet() || mockUserFlag.get(); }
+        return savedUserId.isSet() || mockUserFlag.get();
+    }
 
     public Observable<User> retrieveSavedUser(){
-        // todo: actually do super if mockUserFlag is not set
-        return Observable.create(new Observable.OnSubscribe<User>() {
-            @Override
-            public void call(Subscriber<? super User> subscriber) {
-                subscriber.onNext(getUser());
-                notifyLoginListeners(getUser());
-            }
-        });
+        if (mockUserFlag.get()) {
+            this.user = new User("John", "Smith", "donotemail@wsj.com", true);
+
+            return Observable.create(new Observable.OnSubscribe<User>() {
+                @Override
+                public void call(Subscriber<? super User> subscriber) {
+                    subscriber.onNext(getUser());
+                    notifyLoginListeners(getUser());
+                }
+            });
+        } else {
+            return super.retrieveSavedUser();
+        }
     }
 }

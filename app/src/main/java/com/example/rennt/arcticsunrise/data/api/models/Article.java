@@ -48,6 +48,8 @@ public class Article extends SugarKeyRecord<Article>{
         this.thumbnail = thumbnail;
     }
 
+    public boolean isPaid() { return isPaid; }
+
     public boolean isDeco() { return isDeco; }
 
     public String getHeadline() { return headline; }

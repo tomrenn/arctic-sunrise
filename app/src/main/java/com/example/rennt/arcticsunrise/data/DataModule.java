@@ -87,12 +87,6 @@ public class DataModule {
         return app.getSharedPreferences("default", Application.MODE_PRIVATE);
     }
 
-    @Provides @Named("UI-list") // TODO: This should be a temporary preference
-    BooleanPreference provideUIListPreference(SharedPreferences prefs){
-        Timber.d("New preference being created");
-        return new BooleanPreference(prefs, "UI-list-type");
-    }
-
     @Provides @SavedUserId LongPreference provideSavedUserId(SharedPreferences prefs){
         return new LongPreference(prefs, "SavedUserId");
     }

@@ -20,9 +20,11 @@ import android.widget.Toast;
 import com.example.rennt.arcticsunrise.ArcticSunriseApp;
 import com.example.rennt.arcticsunrise.R;
 import com.example.rennt.arcticsunrise.data.api.IssueService;
+import com.example.rennt.arcticsunrise.data.api.UserManager;
 import com.example.rennt.arcticsunrise.data.api.models.Article;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
 import com.example.rennt.arcticsunrise.data.api.models.Section;
+import com.example.rennt.arcticsunrise.data.api.models.User;
 import com.example.rennt.arcticsunrise.data.prefs.BooleanPreference;
 import com.squareup.picasso.Picasso;
 
@@ -39,11 +41,10 @@ import timber.log.Timber;
 import static butterknife.ButterKnife.findById;
 
 /**
- * Created by rennt on 12/1/14.
+ * Section front PagerAdapter.
  */
 public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
     private Issue issue;
-    @Inject @Named("UI-list") BooleanPreference useCardsFragment;
 
     public IssueViewPagerAdapter(FragmentManager fm, Context c, Issue issue){
         super(fm);
@@ -63,12 +64,7 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment;
-        if (useCardsFragment != null && useCardsFragment.get()) {
-            fragment = new SectionRecyclerFragment();
-        } else {
-            fragment = new SectionFragment();
-        }
+        Fragment fragment = new SectionRecyclerFragment();
 
         Bundle args = new Bundle();
         args.putInt("sectionPos", position);
@@ -79,15 +75,37 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
 
 
     /**
+     * Simple ViewHolder for article cards.
+     */
+    public static class CardViewHolder extends RecyclerView.ViewHolder {
+        public TextView headline;
+        public TextView key;
+        public TextView summary;
+        public ImageView image;
+
+        public CardViewHolder(View itemView) {
+            super(itemView);
+            headline = findById(itemView, R.id.headline);
+            summary = findById(itemView, R.id.summary);
+            image = findById(itemView, R.id.image);
+            key = findById(itemView, R.id.key);
+        }
+    }
+
+
+    /**
      * Section Fragment using RecyclerView
      */
-    public static class SectionRecyclerFragment extends Fragment {
+    public static class SectionRecyclerFragment extends Fragment implements
+            UserManager.LoggedInListener, UserManager.LoggedOutListener {
         @Inject IssueService issueService;
         private int sectionPos;
         private RecyclerView recyclerView;
         private RecyclerView.Adapter recyclerAdapter;
+        @Inject UserManager userManager;
 
         private Observable<Section> articleObserver;
+
 
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -103,6 +121,15 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
                     recieveSectionArticles(section.getArticles());
                 }
             });
+
+            userManager.addListeners(this, this);
+        }
+
+        @Override
+        public void onDestroyView() {
+            super.onDestroyView();
+            userManager.removeLoginListener(this);
+            userManager.removeLogoutListener(this);
         }
 
         @Override
@@ -112,6 +139,10 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
             LinearLayoutManager manager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(manager);
             return recyclerView;
+        }
+
+        private void removeKeys(){
+//            this.recyclerView;
         }
 
         private void recieveSectionArticles(final List<Article> articles){
@@ -155,12 +186,23 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
                     }
                 }
 
+                public boolean shouldShowKey(Article article, UserManager userManager){
+                    return article.isPaid() &&
+                           (userManager.getUser() == null ||
+                                    !userManager.getUser().isPaidSubscriber());
+                }
+
                 /**
                  * Assign(bind) values to the ViewHolder
                  */
                 @Override
                 public void onBindViewHolder(CardViewHolder holder, int position) {
                     Article article = articles.get(position);
+                    if (holder.key != null && shouldShowKey(article, userManager)) {
+                        holder.key.setText(new String(new int[] { 0x1F511 }, 0, 1));
+                    } else if (holder.key != null){
+                        holder.key.setText("");
+                    }
                     holder.headline.setText(article.getHeadline());
                     if (holder.summary != null){
                         holder.summary.setText(article.getSummary());
@@ -186,102 +228,19 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
             Timber.i("Saving section fragment " + sectionPos);
             outState.putInt("sectionPos", sectionPos);
         }
+
+        @Override
+        public void onUserLoggedIn(User user) {
+            Timber.d("User logged in event recieved");
+            recyclerView.invalidate();
+        }
+
+        @Override
+        public void onUserLoggedOut() {
+            recyclerView.invalidate();
+        }
     }
 
-    public static class CardViewHolder extends RecyclerView.ViewHolder {
-        public TextView headline;
-        public TextView summary;
-        public ImageView image;
-
-        public CardViewHolder(View itemView) {
-            super(itemView);
-            headline = findById(itemView, R.id.headline);
-            summary = findById(itemView, R.id.summary);
-            image = findById(itemView, R.id.image);
-        }
-    }
-
-    /**
-     * A fragment that represents a section within a gelcap Issue.
-     */
-    public static class SectionFragment extends ListFragment {
-        @Inject IssueService issueService;
-        private int sectionPos;
-        private ArrayAdapter<String> adapter;
-        private List<Article> articles;
-        private long startTime = 0;
-        private Observable<Section> articleObserver;
-        //todo: inject add Floating Action Button if new content
-
-        /**
-         * When creating, retrieve this instance's number from its arguments.
-         */
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            ArcticSunriseApp app = ArcticSunriseApp.get(getActivity());
-            app.inject(this);
-            startTime = System.currentTimeMillis();
-
-            sectionPos = getArguments().getInt("sectionPos");
-
-            // setSection must be called before attempting to use this fragment.
-            this.articleObserver = issueService.buildSectionArticlesObservable(sectionPos);
-            articleObserver.subscribe(new Action1<Section>() {
-                @Override
-                public void call(Section section) {
-                    recieveSectionArticles(section.getArticles());
-                }
-            });
-        }
 
 
-        private void recieveSectionArticles(List<Article> articles){
-            long totalTime = System.currentTimeMillis() - startTime;
-            Toast.makeText(getActivity(), "section " + sectionPos + " took " + totalTime + "ms", Toast.LENGTH_SHORT).show();
-
-            this.articles = articles;
-
-            ArrayList<String> titles = new ArrayList<String>();
-            for (Article article : articles){
-                titles.add(article.getHeadline());
-            }
-            adapter.addAll(titles);
-            adapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onSaveInstanceState(Bundle outState) {
-            super.onSaveInstanceState(outState);
-            Timber.i("Saving section fragment " + sectionPos);
-            outState.putInt("sectionPos", sectionPos);
-        }
-
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View v = inflater.inflate(R.layout.layout_fragment, container, false);
-            if (adapter != null){
-                adapter.clear();
-                ArrayList<String> titles = new ArrayList<String>();
-                for (Article article : articles){
-                    titles.add(article.getHeadline());
-                }
-                adapter.addAll(titles);
-                setListAdapter(adapter);
-            }
-            return v;
-        }
-
-        @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-            if (adapter == null){
-                adapter = new ArrayAdapter<String>(
-                        getActivity(), android.R.layout.simple_list_item_1, new ArrayList<String>());
-                setListAdapter(adapter);
-            }
-        }
-    }
 }

@@ -23,6 +23,7 @@ import com.example.rennt.arcticsunrise.data.ApiEndpoint;
 import com.example.rennt.arcticsunrise.data.ApiEndpoints;
 import com.example.rennt.arcticsunrise.data.MockUserFlag;
 import com.example.rennt.arcticsunrise.data.api.CatalogService;
+import com.example.rennt.arcticsunrise.data.api.UserManager;
 import com.example.rennt.arcticsunrise.data.prefs.BooleanPreference;
 import com.example.rennt.arcticsunrise.data.prefs.IssuePreference;
 import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
@@ -57,6 +58,7 @@ public class DebugAppContainer implements AppContainer {
     private BooleanPreference listUiType;
     private BooleanPreference mockUserFlag;
     private Application app;
+    private UserManager userManager;
     // injected preferences
     private Activity activity;
 
@@ -76,7 +78,6 @@ public class DebugAppContainer implements AppContainer {
     @InjectView(R.id.debug_build_sha) TextView buildShaView;
     @InjectView(R.id.debug_build_date) TextView buildDateView;
 
-    @InjectView(R.id.debug_ui_list_type) Switch switchListType;
     @InjectView(R.id.debug_mock_user) Switch switchMockUser;
 
 
@@ -84,13 +85,13 @@ public class DebugAppContainer implements AppContainer {
             @ApiEndpoint StringPreference apiEndpoint,
             @IssuePreference LongPreference savedIssue,
             @MockUserFlag BooleanPreference mockUserFlag,
-            @Named("UI-list") BooleanPreference listUiType,
+            UserManager userManager,
             Application app
     ){
         this.apiEndpoint = apiEndpoint;
         this.savedIssue = savedIssue;
         this.mockUserFlag = mockUserFlag;
-        this.listUiType = listUiType;
+        this.userManager = userManager;
         this.app = app;
     }
 
@@ -139,21 +140,17 @@ public class DebugAppContainer implements AppContainer {
     }
 
     private void setupUIConfigs(){
-        switchListType.setChecked(listUiType.get());
-        switchListType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                listUiType.set(isChecked);
-                relaunch();
-            }
-        });
-
         switchMockUser.setChecked(mockUserFlag.get());
         switchMockUser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mockUserFlag.set(isChecked);
-                relaunch();
+                if (isChecked) {
+                    userManager.retrieveSavedUser().subscribe();
+                }
+                else {
+                    userManager.logout();
+                }
             }
         });
     }

@@ -35,8 +35,7 @@ import timber.log.Timber;
         injects = {
                 MainActivity.class,
                 IssueService.class,
-                IssueViewPagerAdapter.SectionRecyclerFragment.class,
-                IssueViewPagerAdapter.SectionFragment.class
+                IssueViewPagerAdapter.SectionRecyclerFragment.class
         },
         addsTo = ArcticSunriseModule.class,
         complete = false, library = true
