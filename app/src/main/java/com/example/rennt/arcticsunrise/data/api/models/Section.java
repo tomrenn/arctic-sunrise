@@ -37,14 +37,9 @@ public class Section extends SugarKeyRecord<Section> implements Parcelable{
         super();
     }
 
-    public Section(Parcel in){
-        name = in.readString();
-        title = in.readString();
-        contentUrl = in.readString();
-        boolean[] bools = new boolean[2];
-        in.readBooleanArray(bools);
-        isHidden = bools[0];
-        isPaid = bools[1];
+    private Section(final String name, final String title){
+        this.name = name;
+        this.title = title;
     }
 
     public boolean isPaid() {
@@ -90,4 +85,25 @@ public class Section extends SugarKeyRecord<Section> implements Parcelable{
     public void setArticles(List<Article> articles) {
         this.articles = articles;
     }
+
+    public static class Builder {
+        private String name;
+        private String title;
+        private List<Section> sections;
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Section build(){
+            return new Section(name, title);
+        }
+    }
+
 }

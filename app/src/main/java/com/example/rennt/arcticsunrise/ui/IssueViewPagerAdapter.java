@@ -141,10 +141,6 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
             return recyclerView;
         }
 
-        private void removeKeys(){
-//            this.recyclerView;
-        }
-
         private void recieveSectionArticles(final List<Article> articles){
             recyclerAdapter = new RecyclerView.Adapter<CardViewHolder>() {
                 private static final int CARD_TYPE = 0;
@@ -231,12 +227,13 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
 
         @Override
         public void onUserLoggedIn(User user) {
-            Timber.d("User logged in event recieved");
+            recyclerView.getAdapter().notifyDataSetChanged();
             recyclerView.invalidate();
         }
 
         @Override
         public void onUserLoggedOut() {
+            recyclerAdapter.notifyDataSetChanged();
             recyclerView.invalidate();
         }
     }

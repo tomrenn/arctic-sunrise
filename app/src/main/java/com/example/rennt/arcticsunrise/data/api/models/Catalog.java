@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +17,12 @@ public class Catalog extends SugarKeyRecord<Catalog> {
     private int version;
     @SerializedName("items") @Ignore
     private List<Issue> issues;
+
+    private Catalog(final int version, final List<Issue> issues){
+        this.version = version;
+        this.issues = issues;
+    }
+
 
     public List<Issue> getIssues(){
         return this.issues;
@@ -32,5 +39,24 @@ public class Catalog extends SugarKeyRecord<Catalog> {
             }
         }
         return null;
+    }
+
+    public static class Builder {
+        private int version;
+        private List<Issue> issues = new ArrayList<>();
+
+        public Builder setVersion(final int version){
+            this.version = version;
+            return this;
+        }
+
+        public Builder addIssue(final Issue issue){
+            this.issues.add(issue);
+            return this;
+        }
+
+        public Catalog build(){
+            return new Catalog(version, issues);
+        }
     }
 }

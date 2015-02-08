@@ -63,6 +63,47 @@ public class Article extends SugarKeyRecord<Article>{
     }
 
 
+
+    public static class Builder {
+        private String headline;
+        private String summary;
+        private boolean isDeco;
+        private boolean isPaid;
+        private String thumbnail;
+
+        public Article build(){
+            return new Article(headline, summary, isDeco, isPaid, thumbnail);
+        }
+
+        public Builder setHeadline(String headline) {
+            this.headline = headline;
+            return this;
+        }
+
+        public Builder setSummary(String summary) {
+            this.summary = summary;
+            return this;
+        }
+
+        public Builder setDeco(boolean isDeco) {
+            this.isDeco = isDeco;
+            return this;
+        }
+
+        public Builder setPaid(boolean isPaid) {
+            this.isPaid = isPaid;
+            return this;
+        }
+
+        public Builder setThumbnail(String thumbnail) {
+            this.thumbnail = thumbnail;
+            return this;
+        }
+
+    }
+
+
+
     public static class ArticleListParser implements XMLRequest.XMLParser<List<Article>> {
         private static final String ns = null;
 

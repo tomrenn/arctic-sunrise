@@ -40,16 +40,16 @@ public class Issue extends SugarKeyRecord<Issue> {
     @Expose @SerializedName("schema_version") @Ignore
     private String schemaVersion;
 
-
-
-    public String getKey(){
-        return key;
+    private Issue(String type, String key){
+        this.type = type;
+        this.key = key;
     }
 
+    public String getKey(){ return key; }
 
-    public void setSections(List<Section> sections){
-        this.sections = sections;
-    }
+    public String getType(){ return type; }
+
+    public void setSections(List<Section> sections){ this.sections = sections; }
 
     public String getIssueId(){
         return this.first.split("/")[0];
@@ -64,4 +64,32 @@ public class Issue extends SugarKeyRecord<Issue> {
     public int getRevision() {
         return revision;
     }
+
+    public static class Builder {
+        private String key;
+        private String type;
+        private List<Section> sections;
+
+        public Builder setKey(String key) {
+            this.key = key;
+            return this;
+        }
+
+        public Builder setType(String type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder setSections(List<Section> sections){
+            this.sections = sections;
+            return this;
+        }
+
+        public Issue build(){
+            Issue issue = new Issue(type, key);
+            issue.setSections(sections);
+            return issue;
+        }
+    }
+
 }

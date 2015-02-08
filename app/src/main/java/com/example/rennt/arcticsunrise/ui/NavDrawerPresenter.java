@@ -28,8 +28,11 @@ import static butterknife.ButterKnife.findById;
  * Navigation drawer presenter.
  * - Handle user state banner. (Logged out v.s. Logged in)
  * - Handle click actions in nav menu.
+ *
+ * fixme: since this is a UserManager.LoggedInListener, this Presenter must be removed or kept
+ * fixme: as a singleton through dagger so that it does not leak memory.
  */
-public class NavDrawerPresenter {
+public class NavDrawerPresenter implements UserManager.LoggedInListener {
     private final ViewGroup rootNav;
     private final Context context;
     private final UserManager userManager;
@@ -48,8 +51,9 @@ public class NavDrawerPresenter {
 
         if (userManager.isUserLoaded()){
             displayUserBanner(userManager.getUser());
-        }
-        if (userManager.hasUser()){
+
+        } else if (userManager.hasUser()){
+            // todo: decouple instantiation of this presenter from the actual login?
             userManager.retrieveSavedUser().subscribe(new Action1<User>() {
                 @Override
                 public void call(User user) {
@@ -57,6 +61,7 @@ public class NavDrawerPresenter {
                 }
             });
         }
+        userManager.addLoginListener(this);
     }
 
     @OnClick(R.id.sign_in) public void showLoginDialog(){
@@ -135,5 +140,10 @@ public class NavDrawerPresenter {
                 displayLogoutBanner();
             }
         });
+    }
+
+    @Override
+    public void onUserLoggedIn(User user) {
+        displayUserBanner(user);
     }
 }
