@@ -39,6 +39,11 @@ public class DebugDataModule {
         return new BooleanPreference(prefs, "MockUserFlag");
     }
 
+    @Provides @ApiEndpoint StringPreference provideApiEndpoint(SharedPreferences prefs){
+        return new StringPreference(prefs, "ApiEndpoint", DataModule.PRODUCTION_API_URL);
+    }
+
+
     @Provides @Singleton
     UserManager provideUserManager(@MockUserFlag BooleanPreference mockUserFlag,
                                    @SavedUserId LongPreference savedUserId,

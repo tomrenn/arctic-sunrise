@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import com.example.rennt.arcticsunrise.R;
 
-import org.lucasr.twowayview.widget.SpannableGridLayoutManager;
-
 
 /**
  * Created by rennt on 11/17/14.
@@ -67,10 +65,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.CardViewHolder> {
     }
 
     private void setSpan(int colSpan, int rowSpan, View itemView){
-        SpannableGridLayoutManager.LayoutParams params = new SpannableGridLayoutManager.LayoutParams(itemView.getLayoutParams());
-        params.rowSpan = rowSpan;
-        params.colSpan = colSpan;
-        itemView.setLayoutParams(params);
+//        SpannableGridLayoutManager.LayoutParams params = new SpannableGridLayoutManager.LayoutParams(itemView.getLayoutParams());
+//        params.rowSpan = rowSpan;
+//        params.colSpan = colSpan;
+//        itemView.setLayoutParams(params);
     }
 
     @Override

@@ -68,7 +68,7 @@ public class EditionModule {
     /**
      * Return the catalog address. '.../usa/catalog.json'
      */
-    private Uri getCatalogUri(@BaseEditionPath Uri basePath) {
+    private Uri getCatalogUri(Uri basePath) {
         int catalogVersion = 1;
 
         if (edition == Edition.USA) {

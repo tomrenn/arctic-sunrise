@@ -32,7 +32,7 @@ public class UserManager {
         public void onUserLoggedOut();
     }
 
-    public UserManager(@SavedUserId LongPreference savedUserId, OkHttpClient client){
+    public UserManager(LongPreference savedUserId, OkHttpClient client){
         this.savedUserId = savedUserId;
         this.httpClient = client;
         this.inListeners = new LinkedList<>();

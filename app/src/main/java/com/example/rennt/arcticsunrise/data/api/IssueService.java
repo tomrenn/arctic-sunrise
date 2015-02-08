@@ -73,7 +73,7 @@ public class IssueService {
      */
 
     public IssueService(DataModule.NetworkResolver resolver, Gson gson,
-                        Issue issue, @BaseEditionPath Uri baseEditionPath){
+                        Issue issue, Uri baseEditionPath){
         this.resolver = resolver;
         this.issue = issue;
         this.baseEditionPath = baseEditionPath;

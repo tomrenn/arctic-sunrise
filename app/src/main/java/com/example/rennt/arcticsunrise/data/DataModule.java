@@ -91,10 +91,6 @@ public class DataModule {
         return new LongPreference(prefs, "SavedUserId");
     }
 
-    @Provides @ApiEndpoint StringPreference provideApiEndpoint(SharedPreferences prefs){
-        return new StringPreference(prefs, "ApiEndpoint", PRODUCTION_API_URL);
-    }
-
     @Provides @IssuePreference LongPreference provideCurrentIssuePreference(SharedPreferences prefs){
         return new LongPreference(prefs, "CURRENT_ISSUE_ID");
     }
