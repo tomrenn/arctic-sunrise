@@ -2,42 +2,19 @@ package com.example.rennt.arcticsunrise.data;
 
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.net.Network;
-import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
-import android.util.Log;
 
 import com.example.rennt.arcticsunrise.ArcticSunriseModule;
 import com.example.rennt.arcticsunrise.data.api.BaseApiPath;
 import com.example.rennt.arcticsunrise.data.api.BaseEditionPath;
-import com.example.rennt.arcticsunrise.data.api.CatalogService;
+import com.example.rennt.arcticsunrise.data.api.PubcrawlCatalogService;
 import com.example.rennt.arcticsunrise.data.api.Edition;
-import com.example.rennt.arcticsunrise.data.api.models.Catalog;
-import com.example.rennt.arcticsunrise.data.api.models.Issue;
-import com.example.rennt.arcticsunrise.data.api.models.Section;
 import com.example.rennt.arcticsunrise.ui.MainActivity;
 import com.google.gson.Gson;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
-import org.simpleframework.xml.util.Resolver;
-
-import java.io.Reader;
-import java.lang.reflect.Field;
-import java.util.List;
-
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import hugo.weaving.DebugLog;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 /**
  * Provides an edition and a Catalog Observable for that edition.
@@ -81,10 +58,10 @@ public class EditionModule {
 
 
     @Provides @Singleton
-    CatalogService providesCatalogService(DataModule.NetworkResolver resolver, Gson gson,
+    PubcrawlCatalogService providesCatalogService(DataModule.NetworkResolver resolver, Gson gson,
                                           @BaseEditionPath Uri basePath,
                                           ConnectivityManager cm){
         Uri catalogUri = getCatalogUri(basePath);
-        return new CatalogService(resolver, gson, catalogUri, edition, cm);
+        return new PubcrawlCatalogService(resolver, gson, catalogUri, edition, cm);
     }
 }

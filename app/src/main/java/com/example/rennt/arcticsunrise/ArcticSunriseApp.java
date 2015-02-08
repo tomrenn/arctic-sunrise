@@ -1,16 +1,11 @@
 package com.example.rennt.arcticsunrise;
 
-import android.app.Application;
 import android.content.Context;
 
-import com.example.rennt.arcticsunrise.data.DataModule;
 import com.example.rennt.arcticsunrise.data.EditionModule;
 import com.example.rennt.arcticsunrise.data.IssueModule;
-import com.example.rennt.arcticsunrise.data.api.Edition;
-import com.example.rennt.arcticsunrise.data.api.IssueService;
 import com.orm.SugarApp;
 
-import dagger.Module;
 import dagger.ObjectGraph;
 import hugo.weaving.DebugLog;
 import timber.log.Timber;

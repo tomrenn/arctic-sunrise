@@ -1,7 +1,5 @@
 package com.example.rennt.arcticsunrise.ui;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -18,8 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.astuetz.PagerSlidingTabStrip;
 import com.example.rennt.arcticsunrise.AppContainer;
 import com.example.rennt.arcticsunrise.ArcticSunriseApp;
@@ -27,21 +23,19 @@ import com.example.rennt.arcticsunrise.R;
 import com.example.rennt.arcticsunrise.data.EditionModule;
 import com.example.rennt.arcticsunrise.data.IssueModule;
 import com.example.rennt.arcticsunrise.data.ObjectGraphHolder;
-import com.example.rennt.arcticsunrise.data.api.CatalogService;
+import com.example.rennt.arcticsunrise.data.api.PubcrawlCatalogService;
 import com.example.rennt.arcticsunrise.data.api.Edition;
-import com.example.rennt.arcticsunrise.data.api.IssueService;
+import com.example.rennt.arcticsunrise.data.api.PubcrawlIssueService;
 import com.example.rennt.arcticsunrise.data.api.UserManager;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
 import com.example.rennt.arcticsunrise.data.prefs.IssuePreference;
 import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
-import com.melnykov.fab.FloatingActionButton;
 
 //import org.lucasr.twowayview.TwoWayLayoutManager;
 //import org.lucasr.twowayview.widget.SpannableGridLayoutManager;
 //import org.lucasr.twowayview.widget.TwoWayView;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -63,7 +57,8 @@ import timber.log.Timber;
 
 public class MainActivity extends ActionBarActivity implements ObjectGraphHolder {
     @Inject AppContainer appContainer;
-    @Inject CatalogService catalogService;
+    @Inject
+    PubcrawlCatalogService catalogService;
     @Inject UserManager userManager;
     private ViewGroup container;
 
@@ -80,7 +75,7 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
     // happens later
     private Catalog catalog;
     private ObjectGraph issueObjectGraph;
-    private IssueService issueService;
+    private PubcrawlIssueService issueService;
     private Issue currentIssue;
 
     private NavDrawerPresenter navPresenter;
@@ -118,7 +113,7 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
         boolean useCatalogCache = true;
         Bundle args = getIntent().getExtras();
         if (args != null){
-            useCatalogCache = args.getBoolean(CatalogService.CATALOG_CACHE_FLAG, true);
+            useCatalogCache = args.getBoolean(PubcrawlCatalogService.CATALOG_CACHE_FLAG, true);
         }
         subscribeNewCatalogRequest(useCatalogCache);
     }
@@ -249,7 +244,7 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
         currentIssue = issue;
         ArcticSunriseApp app = ArcticSunriseApp.get(this);
         issueObjectGraph = app.plusIssueModule(new IssueModule(issue));
-        issueService = issueObjectGraph.get(IssueService.class);
+        issueService = issueObjectGraph.get(PubcrawlIssueService.class);
 
         // fill issue sections.
         Subscription subscription = issueService.getIssueSectionsObservable()

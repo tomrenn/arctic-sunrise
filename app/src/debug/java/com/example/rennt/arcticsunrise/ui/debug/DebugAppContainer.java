@@ -17,19 +17,17 @@ import android.widget.TextView;
 import com.example.rennt.arcticsunrise.AppContainer;
 import com.example.rennt.arcticsunrise.ArcticSunriseApp;
 import com.example.rennt.arcticsunrise.BuildConfig;
-import com.example.rennt.arcticsunrise.MockApiModule;
 import com.example.rennt.arcticsunrise.R;
 import com.example.rennt.arcticsunrise.data.ApiEndpoint;
 import com.example.rennt.arcticsunrise.data.ApiEndpoints;
 import com.example.rennt.arcticsunrise.data.MockUserFlag;
-import com.example.rennt.arcticsunrise.data.api.CatalogService;
+import com.example.rennt.arcticsunrise.data.api.PubcrawlCatalogService;
 import com.example.rennt.arcticsunrise.data.api.UserManager;
 import com.example.rennt.arcticsunrise.data.prefs.BooleanPreference;
 import com.example.rennt.arcticsunrise.data.prefs.IssuePreference;
 import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
 import com.example.rennt.arcticsunrise.data.prefs.StringPreference;
 import com.example.rennt.arcticsunrise.ui.MainActivity;
-import com.google.common.base.Strings;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -38,7 +36,6 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import butterknife.ButterKnife;
@@ -157,7 +154,7 @@ public class DebugAppContainer implements AppContainer {
 
     private void relaunch(){
         Intent newApp = new Intent(app, MainActivity.class);
-        newApp.putExtra(CatalogService.CATALOG_CACHE_FLAG, false);
+        newApp.putExtra(PubcrawlCatalogService.CATALOG_CACHE_FLAG, false);
         newApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         app.startActivity(newApp);
         ArcticSunriseApp.get(app).buildObjectGraph();

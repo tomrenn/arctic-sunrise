@@ -1,5 +1,6 @@
 package com.example.rennt.arcticsunrise.data;
 
+import com.example.rennt.arcticsunrise.data.api.CatalogService;
 import com.example.rennt.arcticsunrise.data.api.Edition;
 import com.example.rennt.arcticsunrise.data.api.models.Article;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
@@ -9,10 +10,12 @@ import com.example.rennt.arcticsunrise.data.api.models.Section;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
+
 /**
  * Created by tomrenn on 2/7/15.
  */
-public class MockPubcrawlService {
+public class MockPubcrawlService implements CatalogService{
 
     public Catalog getCatalog(Edition edition){
         return new Catalog.Builder()
@@ -58,5 +61,15 @@ public class MockPubcrawlService {
                 .setPaid(isPaid)
                 .setThumbnail(thumbnail)
                 .build();
+    }
+
+    @Override
+    public Observable<Catalog> getCatalogObservable() {
+        return getCatalogObservable(false);
+    }
+
+    @Override
+    public Observable<Catalog> getCatalogObservable(boolean useCache) {
+        return Observable.just(getCatalog(Edition.USA));
     }
 }

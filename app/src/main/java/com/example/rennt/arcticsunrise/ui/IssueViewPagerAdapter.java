@@ -2,7 +2,6 @@ package com.example.rennt.arcticsunrise.ui;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.ListFragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,27 +11,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.rennt.arcticsunrise.ArcticSunriseApp;
 import com.example.rennt.arcticsunrise.R;
-import com.example.rennt.arcticsunrise.data.api.IssueService;
+import com.example.rennt.arcticsunrise.data.api.PubcrawlIssueService;
 import com.example.rennt.arcticsunrise.data.api.UserManager;
 import com.example.rennt.arcticsunrise.data.api.models.Article;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
 import com.example.rennt.arcticsunrise.data.api.models.Section;
 import com.example.rennt.arcticsunrise.data.api.models.User;
-import com.example.rennt.arcticsunrise.data.prefs.BooleanPreference;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import rx.Observable;
 import rx.functions.Action1;
@@ -98,7 +92,8 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
      */
     public static class SectionRecyclerFragment extends Fragment implements
             UserManager.LoggedInListener, UserManager.LoggedOutListener {
-        @Inject IssueService issueService;
+        @Inject
+        PubcrawlIssueService issueService;
         private int sectionPos;
         private RecyclerView recyclerView;
         private RecyclerView.Adapter recyclerAdapter;

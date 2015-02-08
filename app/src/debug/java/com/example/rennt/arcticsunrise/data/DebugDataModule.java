@@ -52,6 +52,8 @@ public class DebugDataModule {
     }
     /**
      * A NetworkResolver to handle mock uri requests.
+     * FIXME: Remove this obscure NetworkResolver concept
+     * TODO: Make data module overwrite CatalogObserver and IssueObserver with relative mocks if isMockMode();
      */
     @Provides
     DataModule.NetworkResolver provideNetworkResolver(OkHttpClient httpClient, Application app){
