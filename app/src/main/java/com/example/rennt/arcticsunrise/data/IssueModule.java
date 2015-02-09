@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import com.example.rennt.arcticsunrise.ArcticSunriseModule;
 import com.example.rennt.arcticsunrise.data.api.BaseEditionPath;
+import com.example.rennt.arcticsunrise.data.api.IssueService;
 import com.example.rennt.arcticsunrise.data.api.PubcrawlIssueService;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
 import com.example.rennt.arcticsunrise.ui.IssueViewPagerAdapter;
@@ -33,7 +34,7 @@ public class IssueModule {
 
 
     @Provides
-    PubcrawlIssueService provideIssueService(DataModule.NetworkResolver resolver, Gson gson, @BaseEditionPath Uri editionBase){
+    IssueService provideIssueService(DataModule.NetworkResolver resolver, Gson gson, @BaseEditionPath Uri editionBase){
         return new PubcrawlIssueService(resolver, gson, issue, editionBase);
     }
 

@@ -14,7 +14,9 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.example.rennt.arcticsunrise.data.api.BaseApiPath;
 import com.example.rennt.arcticsunrise.data.api.BaseEditionPath;
+import com.example.rennt.arcticsunrise.data.api.BasePubcrawlService;
 import com.example.rennt.arcticsunrise.data.api.Edition;
+import com.example.rennt.arcticsunrise.data.api.PubcrawlService;
 import com.example.rennt.arcticsunrise.data.api.SavedUserId;
 import com.example.rennt.arcticsunrise.data.api.UserManager;
 import com.example.rennt.arcticsunrise.data.prefs.BooleanPreference;
@@ -54,6 +56,12 @@ public class DataModule {
     public interface NetworkResolver{
         String fetchUriToString(Uri uri) throws IOException;
         Reader fetchUri(Uri uri) throws IOException;
+    }
+
+    @Provides @Singleton
+    PubcrawlService providePubcrawlService(@BaseApiPath Uri basePath, Gson gson,
+                                           OkHttpClient httpClient, ConnectivityManager cm){
+        return new BasePubcrawlService(basePath, cm, gson, httpClient);
     }
 
     @Provides @Singleton
