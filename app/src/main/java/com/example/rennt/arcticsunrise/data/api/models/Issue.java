@@ -40,6 +40,9 @@ public class Issue extends SugarKeyRecord<Issue> {
     @Expose @SerializedName("schema_version") @Ignore
     private String schemaVersion;
 
+    // default constructor for sugarORM
+    public Issue() { super(); }
+
     private Issue(String type, String key){
         this.type = type;
         this.key = key;

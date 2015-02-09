@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.example.rennt.arcticsunrise.ArcticSunriseApp;
 import com.example.rennt.arcticsunrise.R;
+import com.example.rennt.arcticsunrise.data.api.Edition;
 import com.example.rennt.arcticsunrise.data.api.PubcrawlIssueService;
+import com.example.rennt.arcticsunrise.data.api.PubcrawlService;
 import com.example.rennt.arcticsunrise.data.api.UserManager;
 import com.example.rennt.arcticsunrise.data.api.models.Article;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
@@ -92,12 +94,14 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
      */
     public static class SectionRecyclerFragment extends Fragment implements
             UserManager.LoggedInListener, UserManager.LoggedOutListener {
-        @Inject
-        PubcrawlIssueService issueService;
+        @Inject PubcrawlService pubcrawl;
+        @Inject Edition edition;
+        @Inject Issue issue;
+        @Inject UserManager userManager;
+
         private int sectionPos;
         private RecyclerView recyclerView;
         private RecyclerView.Adapter recyclerAdapter;
-        @Inject UserManager userManager;
 
         private Observable<Section> articleObserver;
 
@@ -109,7 +113,8 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
 
             sectionPos = getArguments().getInt("sectionPos");
 
-            this.articleObserver = issueService.buildSectionArticlesObservable(sectionPos);
+            Section section = issue.getSections().get(sectionPos);
+            this.articleObserver = pubcrawl.populateSectionWithArticles(edition, issue, section);
             articleObserver.subscribe(new Action1<Section>() {
                 @Override
                 public void call(Section section) {
@@ -199,7 +204,7 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
                         holder.summary.setText(article.getSummary());
                     }
                     if (!article.getThumbnail().isEmpty()) {
-                        Uri uri = issueService.getUriFromIssue(article.getThumbnail());
+                        Uri uri = pubcrawl.getUriFromIssue(edition, issue, article.getThumbnail());
                         Picasso.with(getActivity()).load(uri).into(holder.image);
                     }
                 }

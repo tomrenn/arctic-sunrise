@@ -18,6 +18,9 @@ public class Catalog extends SugarKeyRecord<Catalog> {
     @SerializedName("items") @Ignore
     private List<Issue> issues;
 
+    // default constructor for SugarORM
+    public Catalog(){ super(); }
+
     private Catalog(final int version, final List<Issue> issues){
         this.version = version;
         this.issues = issues;

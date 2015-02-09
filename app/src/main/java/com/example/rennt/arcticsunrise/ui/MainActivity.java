@@ -26,6 +26,7 @@ import com.example.rennt.arcticsunrise.data.ObjectGraphHolder;
 import com.example.rennt.arcticsunrise.data.api.PubcrawlCatalogService;
 import com.example.rennt.arcticsunrise.data.api.Edition;
 import com.example.rennt.arcticsunrise.data.api.PubcrawlIssueService;
+import com.example.rennt.arcticsunrise.data.api.PubcrawlService;
 import com.example.rennt.arcticsunrise.data.api.UserManager;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
@@ -57,10 +58,8 @@ import timber.log.Timber;
 
 public class MainActivity extends ActionBarActivity implements ObjectGraphHolder {
     @Inject AppContainer appContainer;
-    @Inject
-    PubcrawlCatalogService catalogService;
+    @Inject PubcrawlService pubcrawl;
     @Inject UserManager userManager;
-    private ViewGroup container;
 
     @InjectView(R.id.navDrawer) DrawerLayout navDrawer;
     @InjectView(R.id.drawerListView) ListView drawerListView;
@@ -70,12 +69,15 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
     @InjectView(R.id.content) RelativeLayout relativeContent;
     @InjectView(R.id.progressBar) ProgressBar progressBar;
 
+    @Inject Edition edition;
     @Inject @IssuePreference LongPreference savedIssuePref;
+
+    private ViewGroup container;
 
     // happens later
     private Catalog catalog;
+//    private PubcrawlIssueService issueService;
     private ObjectGraph issueObjectGraph;
-    private PubcrawlIssueService issueService;
     private Issue currentIssue;
 
     private NavDrawerPresenter navPresenter;
@@ -142,9 +144,9 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
     protected void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
         Timber.d("--- saving instance state ---");
-        Timber.d("current issue : " + issueService.getIssue().getId());
-        savedIssuePref.set(issueService.getIssue().getId());
-        outState.putLong("savedIssueId", issueService.getIssue().getId());
+        Timber.d("current issue : " + currentIssue.getId());
+        savedIssuePref.set(currentIssue.getId());
+        outState.putLong("savedIssueId", currentIssue.getId());
     }
 
     public ObjectGraph getObjectGraph(){
@@ -152,7 +154,7 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
     }
 
     private void subscribeNewCatalogRequest(boolean useCache) {
-        Observable<Catalog> catalogObservable = catalogService.getCatalogObservable(useCache);
+        Observable<Catalog> catalogObservable = pubcrawl.getCatalogObservable(edition, useCache);
 
         lastCatalogSubscription = catalogObservable.subscribe(new Action1<Catalog>() {
             @Override
@@ -244,10 +246,9 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
         currentIssue = issue;
         ArcticSunriseApp app = ArcticSunriseApp.get(this);
         issueObjectGraph = app.plusIssueModule(new IssueModule(issue));
-        issueService = issueObjectGraph.get(PubcrawlIssueService.class);
 
         // fill issue sections.
-        Subscription subscription = issueService.getIssueSectionsObservable()
+        Subscription subscription = pubcrawl.populateIssueWithSections(edition, issue)
                 .subscribe(new Action1<Issue>() {
                     @Override
                     public void call(Issue issue) {

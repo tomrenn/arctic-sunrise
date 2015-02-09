@@ -32,6 +32,7 @@ public class IssueModule {
         this.issue = issue;
     }
 
+    @Provides Issue provideIssue(){ return issue; }
 
     @Provides
     IssueService provideIssueService(DataModule.NetworkResolver resolver, Gson gson, @BaseEditionPath Uri editionBase){

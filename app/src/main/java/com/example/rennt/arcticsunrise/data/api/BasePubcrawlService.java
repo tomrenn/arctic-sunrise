@@ -55,6 +55,7 @@ public class BasePubcrawlService implements PubcrawlService {
      * Execute a basic HTTP Get request.
      */
     private Response performRequest(Uri uri) throws IOException {
+        Timber.d("HTTP GET: " + uri.toString());
         Request request = new Request.Builder()
                 .url(uri.toString())
                 .build();
@@ -70,7 +71,7 @@ public class BasePubcrawlService implements PubcrawlService {
      */
     private Uri getCatalogUri(Edition edition) {
         // appends edition, i.e., /usa or /europe
-        basePath = getEditionPath(edition);
+        Uri editionPath = getEditionPath(edition);
 
         int catalogVersion = 1;
 
@@ -79,7 +80,7 @@ public class BasePubcrawlService implements PubcrawlService {
         }
         String catalogPath = String.format(CATALOG_PATH, catalogVersion);
 
-        return Uri.withAppendedPath(basePath, catalogPath);
+        return Uri.withAppendedPath(editionPath, catalogPath);
     }
 
 
