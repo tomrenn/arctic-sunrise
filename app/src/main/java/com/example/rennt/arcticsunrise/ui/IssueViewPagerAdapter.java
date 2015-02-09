@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.example.rennt.arcticsunrise.ArcticSunriseApp;
 import com.example.rennt.arcticsunrise.R;
 import com.example.rennt.arcticsunrise.data.api.Edition;
-import com.example.rennt.arcticsunrise.data.api.PubcrawlIssueService;
 import com.example.rennt.arcticsunrise.data.api.PubcrawlService;
 import com.example.rennt.arcticsunrise.data.api.UserManager;
 import com.example.rennt.arcticsunrise.data.api.models.Article;
@@ -115,12 +114,7 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
 
             Section section = issue.getSections().get(sectionPos);
             this.articleObserver = pubcrawl.populateSectionWithArticles(edition, issue, section);
-            articleObserver.subscribe(new Action1<Section>() {
-                @Override
-                public void call(Section section) {
-                    recieveSectionArticles(section.getArticles());
-                }
-            });
+
 
             userManager.addListeners(this, this);
         }
@@ -138,6 +132,14 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
             recyclerView = (RecyclerView) inflater.inflate(R.layout.section, container, false);
             LinearLayoutManager manager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(manager);
+
+            articleObserver.subscribe(new Action1<Section>() {
+                @Override
+                public void call(Section section) {
+                    recieveSectionArticles(section.getArticles());
+                }
+            });
+
             return recyclerView;
         }
 

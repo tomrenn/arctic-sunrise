@@ -21,7 +21,7 @@ import com.example.rennt.arcticsunrise.R;
 import com.example.rennt.arcticsunrise.data.ApiEndpoint;
 import com.example.rennt.arcticsunrise.data.ApiEndpoints;
 import com.example.rennt.arcticsunrise.data.MockUserFlag;
-import com.example.rennt.arcticsunrise.data.api.PubcrawlCatalogService;
+import com.example.rennt.arcticsunrise.data.api.PubcrawlService;
 import com.example.rennt.arcticsunrise.data.api.UserManager;
 import com.example.rennt.arcticsunrise.data.prefs.BooleanPreference;
 import com.example.rennt.arcticsunrise.data.prefs.IssuePreference;
@@ -154,7 +154,7 @@ public class DebugAppContainer implements AppContainer {
 
     private void relaunch(){
         Intent newApp = new Intent(app, MainActivity.class);
-        newApp.putExtra(PubcrawlCatalogService.CATALOG_CACHE_FLAG, false);
+        newApp.putExtra(PubcrawlService.CATALOG_CACHE_FLAG, false);
         newApp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         app.startActivity(newApp);
         ArcticSunriseApp.get(app).buildObjectGraph();

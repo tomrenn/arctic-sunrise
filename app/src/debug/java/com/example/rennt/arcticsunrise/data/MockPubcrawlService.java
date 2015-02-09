@@ -1,8 +1,9 @@
 package com.example.rennt.arcticsunrise.data;
 
-import com.example.rennt.arcticsunrise.data.api.CatalogService;
+import android.net.Uri;
+
 import com.example.rennt.arcticsunrise.data.api.Edition;
-import com.example.rennt.arcticsunrise.data.api.IssueService;
+import com.example.rennt.arcticsunrise.data.api.PubcrawlService;
 import com.example.rennt.arcticsunrise.data.api.models.Article;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
 import com.example.rennt.arcticsunrise.data.api.models.Issue;
@@ -16,7 +17,7 @@ import rx.Observable;
 /**
  * Created by tomrenn on 2/7/15.
  */
-public class MockPubcrawlService implements CatalogService, IssueService {
+public class MockPubcrawlService implements PubcrawlService {
 
     public Catalog getCatalog(Edition edition){
         return new Catalog.Builder()
@@ -33,7 +34,7 @@ public class MockPubcrawlService implements CatalogService, IssueService {
     }
 
 
-    public List<Section> getSections(Issue issue){
+    public List<Section> getSections(){
         List<Section> sections = new ArrayList<>();
         sections.add(new Section.Builder()
                         .setName("BEST_SECTION")
@@ -64,27 +65,31 @@ public class MockPubcrawlService implements CatalogService, IssueService {
                 .build();
     }
 
+
     @Override
-    public Observable<Catalog> getCatalogObservable() {
-        return getCatalogObservable(false);
+    public Observable<Catalog> getCatalogObservable(Edition edition) {
+        return getCatalogObservable(edition, true);
     }
 
     @Override
-    public Observable<Catalog> getCatalogObservable(boolean useCache) {
+    public Observable<Catalog> getCatalogObservable(Edition edition, boolean useCache) {
         return Observable.just(getCatalog(Edition.USA));
     }
 
     @Override
-    public Observable<Issue> getIssueSectionsObservable() {
-        Issue mockIssue = mockIssue1();
-        mockIssue.setSections(getSections(mockIssue));
-        return Observable.just(mockIssue);
+    public Uri getUriFromIssue(Edition edition, Issue issue, String filename) {
+        return null;
     }
 
     @Override
-    public Observable<Section> buildSectionArticlesObservable(int sectionPos) {
+    public Observable<Issue> populateIssueWithSections(Edition edition, Issue issue) {
+        issue.setSections(getSections());
+        return Observable.just(issue);
+    }
+
+    @Override
+    public Observable<Section> populateSectionWithArticles(Edition edition, Issue issue, Section section) {
         List<Article> articles = getArticles(null);
-        Section section = getSections(null).get(sectionPos);
         section.setArticles(articles);
         return Observable.just(section);
     }

@@ -2,15 +2,19 @@ package com.example.rennt.arcticsunrise.data;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 
 import com.example.rennt.arcticsunrise.data.api.BaseApiPath;
+import com.example.rennt.arcticsunrise.data.api.BasePubcrawlService;
+import com.example.rennt.arcticsunrise.data.api.PubcrawlService;
 import com.example.rennt.arcticsunrise.data.api.SavedUserId;
 import com.example.rennt.arcticsunrise.data.api.UserManager;
 import com.example.rennt.arcticsunrise.data.prefs.BooleanPreference;
 import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
 import com.example.rennt.arcticsunrise.data.prefs.StringPreference;
 import com.example.rennt.arcticsunrise.ui.debug.DebugAppContainer;
+import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.io.IOException;
@@ -50,15 +54,19 @@ public class DebugDataModule {
                                    OkHttpClient httpClient){
         return new MockUserManager(savedUserId, httpClient, mockUserFlag);
     }
-    /**
-     * A NetworkResolver to handle mock uri requests.
-     * FIXME: Remove this obscure NetworkResolver concept
-     * TODO: Make data module overwrite CatalogObserver and IssueObserver with relative mocks if isMockMode();
-     */
-    @Provides
-    DataModule.NetworkResolver provideNetworkResolver(OkHttpClient httpClient, Application app){
-        return new MockNetworkResolver(httpClient, app.getAssets());
+
+    @Provides @IsMockMode boolean provideMockFlag(@ApiEndpoint StringPreference apiEndpoint){
+        return apiEndpoint.get().startsWith("mock://");
     }
 
-
+    @Provides @Singleton
+    PubcrawlService provideMockPubcrawl(@IsMockMode boolean isMockMode,
+                                        Gson gson, OkHttpClient httpClient,
+                                        ConnectivityManager cm, @BaseApiPath Uri baseApiPath){
+        if (isMockMode){
+            return new MockPubcrawlService();
+        } else {
+            return new BasePubcrawlService(baseApiPath, cm, gson, httpClient);
+        }
+    }
 }

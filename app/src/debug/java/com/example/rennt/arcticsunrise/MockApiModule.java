@@ -22,7 +22,5 @@ import dagger.Provides;
 )
 public class MockApiModule {
 
-    @IsMockMode boolean provideMockFlag(@ApiEndpoint StringPreference apiEndpoint){
-        return apiEndpoint.get().startsWith("mock://");
-    }
+
 }

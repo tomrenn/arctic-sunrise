@@ -10,6 +10,8 @@ import com.example.rennt.arcticsunrise.data.api.models.Section;
 import rx.Observable;
 
 public interface PubcrawlService {
+    public static String CATALOG_CACHE_FLAG = "catalogCacheFlag";
+
 
     Observable<Catalog> getCatalogObservable(Edition edition);
     Observable<Catalog> getCatalogObservable(Edition edition, boolean useCache);

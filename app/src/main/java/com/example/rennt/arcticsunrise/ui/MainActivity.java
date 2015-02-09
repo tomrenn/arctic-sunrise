@@ -23,9 +23,7 @@ import com.example.rennt.arcticsunrise.R;
 import com.example.rennt.arcticsunrise.data.EditionModule;
 import com.example.rennt.arcticsunrise.data.IssueModule;
 import com.example.rennt.arcticsunrise.data.ObjectGraphHolder;
-import com.example.rennt.arcticsunrise.data.api.PubcrawlCatalogService;
 import com.example.rennt.arcticsunrise.data.api.Edition;
-import com.example.rennt.arcticsunrise.data.api.PubcrawlIssueService;
 import com.example.rennt.arcticsunrise.data.api.PubcrawlService;
 import com.example.rennt.arcticsunrise.data.api.UserManager;
 import com.example.rennt.arcticsunrise.data.api.models.Catalog;
@@ -115,7 +113,7 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
         boolean useCatalogCache = true;
         Bundle args = getIntent().getExtras();
         if (args != null){
-            useCatalogCache = args.getBoolean(PubcrawlCatalogService.CATALOG_CACHE_FLAG, true);
+            useCatalogCache = args.getBoolean(PubcrawlService.CATALOG_CACHE_FLAG, true);
         }
         subscribeNewCatalogRequest(useCatalogCache);
     }
