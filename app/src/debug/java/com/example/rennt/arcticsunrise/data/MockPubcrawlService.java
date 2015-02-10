@@ -45,13 +45,14 @@ public class MockPubcrawlService implements PubcrawlService {
 
     public List<Article> getArticles(Section section){
         List<Article> articles = new ArrayList<>();
-        articles.add(simpleArticle("Dragons attack", "Hide yo kids, hide yo dragonborn"));
+        articles.add(simpleArticle("New AI set to run for office",
+                "Declares there is nothing to worry."));
 
         return articles;
     }
 
     private Article simpleArticle(String headline, String summary){
-        return getArticle(headline, summary, false, true, null);
+        return getArticle(headline, summary, false, true, "");
     }
 
     private Article getArticle(String headline, String summary, boolean isDeco, boolean isPaid,
@@ -78,7 +79,7 @@ public class MockPubcrawlService implements PubcrawlService {
 
     @Override
     public Uri getUriFromIssue(Edition edition, Issue issue, String filename) {
-        return null;
+        return new Uri.Builder().scheme("http").build();
     }
 
     @Override

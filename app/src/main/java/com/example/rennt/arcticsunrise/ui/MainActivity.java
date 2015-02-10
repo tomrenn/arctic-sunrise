@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -65,7 +64,6 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
     @InjectView(R.id.pagertabs) PagerSlidingTabStrip pagerTabs;
     @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.content) RelativeLayout relativeContent;
-    @InjectView(R.id.progressBar) ProgressBar progressBar;
 
     @Inject Edition edition;
     @Inject @IssuePreference LongPreference savedIssuePref;
@@ -102,8 +100,6 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
 
         if (savedIssuePref.isSet()) {
             Timber.d("Saved Issue id is : " + savedIssuePref.get());
-            container.removeView(progressBar);
-            progressBar.setVisibility(View.GONE);
             restoreSavedIssue(savedIssuePref.get());
         }
 
@@ -239,7 +235,6 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
     }
 
     private void chooseIssue(Issue issue){
-        container.removeView(progressBar);
         Timber.d("Chosen issue : " + issue.getKey() + " - " + issue.getId());
         currentIssue = issue;
         ArcticSunriseApp app = ArcticSunriseApp.get(this);

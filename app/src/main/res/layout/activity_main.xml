@@ -22,13 +22,6 @@
             app:popupTheme="@style/Theme.AppCompat.Light">
         </android.support.v7.widget.Toolbar>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:indeterminate="true"
-            android:layout_centerInParent="true"/>
-
         <com.astuetz.PagerSlidingTabStrip
             android:id="@+id/pagertabs"
             android:layout_width="match_parent"
