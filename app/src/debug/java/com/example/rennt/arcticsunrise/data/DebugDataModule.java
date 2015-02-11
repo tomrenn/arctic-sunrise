@@ -61,10 +61,11 @@ public class DebugDataModule {
 
     @Provides @Singleton
     PubcrawlService provideMockPubcrawl(@IsMockMode boolean isMockMode,
+                                        Application app,
                                         Gson gson, OkHttpClient httpClient,
                                         ConnectivityManager cm, @BaseApiPath Uri baseApiPath){
         if (isMockMode){
-            return new MockPubcrawlService();
+            return new MockPubcrawlService(app);
         } else {
             return new BasePubcrawlService(baseApiPath, cm, gson, httpClient);
         }

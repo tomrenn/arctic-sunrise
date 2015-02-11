@@ -1,5 +1,7 @@
 package com.example.rennt.arcticsunrise.data;
 
+import android.app.Application;
+import android.content.Context;
 import android.net.Uri;
 
 import com.example.rennt.arcticsunrise.data.api.Edition;
@@ -18,6 +20,11 @@ import rx.Observable;
  * Created by tomrenn on 2/7/15.
  */
 public class MockPubcrawlService implements PubcrawlService {
+    private Context context;
+
+    public MockPubcrawlService(Application app){
+        this.context = app;
+    }
 
     public Catalog getCatalog(Edition edition){
         return new Catalog.Builder()
@@ -33,20 +40,57 @@ public class MockPubcrawlService implements PubcrawlService {
                 .build();
     }
 
+    private String getMockImage(String imageName){
+        return "file:///android_asset/mock/images/" + imageName;
+//        return this.context.getAssets().open();
+        //"mock/images/" + imageName);
+    }
 
-    public List<Section> getSections(){
+    private List<Section> getSections(){
         List<Section> sections = new ArrayList<>();
         sections.add(new Section.Builder()
-                        .setName("BEST_SECTION")
-                        .setTitle("TEH VRY BEST")
+                .setName("BEST_SECTION")
+                .setTitle("TEH VRY BEST")
+                .build());
+
+        sections.add(new Section.Builder()
+                        .setName("mock2")
+                        .setTitle("Such Mock")
                         .build());
         return sections;
     }
 
     public List<Article> getArticles(Section section){
         List<Article> articles = new ArrayList<>();
-        articles.add(simpleArticle("New AI set to run for office",
-                "Declares there is nothing to worry."));
+
+        if (section.getName().equals("BEST_SECTION")) {
+            articles.add(getArticle(
+                    "Lollipop, awww yis. Dis a deco", "", true, false, getMockImage("lollipop.png")));
+
+            articles.add(getArticle(
+                    "Power of open source",
+                    "There are many appeals of open source software - security, wide adoption, and " +
+                            "support.", false, false, getMockImage("opensource.png")));
+
+            articles.add(simpleArticle("New AI set to run for office",
+                    "Sets record campaign funding through bitcoin due to botnet support"));
+
+            articles.add(getArticle(
+                    "World renown artists", "A look at the past and present.", false, true,
+                    getMockImage("starry.png")));
+
+        } else if (section.getName().equals("mock2")) {
+            articles.add(getArticle(
+                    "Maintaining peak performance.", "", true, false, getMockImage("programmingskill.png")));
+
+            articles.add(getArticle(
+                    "Secret Nikola Telsa notes found",
+                    "Energy companies scramble to provide wireless power",
+                    false, false,
+                    getMockImage("tesla.png")));
+        }
+
+
 
         return articles;
     }
@@ -90,7 +134,7 @@ public class MockPubcrawlService implements PubcrawlService {
 
     @Override
     public Observable<Section> populateSectionWithArticles(Edition edition, Issue issue, Section section) {
-        List<Article> articles = getArticles(null);
+        List<Article> articles = getArticles(section);
         section.setArticles(articles);
         return Observable.just(section);
     }

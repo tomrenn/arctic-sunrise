@@ -206,7 +206,13 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
                         holder.summary.setText(article.getSummary());
                     }
                     if (!article.getThumbnail().isEmpty()) {
-                        Uri uri = pubcrawl.getUriFromIssue(edition, issue, article.getThumbnail());
+                        Uri uri = Uri.parse(article.getThumbnail());
+                        if (uri.getScheme() == null){
+                            uri = pubcrawl.getUriFromIssue(edition, issue, article.getThumbnail());
+                        } else {
+                            // thumbnail includes scheme, no need to prefix issue address
+                            uri = Uri.parse(article.getThumbnail());
+                        }
                         Picasso.with(getActivity()).load(uri).into(holder.image);
                     }
                 }
