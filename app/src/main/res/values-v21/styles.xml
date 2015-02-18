@@ -8,5 +8,14 @@
         <item name="android:colorPrimaryDark">@color/primary_dark</item>
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="android:colorAccent">@color/accent</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
     </style>
+
+    <style name="MainActivityTheme" parent="AppTheme">
+
+    </style>
+
+
 </resources>

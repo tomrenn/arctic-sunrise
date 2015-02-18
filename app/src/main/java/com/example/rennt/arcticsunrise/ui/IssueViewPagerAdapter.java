@@ -3,11 +3,17 @@ package com.example.rennt.arcticsunrise.ui;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Slide;
+import android.transition.TransitionSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,9 +86,13 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
 
         public CardViewHolder(View itemView) {
             super(itemView);
+            itemView.setTag(this);
             headline = findById(itemView, R.id.headline);
             summary = findById(itemView, R.id.summary);
             image = findById(itemView, R.id.image);
+            if (image != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                image.setTransitionName("image");
+            }
             key = findById(itemView, R.id.key);
         }
     }
@@ -100,7 +110,8 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
 
         private int sectionPos;
         private RecyclerView recyclerView;
-        private RecyclerView.Adapter recyclerAdapter;
+        private List<Article> articles;
+        private RecyclerView.Adapter<CardViewHolder> recyclerAdapter;
 
         private Observable<Section> articleObserver;
 
@@ -136,9 +147,33 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
             articleObserver.subscribe(new Action1<Section>() {
                 @Override
                 public void call(Section section) {
+                    articles = section.getArticles();
                     recieveSectionArticles(section.getArticles());
                 }
             });
+
+            recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    Article article = articles.get(position);
+
+                    Intent intent = new Intent(getActivity(), ArticlesActivity.class);
+                    ActivityOptionsCompat options =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    getActivity(),
+                                    ((CardViewHolder)view.getTag()).image,
+                                    "image");
+
+                    Bundle bundle = options.toBundle();
+                    String url = pubcrawl.getUriFromIssue(edition, issue, article.getThumbnail()).toString();
+                    bundle.putString("imageUrl", url);
+                    intent.putExtras(bundle);
+
+                    ActivityCompat.startActivity(getActivity(), intent, bundle);
+
+
+                }
+            }));
 
             return recyclerView;
         }

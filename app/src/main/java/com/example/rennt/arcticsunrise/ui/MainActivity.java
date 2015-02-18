@@ -139,8 +139,10 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
         super.onSaveInstanceState(outState);
         Timber.d("--- saving instance state ---");
         Timber.d("current issue : " + currentIssue.getId());
-        savedIssuePref.set(currentIssue.getId());
-        outState.putLong("savedIssueId", currentIssue.getId());
+        if (currentIssue.getId() != null) {
+            savedIssuePref.set(currentIssue.getId());
+            outState.putLong("savedIssueId", currentIssue.getId());
+        }
     }
 
     public ObjectGraph getObjectGraph(){
