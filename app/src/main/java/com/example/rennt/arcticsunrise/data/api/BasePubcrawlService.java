@@ -41,7 +41,7 @@ public class BasePubcrawlService implements PubcrawlService {
     private Gson gson;
     private OkHttpClient httpClient;
 
-    public BasePubcrawlService(@BaseApiPath Uri basePath,
+    public BasePubcrawlService(Uri basePath,
                                ConnectivityManager connectivityManager,
                                Gson gson,
                                OkHttpClient httpClient){

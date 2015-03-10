@@ -9,9 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.LruCache;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.Volley;
 import com.example.rennt.arcticsunrise.data.api.BaseApiPath;
 import com.example.rennt.arcticsunrise.data.api.BaseEditionPath;
 import com.example.rennt.arcticsunrise.data.api.BasePubcrawlService;
@@ -104,33 +101,8 @@ public class DataModule {
     }
 
     @Provides @Singleton
-    RequestQueue provideRequestQueue(Application appContext) {
-        return Volley.newRequestQueue(appContext.getApplicationContext());
-    }
-
-    @Provides @Singleton
     Gson provideGson() {
         return new GsonBuilder().create();
-    }
-
-    @Provides @Singleton
-    ImageLoader provideImageLoader(RequestQueue mRequestQueue) {
-        // create new image loader, example from -
-        // http://developer.android.com/training/volley/requestqueue.html#singleton
-        return new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
-            private final LruCache<String, Bitmap>
-                    cache = new LruCache<String, Bitmap>(MAX_CACHE_SIZE);
-
-            @Override
-            public Bitmap getBitmap(String url) {
-                return cache.get(url);
-            }
-
-            @Override
-            public void putBitmap(String url, Bitmap bitmap) {
-                cache.put(url, bitmap);
-            }
-        });
     }
 
 }
