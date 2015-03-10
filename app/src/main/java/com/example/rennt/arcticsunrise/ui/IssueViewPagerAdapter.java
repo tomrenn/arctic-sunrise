@@ -153,7 +153,6 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
                 public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                     View view;
                     LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                    Timber.d("On create view holder type: " + viewType);
                     switch (viewType){
                         case CARD_TYPE:
                             view = inflater.inflate(R.layout.simple_card, parent, false);

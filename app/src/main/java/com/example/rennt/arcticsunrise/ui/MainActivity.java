@@ -57,29 +57,25 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
     @Inject AppContainer appContainer;
     @Inject PubcrawlService pubcrawl;
     @Inject UserManager userManager;
+    @Inject Edition edition;
+    @Inject @IssuePreference LongPreference savedIssuePref;
 
-    @InjectView(R.id.navDrawer) DrawerLayout navDrawer;
-    @InjectView(R.id.drawerListView) ListView drawerListView;
     @InjectView(R.id.viewpager) ViewPager viewPager;
     @InjectView(R.id.pagertabs) PagerSlidingTabStrip pagerTabs;
     @InjectView(R.id.toolbar) Toolbar toolbar;
     @InjectView(R.id.content) RelativeLayout relativeContent;
 
-    @Inject Edition edition;
-    @Inject @IssuePreference LongPreference savedIssuePref;
-
     private ViewGroup container;
-
-    // happens later
     private Catalog catalog;
-//    private PubcrawlIssueService issueService;
     private ObjectGraph issueObjectGraph;
     private Issue currentIssue;
-
     private NavDrawerPresenter navPresenter;
+    private Subscription lastCatalogSubscription;
 
-    // observables
-    Subscription lastCatalogSubscription;
+    interface OnIssueChangedListener{
+        void onIssueChanged(Issue issue);
+    }
+
 
     @Override @DebugLog
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,12 +87,17 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
 
         // get root view
         container = appContainer.get(this);
-        // set content view
         getLayoutInflater().inflate(R.layout.activity_main, container);
-        // inject views
         ButterKnife.inject(this);
 
         navPresenter = new NavDrawerPresenter(container, userManager);
+        navPresenter.setOnIssueChangedListener(new OnIssueChangedListener() {
+            @Override
+            public void onIssueChanged(Issue issue) {
+                chooseIssue(issue);
+            }
+        });
+
 
         if (savedIssuePref.isSet()) {
             Timber.d("Saved Issue id is : " + savedIssuePref.get());
@@ -137,8 +138,6 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
 
     protected void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
-        Timber.d("--- saving instance state ---");
-        Timber.d("current issue : " + currentIssue.getId());
         savedIssuePref.set(currentIssue.getId());
         outState.putLong("savedIssueId", currentIssue.getId());
     }
@@ -177,31 +176,11 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupNavDrawer(){
-        List<String> issues = new LinkedList<>();
-        for (Issue issue : catalog.getIssues()){
-            issues.add(issue.getKey());
-        }
-        drawerListView.setAdapter(
-                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, issues));
-
-        drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Issue selectedIssue = catalog.getIssues().get(position);
-                Timber.d("Selected position " + position);
-                Timber.d("Changing to issue " + selectedIssue.getKey());
-                chooseIssue(selectedIssue);
-                navDrawer.closeDrawers();
-            }
-        });
-    }
-
     private void receiveCatalog(Catalog catalog){
         Timber.d("Recieved Catalog object " + catalog);
         this.catalog = catalog;
 
-        setupNavDrawer();
+        navPresenter.setAvailableIssues(catalog.getIssues());
 
         if (currentIssue == null){
             Timber.d("Defaulting to first available issue");
@@ -219,13 +198,11 @@ public class MainActivity extends ActionBarActivity implements ObjectGraphHolder
     private void checkOutdatedIssue(Catalog catalog){
         for (Issue issue : catalog.getIssues()){
             if (currentIssue.getKey().equals(issue.getKey())){
-                alertNewAvailableIssue(issue);
-                break;
-//                if (issue.getRevision() > currentIssue.getRevision()){
-//                    // show new content available dialog
-//                    alertNewAvailableIssue(issue);
-//                    break;
-//                }
+                if (issue.getRevision() > currentIssue.getRevision()){
+                    // show new content available dialog
+                    alertNewAvailableIssue(issue);
+                    break;
+                }
             }
         }
     }

@@ -3,18 +3,26 @@ package com.example.rennt.arcticsunrise.ui;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.rennt.arcticsunrise.R;
 import com.example.rennt.arcticsunrise.data.api.UserManager;
+import com.example.rennt.arcticsunrise.data.api.models.Issue;
 import com.example.rennt.arcticsunrise.data.api.models.User;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -29,17 +37,21 @@ import static butterknife.ButterKnife.findById;
  * - Handle user state banner. (Logged out v.s. Logged in)
  * - Handle click actions in nav menu.
  *
- * fixme: since this is a UserManager.LoggedInListener, this Presenter must be removed or kept
- * fixme: as a singleton through dagger so that it does not leak memory.
+ * fixme: since this is a UserManager.LoggedInListener, this Presenter must be removed as a listener
+ * fixme: OR kept as a singleton through dagger so that it does not leak memory.
  */
 public class NavDrawerPresenter implements UserManager.LoggedInListener {
     private final ViewGroup rootNav;
     private final Context context;
     private final UserManager userManager;
     private final LayoutInflater inflater;
+    private MainActivity.OnIssueChangedListener issueChangedListener;
 
+    @InjectView(R.id.navDrawer) DrawerLayout navDrawer;
     @InjectView(R.id.banner_container) ViewGroup bannerContainer;
     @InjectView(R.id.regsiter) Button registerButton;
+    @InjectView(R.id.drawerListView) ListView drawerListView;
+
 
     public NavDrawerPresenter(final ViewGroup rootView, final UserManager userManager){
         this.rootNav = rootView;
@@ -111,7 +123,6 @@ public class NavDrawerPresenter implements UserManager.LoggedInListener {
                 });
             }
         });
-
     }
 
     private void displayLogoutBanner(){
@@ -138,6 +149,31 @@ public class NavDrawerPresenter implements UserManager.LoggedInListener {
             public void onClick(View v) {
                 userManager.logout();
                 displayLogoutBanner();
+            }
+        });
+    }
+
+
+    public void setOnIssueChangedListener(MainActivity.OnIssueChangedListener listener){
+        this.issueChangedListener = listener;
+    }
+
+    public void setAvailableIssues(final List<Issue> issues){
+        List<String> issueKeys = new LinkedList<>();
+        for (Issue issue : issues){
+            issueKeys.add(issue.getKey());
+        }
+        drawerListView.setAdapter(
+                new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, issueKeys));
+
+        drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Issue selectedIssue = issues.get(position);
+                Timber.d("Selected position " + position);
+                Timber.d("Changing to issue " + selectedIssue.getKey());
+                issueChangedListener.onIssueChanged(selectedIssue);
+                navDrawer.closeDrawers();
             }
         });
     }
