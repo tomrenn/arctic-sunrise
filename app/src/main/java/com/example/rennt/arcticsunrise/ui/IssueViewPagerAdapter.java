@@ -99,6 +99,7 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
         @Inject UserManager userManager;
 
         private int sectionPos;
+        private ViewGroup sectionContainer;
         private RecyclerView recyclerView;
         private RecyclerView.Adapter recyclerAdapter;
 
@@ -127,9 +128,10 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            recyclerView = (RecyclerView) inflater.inflate(R.layout.section, container, false);
+            sectionContainer = (ViewGroup) inflater.inflate(R.layout.section, container, false);
+            recyclerView = findById(sectionContainer, R.id.articleRecycler);
             LinearLayoutManager manager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(manager);
 
@@ -138,10 +140,17 @@ public class IssueViewPagerAdapter extends FragmentStatePagerAdapter {
                 public void call(Section section) {
                     recieveSectionArticles(section.getArticles());
                 }
+            }, new Action1<Throwable>() {
+                @Override
+                public void call(Throwable throwable) {
+                    inflater.inflate(R.layout.articles_failed, sectionContainer);
+                }
             });
 
-            return recyclerView;
+            return sectionContainer;
         }
+
+
 
         private void recieveSectionArticles(final List<Article> articles){
             recyclerAdapter = new RecyclerView.Adapter<CardViewHolder>() {
