@@ -5,7 +5,7 @@ buildscript {
 
     dependencies {
         classpath 'com.jakewharton.hugo:hugo-plugin:1.1.0'
-        classpath 'com.android.tools.build:gradle:1.1.0-rc1'
+        classpath 'com.android.tools.build:gradle:1.1.0'
     }
 }
 
@@ -55,6 +55,9 @@ android {
 dependencies {
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:1.9.5"
+
+    debugCompile 'com.facebook.stetho:stetho:1.0.1'
+    debugCompile 'com.facebook.stetho:stetho-okhttp:1.0.1'
 
     compile 'com.google.code.gson:gson:2.3'
 
