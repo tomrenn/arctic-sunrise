@@ -285,9 +285,9 @@ public class BasePubcrawlService implements PubcrawlService {
                     }
                     subscriber.onCompleted();
 
-                } catch (Exception exception) {
-                    Timber.e(exception.toString());
-                    subscriber.onNext(section);
+                } catch (Exception e) {
+                    Timber.e(e.toString());
+                    subscriber.onError(e);
                     subscriber.onCompleted();
                 }
             }

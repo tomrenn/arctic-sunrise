@@ -4,5 +4,5 @@ Sample application demonstrating concepts from [U+2020](https://github.com/JakeW
 
 Includes a Mock mode for testing remote content and Mock UserManager to feign user login.
 
-[screenshot](screenshot.png)
+![screenshot](screenshot.png)
 
