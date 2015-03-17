@@ -13,15 +13,11 @@ import com.example.rennt.arcticsunrise.data.api.UserManager;
 import com.example.rennt.arcticsunrise.data.prefs.BooleanPreference;
 import com.example.rennt.arcticsunrise.data.prefs.LongPreference;
 import com.example.rennt.arcticsunrise.data.prefs.StringPreference;
-import com.example.rennt.arcticsunrise.ui.debug.DebugAppContainer;
+import com.facebook.stetho.Stetho;
+import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -45,6 +41,17 @@ public class DebugDataModule {
 
     @Provides @ApiEndpoint StringPreference provideApiEndpoint(SharedPreferences prefs){
         return new StringPreference(prefs, "ApiEndpoint", DataModule.PRODUCTION_API_URL);
+    }
+
+    @Provides @Singleton OkHttpClient provideDebugHttpClient(Application app){
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(app)
+                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(app))
+                        .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(app))
+                        .build());
+        OkHttpClient httpClient = new OkHttpClient();
+        httpClient.networkInterceptors().add(new StethoInterceptor());
+        return httpClient;
     }
 
 
